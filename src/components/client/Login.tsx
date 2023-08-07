@@ -5,6 +5,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useUserLogin } from "@/hooks/useUserLogin";
 import jwt_decode from "jwt-decode";
 import { setCookie } from "cookies-next";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination, Autoplay } from 'swiper/modules';
+import { PhEyeThin } from "@/icons/EyeIcon";
 
 function Login() {
   const { register, handleSubmit } = useForm<LoginData>();
@@ -23,51 +28,46 @@ function Login() {
     } else return;
   }, [isSuccess, isError]);
   return (
-    <main className="flex items-center h-screen overflow-hidden bg-[#0D1117]">
-      <div className="mx-auto flex w-full max-w-2xl flex-col px-4 sm:px-6">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="-mx-4 z-[2] mt-10 flex-auto bg-[#161B22] px-4 py-10 shadow-2xl shadow-gray-500/10 sm:mx-0 sm:flex-none sm:rounded-5xl sm:p-24 rounded-xl"
-        >
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="login"
-                className="mb-2 block text-base font-semibold text-[#e6edf3]"
-              >
-                Login
-              </label>
-              <input
-                type="text"
-                id="login"
-                {...register("login", { required: true })}
-                className="border appearance-none text-sm rounded-lg block w-full p-2.5  bg-[#0D1117] border-[#30363D] placeholder-gray-400 text-white focus:outline-none  focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter your emial"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-base font-semibold text-[#e6edf3]"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                {...register("password", { required: true })}
-                className="border appearance-none text-sm rounded-lg block w-full p-2.5  bg-[#0D1117] border-[#30363D] placeholder-gray-400 text-white focus:outline-none  focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter your password"
-              />
-            </div>
+    <main className="">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="flex items-center justify-center h-screen p-5 md:p-20 md:h-auto">
+          <div className="flex flex-col items-center justify-center w-full space-y-5 md:w-3/4 h-96">
+            <h1 className="text-5xl font-bold text-center">Tizimga kirish</h1>
+            <form className="w-full p-5 mt-5 space-y-5 md:p-10">
+              <input type="text" className="block w-full p-3 border border-gray-600 rounded-lg" placeholder="Telefon raqam" />
+              <div className="relative">
+                <input type="password" className="block w-full p-3 border border-gray-600 rounded-lg pr-14" placeholder="Parol" />
+                <div className="absolute z-10 -translate-y-1/2 cursor-pointer top-1/2 right-5">
+                  <PhEyeThin className="w-7 h-7" />
+                </div>
+              </div>
+              <input type="submit" className="block w-full p-3 text-white bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800" placeholder="Telefon raqam" />
+            </form>
           </div>
-          <button
-            className="inline-flex justify-center rounded-lg p-2.5 text-base font-semibold bg-blue-600 text-white hover:bg-blue-800 mt-8 w-full cursor-pointer"
-            type="submit"
-          >
-            Sign in
-          </button>
-        </form>
+        </div>
+        <div className="items-center justify-center hidden w-full h-screen p-5 md:flex">
+          <div className={`bg-[url('../public/slide.jpg')] flex items-end justify-center p-10 pb-40 bg-center bg-cover rounded-3xl min-w-full h-[95vh] relative`}>
+            <div className="absolute left-0 top-0 h-[95vh] rounded-3xl w-full bg-gray-900/50"></div>
+            <Swiper pagination={true} modules={[Pagination, Autoplay]} className="text-white h-52"
+              autoplay={true} loop={true} speed={1500} spaceBetween={30}>
+              <SwiperSlide>
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
+        </div>
       </div>
     </main>
   );

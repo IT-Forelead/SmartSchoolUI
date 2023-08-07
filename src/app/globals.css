@@ -2,26 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.swiper-pagination-bullet {
+    width: 100px !important;
+    opacity: 1 !important;
+    height: 8px !important;
+    margin-right: 10px !important;
+    border-radius: .5rem !important;
+    background: rgba(0,0,0,0.4) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.swiper-pagination-bullet-active {
+    position: relative !important;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.swiper-pagination-bullet-active::before {
+    left: 0;
+    width: 0%;
+    content: '';
+    height: 100%;
+    position: absolute;
+    animation: anima 5s;
+    border-radius: .5rem;
+    background-color: #fff;
+}
+
+@keyframes anima {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
 }

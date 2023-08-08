@@ -40,6 +40,8 @@ function Login() {
       variant: "destructive"
     })
   }
+
+  const quotes: string[] = ["Avtomatlashgan ta'lim tizimi", "Bizning tizim orqali dars jadvalini yarating", "FaceID orqali davomat qilishni ta'minlash"]
   return (
     <main className="">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -65,21 +67,13 @@ function Login() {
             <div className="absolute left-0 top-0 h-[95vh] rounded-3xl w-full bg-gray-900/50"></div>
             <Swiper pagination={true} modules={[Pagination, Autoplay]} className="text-white h-52"
               autoplay={true} loop={true} speed={1500} spaceBetween={30}>
-              <SwiperSlide>
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-2xl font-bold">Lorem ipsum dolor sit amet.</p>
-                </div>
-              </SwiperSlide>
+              {quotes.map((item, idx) => {
+                return <SwiperSlide key={idx}>
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-2xl font-bold">{item}</p>
+                  </div>
+                </SwiperSlide>
+              })}
             </Swiper>
           </div>
         </div>

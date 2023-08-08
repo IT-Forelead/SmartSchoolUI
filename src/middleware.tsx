@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const hasUser = request.cookies.has("user-info");
+  // const hasUser = request.cookies.has("user-info");
+  const hasUser = true;
 
   if (request.nextUrl.pathname.includes("/") && !hasUser) {
     return NextResponse.rewrite(new URL("/login", request.url));

@@ -1,7 +1,11 @@
-import Image from 'next/image'
+import Navbar from '@/components/client/Navbar'
+import Sidebar from '@/components/client/Sidebar'
 
 export default function Home() {
   return (
-    <h1>Dashboard</h1>
+    <>
+      <Navbar />
+      <Sidebar />
+    </>
   )
 }

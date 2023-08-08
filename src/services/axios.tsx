@@ -2,8 +2,6 @@ import { AuthTokens } from "@/models/auth.interface";
 import axios, { AxiosHeaderValue, HeadersDefaults } from "axios";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 
-axios.defaults.baseURL = process.env.API_URI;
-
 type Headers = {
   "Content-Type": string;
   Authorization: string;

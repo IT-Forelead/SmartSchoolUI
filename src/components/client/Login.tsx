@@ -30,16 +30,12 @@ function Login() {
       setCookie("refresh-token", data.data.refreshToken);
       window.location.href = window.location.origin;
     } else if (isError) {
-      alert("Login failed");
+      toast({
+        description: "Login or password incorrect!",
+        variant: "destructive"
+      })
     } else return;
   }, [isSuccess, isError]);
-
-  function loginDashboard() {
-    toast({
-      description: "Please fill all fields!",
-      variant: "destructive"
-    })
-  }
 
   const quotes: string[] = ["Avtomatlashgan ta'lim tizimi", "Bizning tizim orqali dars jadvalini yarating", "FaceID orqali davomat qilishni ta'minlash"]
   return (
@@ -48,18 +44,18 @@ function Login() {
         <div className="flex items-center justify-center h-screen p-5 md:p-20 md:h-auto">
           <div className="flex flex-col items-center justify-center w-full space-y-5 md:w-3/4 h-96">
             <h1 className="text-4xl font-bold text-center">Tizimga kirish</h1>
-            <div className="w-full p-5 mt-5 space-y-5 md:p-10">
-              <Input type="phone" placeholder="Telefon raqam" />
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5 mt-5 space-y-5 md:p-10">
+              <Input type="text" placeholder="Login" {...register("login", { required: true })}/>
               <div className="relative">
-                <Input type={isPasswordShow ? 'text' : "password"} placeholder="Parol" />
+                <Input type={isPasswordShow ? 'text' : "password"} placeholder="Parol" {...register("password", { required: true })}/>
                 <div className="absolute z-10 -translate-y-1/2 cursor-pointer top-1/2 right-3">{
                   isPasswordShow ?
                     <PhEyeSlash onClick={() => setPasswordShow(false)} className="w-6 h-6 text-gray-700" /> :
                     <PhEyeThin onClick={() => setPasswordShow(true)} className="w-6 h-6 text-gray-700" />}
                 </div>
               </div>
-              <Button onClick={() => loginDashboard()} size={"lg"} className="w-full select-none">Login</Button>
-            </div>
+              <Button size={"lg"} className="w-full select-none">Login</Button>
+            </form>
           </div>
         </div>
         <div className="items-center justify-center hidden w-full h-screen p-5 md:flex">

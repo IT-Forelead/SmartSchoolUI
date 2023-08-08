@@ -1,4 +1,4 @@
-import "./globals.css";
+import "../globals.css";
 import type { Metadata } from "next";
 import { Provider } from "@/components/client/Provider";
 import { Inter } from "next/font/google";
@@ -12,17 +12,19 @@ export const metadata: Metadata = {
   description: "Education CRM System",
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <div>
+      <Navbar />
+      <Sidebar />
+      <div className="absolute h-[90vh] right-0 ml-64 left-0 top-16">
         <Provider>{children}</Provider>
-        <Toaster />
-      </body>
-    </html>
+      </div>
+      <Toaster />
+    </div>
   );
 }

@@ -1,11 +1,9 @@
-import Navbar from '@/components/client/Navbar'
-import Sidebar from '@/components/client/Sidebar'
+import Login from "@/components/client/Login";
 
-export default function Home() {
+export default function LoginPage() {
   return (
-    <>
-      <Navbar />
-      <Sidebar />
-    </>
-  )
+    <div>
+      <Login />
+    </div>
+  );
 }

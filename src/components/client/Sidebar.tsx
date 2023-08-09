@@ -1,10 +1,12 @@
 "use client"
 import { SolarBookMinimalisticBroken } from '@/icons/BooksIcon'
 import { SolarHome2Broken } from '@/icons/HomeIcon'
-import { SolarUsersGroupTwoRoundedBroken } from '@/icons/TeachersIcon'
+import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
 import Link from 'next/link'
 // import { useRouter } from 'next/router'
 import React from 'react'
+import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
+import { BiDoorOpen } from '@/icons/RoomIcon'
 
 export default function Sidebar() {
   // const router = useRouter()
@@ -15,13 +17,21 @@ export default function Sidebar() {
           <h1 className='text-5xl'><span className='font-bold text-blue-600'>Edu</span><b className='font-extrabold'>CRM</b></h1>
         </div>
         <ul className='mt-20 font-medium space-y-7'>
-          <li className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${"/" === "/" ? "text-gray-900 font-semibold" : ''}`}>
+          <li className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${false ? "text-gray-900 font-semibold" : ''}`}>
             <SolarHome2Broken className='w-6 h-6 mr-3' />
             <Link href={'/'}>Bosh sahifa</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
-            <SolarUsersGroupTwoRoundedBroken className='w-6 h-6 mr-3' />
+            <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
             <Link href={'/teachers'}>O`qituvchilar</Link>
+          </li>
+          <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
+            <SolarUsersGroupTwoRoundedBroken className='w-6 h-6 mr-3' />
+            <Link href={'/groups'}>Guruhlar</Link>
+          </li>
+          <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
+            <BiDoorOpen className='w-6 h-6 mr-3' />
+            <Link href={'/rooms'}>Xonalar</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
             <SolarBookMinimalisticBroken className='w-6 h-6 mr-3' />

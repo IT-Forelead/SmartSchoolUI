@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 
-import { Overview } from "@/components/client/main/overview"
 import { RecentSales } from "@/components/client/main/recent-sales"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -143,7 +142,6 @@ export default function DashboardPage() {
                     <CardTitle>Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    <Overview />
                   </CardContent>
                 </Card>
                 <Card className="col-span-3">

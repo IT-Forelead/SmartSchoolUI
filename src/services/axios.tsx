@@ -38,14 +38,13 @@ axiosClient.interceptors.response.use(
 
     if (originalConfig.url !== "/auth/login" && err.response) {
       // Access Token was expired
-      if (err.response.status === 403 && !originalConfig._retry) {
-        originalConfig._retry = true;
+      if (err.response.status === 403 && !originalConfig?.sent) {
+        originalConfig.sent = true;
 
         try {
+          originalConfig.headers!["Authorization"] = `Bearer ${getCookie("refresh-token")!}`;
           const rs = await axiosClient.get<AuthTokens>("/auth/refresh", {
-            headers: {
-              Authorization: `Bearer ${getCookie("refresh-token")!}`,
-            },
+            ...originalConfig,
           });
 
           setCookie("access-token", rs.data.accessToken);
@@ -59,7 +58,7 @@ axiosClient.interceptors.response.use(
           deleteCookie("refresh-token");
           deleteCookie("user-info");
           // Redirecting the user to the landing page
-          window.location.href = window.location.origin;
+          window.location.href = "/";
           return Promise.reject(_error);
         }
       }

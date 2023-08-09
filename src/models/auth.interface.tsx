@@ -1,9 +1,10 @@
 export interface AuthTokens {
+  map(arg0: (teacher: any) => void): import("react").ReactNode;
   accessToken: string;
   refreshToken: string;
 }
 
 export interface LoginData {
-  login: string;
+  phone: string;
   password: string;
 }

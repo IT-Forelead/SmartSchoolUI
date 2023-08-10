@@ -54,10 +54,6 @@ export type Teacher = {
   degree: string
 }
 
-function getDataFromObject(row: any, key: string) {
-  return JSON.parse(JSON.stringify(row))[key] ?? ''
-}
-
 export const columns: ColumnDef<Teacher>[] = [
   {
     header: "No",
@@ -66,7 +62,7 @@ export const columns: ColumnDef<Teacher>[] = [
     ),
   },
   {
-    accessorKey: "data",
+    accessorKey: "fullName",
     header: ({ column }) => {
       return (
         <Button
@@ -79,7 +75,7 @@ export const columns: ColumnDef<Teacher>[] = [
       )
     },
     cell: ({ row }) => (
-      <div className="capitalize">{getDataFromObject(row.getValue('data'), 'fullName')}</div>
+      <div className="capitalize">{row.getValue('fullName')}</div>
     ),
   },
   {

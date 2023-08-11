@@ -1,4 +1,4 @@
-import { Teacher } from "@/app/teachers/page";
+import { Teacher } from "@/app/dashboard/teachers/page";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 

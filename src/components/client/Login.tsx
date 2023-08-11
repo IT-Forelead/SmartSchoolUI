@@ -15,7 +15,7 @@ import { Input } from "../ui/input";
 import { PhEyeSlash } from "@/icons/EyeSlashIcon";
 import { notifyError } from "@/lib/notify";
 
-function Login() {
+export default function Login() {
   const { register, handleSubmit } = useForm<LoginData>();
   const { data, mutate: login, isSuccess, isError } = useUserLogin();
   const [isPasswordShow, setPasswordShow] = useState<boolean>(false)
@@ -73,4 +73,3 @@ function Login() {
     </main>
   );
 }
-export default Login;

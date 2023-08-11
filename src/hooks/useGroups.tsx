@@ -1,4 +1,4 @@
-import { Group } from "@/app/groups/page";
+import { Group } from "@/app/dashboard/groups/page";
 import axios from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 

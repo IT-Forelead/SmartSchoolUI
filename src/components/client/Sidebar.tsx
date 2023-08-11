@@ -19,23 +19,23 @@ export default function Sidebar() {
         <ul className='mt-20 font-medium space-y-7'>
           <li className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${false ? "text-gray-900 font-semibold" : ''}`}>
             <SolarHome2Broken className='w-6 h-6 mr-3' />
-            <Link href={'/'}>Bosh sahifa</Link>
+            <Link href={'/dashboard'}>Bosh sahifa</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
             <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
-            <Link href={'/teachers'}>O`qituvchilar</Link>
+            <Link href={'/dashboard/teachers'}>O`qituvchilar</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
             <SolarUsersGroupTwoRoundedBroken className='w-6 h-6 mr-3' />
-            <Link href={'/groups'}>Guruhlar</Link>
+            <Link href={'/dashboard/groups'}>Sinflar</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
             <BiDoorOpen className='w-6 h-6 mr-3' />
-            <Link href={'/rooms'}>Xonalar</Link>
+            <Link href={'/dashboard/rooms'}>Xonalar</Link>
           </li>
           <li className='flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold'>
             <SolarBookMinimalisticBroken className='w-6 h-6 mr-3' />
-            <Link href={'/subjects'}>Fanlar</Link>
+            <Link href={'/dashboard/subjects'}>Fanlar</Link>
           </li>
         </ul>
         <div className='absolute text-sm text-center text-gray-500 -translate-x-1/2 left-1/2 bottom-5 whitespace-nowrap'>

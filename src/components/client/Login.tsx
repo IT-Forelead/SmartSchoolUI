@@ -13,10 +13,9 @@ import { PhEyeThin } from "@/icons/EyeIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { PhEyeSlash } from "@/icons/EyeSlashIcon";
-import { useToast } from "../ui/use-toast";
+import { notifyError } from "@/lib/notify";
 
 function Login() {
-  const { toast } = useToast()
   const { register, handleSubmit } = useForm<LoginData>();
   const { data, mutate: login, isSuccess, isError } = useUserLogin();
   const [isPasswordShow, setPasswordShow] = useState<boolean>(false)
@@ -30,10 +29,7 @@ function Login() {
       setCookie("refresh-token", data.data.refreshToken);
       window.location.href = window.location.origin;
     } else if (isError) {
-      toast({
-        description: "Login or password incorrect!",
-        variant: "destructive"
-      })
+      notifyError('Login yoki parol noto`g`ri')
     } else return;
   }, [isSuccess, isError]);
 
@@ -45,9 +41,9 @@ function Login() {
           <div className="flex flex-col items-center justify-center w-full space-y-5 md:w-3/4 h-96">
             <h1 className="text-4xl font-bold text-center">Tizimga kirish</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5 mt-5 space-y-5 md:p-10">
-              <Input type="text" placeholder="Login" {...register("phone", { required: true })}/>
+              <Input type="text" placeholder="Login" {...register("phone", { required: true })} />
               <div className="relative">
-                <Input type={isPasswordShow ? 'text' : "password"} placeholder="Parol" {...register("password", { required: true })}/>
+                <Input type={isPasswordShow ? 'text' : "password"} placeholder="Parol" {...register("password", { required: true })} />
                 <div className="absolute z-10 -translate-y-1/2 cursor-pointer top-1/2 right-3">{
                   isPasswordShow ?
                     <PhEyeSlash onClick={() => setPasswordShow(false)} className="w-6 h-6 text-gray-700" /> :

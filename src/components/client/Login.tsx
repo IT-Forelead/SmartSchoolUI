@@ -14,10 +14,11 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { PhEyeSlash } from "@/icons/EyeSlashIcon";
 import { notifyError } from "@/lib/notify";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginData>();
-  const { data, mutate: login, isSuccess, isError } = useUserLogin();
+  const { data, mutate: login, isSuccess, isError, isLoading } = useUserLogin();
   const [isPasswordShow, setPasswordShow] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<LoginData> = (data) => login(data);
@@ -50,7 +51,13 @@ export default function Login() {
                     <PhEyeThin onClick={() => setPasswordShow(true)} className="w-6 h-6 text-gray-700" />}
                 </div>
               </div>
-              <Button size={"lg"} className="w-full select-none">Login</Button>
+              {isLoading ?
+                <Button disabled className="w-full select-none">
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Tekshirilmoqda...
+                </Button> :
+                <Button size={"lg"} className="w-full select-none">Kirish</Button>
+              }
             </form>
           </div>
         </div>

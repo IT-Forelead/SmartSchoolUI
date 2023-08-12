@@ -278,12 +278,12 @@ export default function TeachersPage() {
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Fani bo`yicha izlash..."
-            value={(table.getColumn("subjectName")?.getFilterValue() as string) ?? ""}
+            placeholder="F.I.SH bo`yicha izlash..."
+            value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
             onChange={(event) => {
-              console.log(table.getColumn("subjectName"))
+              console.log(table.getColumn("fullName"))
 
-              return table.getColumn("subjectName")?.setFilterValue(event.target.value)
+              return table.getColumn("fullName")?.setFilterValue(event.target.value)
             }
             }
             className="max-w-sm"

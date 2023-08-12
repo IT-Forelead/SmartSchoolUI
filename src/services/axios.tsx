@@ -1,11 +1,15 @@
-import { AuthTokens } from "@/models/auth.interface";
+import { refreshToken } from "@/lib/refresh.token";
 import axios, { AxiosHeaderValue, HeadersDefaults } from "axios";
-import { setCookie, getCookie, deleteCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 
 type Headers = {
   "Content-Type": string;
   Authorization: string;
 } & { [key: string]: AxiosHeaderValue };
+
+export const publicAxiosClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URI,
+});
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URI,
@@ -34,36 +38,24 @@ axiosClient.interceptors.response.use(
     return res;
   },
   async (err) => {
-    const originalConfig = err.config;
+    const config = err.config;
 
-    if (originalConfig.url !== "/auth/login" && err.response) {
+    if (config.url !== "/auth/login" && err.response) {
       // Access Token was expired
-      if (err.response.status === 403 && !originalConfig?.sent) {
-        originalConfig.sent = true;
+      if (err.response.status === 403 && !config?.sent) {
+        config.sent = true;
 
-        try {
-          originalConfig.headers!["Authorization"] = `Bearer ${getCookie("refresh-token")!}`;
-          const rs = await axiosClient.get<AuthTokens>("/auth/refresh", {
-            ...originalConfig,
-          });
-
-          setCookie("access-token", rs.data.accessToken);
-          setCookie("refresh-token", rs.data.refreshToken);
-
-          return axiosClient(originalConfig);
-        } catch (_error) {
-          alert("Your session has been expired!");
-          // Logging out the user by removing all the tokens from local
-          deleteCookie("access-token");
-          deleteCookie("refresh-token");
-          deleteCookie("user-info");
-          // Redirecting the user to the landing page
-          window.location.href = "/";
-          return Promise.reject(_error);
+        const result = await refreshToken()
+        if (result?.accessToken) {
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${result?.accessToken}`,
+          }
         }
+        let res = await axios(config)
+        return res?.data
       }
     }
-
     return Promise.reject(err);
   }
 );

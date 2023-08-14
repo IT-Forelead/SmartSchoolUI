@@ -39,8 +39,11 @@ import { useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import Image from "next/image"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { toast } from "react-toastify"
 import { notifyError, notifySuccess } from "@/lib/notify"
+import { dateFormater } from "@/lib/composables"
+import { getCookie } from "cookies-next"
+import { useRouter } from "next/navigation"
+import { UserInfo } from "@/models/user.interface"
 
 export type Teacher = {
   id: string,
@@ -160,6 +163,13 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
 ]
 
 export default function TeachersPage() {
+  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const router = useRouter()
+  React.useEffect(() => {
+    if(currentUser?.role !== 'admin') {
+      router.push('/dashboard/denied')
+    }
+  }, [currentUser?.role, router])
   const [teacher, setTeacher] = React.useState<Teacher | null>(null)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -173,7 +183,7 @@ export default function TeachersPage() {
 
   React.useEffect(() => {
     reset({...teacher})
-  }, [teacher])
+  }, [reset, teacher])
 
   React.useEffect(() => {
     if (isSuccess) {
@@ -256,7 +266,7 @@ export default function TeachersPage() {
                     Jinsi:
                   </div>
                   <div className="text-lg font-medium">
-                    Erkak
+                    {teacher?.gender.includes('female') ? "Ayol": "Erkak"}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -264,7 +274,7 @@ export default function TeachersPage() {
                     Yaratilgan sana:
                   </div>
                   <div className="text-lg font-medium">
-                    09/08/2023 13:56
+                    {dateFormater(teacher?.createdAt)}
                   </div>
                 </div>
               </div>

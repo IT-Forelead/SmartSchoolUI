@@ -1,11 +1,9 @@
-import "../globals.css";
-import type { Metadata } from "next";
-import { Provider } from "@/components/client/Provider";
-import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/client/Navbar";
-import Sidebar from '@/components/client/Sidebar'
-const inter = Inter({ subsets: ["latin"] });
+import { Provider } from "@/components/client/Provider";
+import Sidebar from '@/components/client/Sidebar';
+import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from "next";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Automated School",
@@ -18,11 +16,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Navbar />
-      <Sidebar />
-      <div className="absolute h-[90vh] right-0 ml-64 left-0 top-16">
-        <Provider>{children}</Provider>
+    <div className="relative flex h-screen">
+      <div className='relative w-64 h-screen py-2.5 bg-white border-r border-gray-200 px-7'>
+        <Sidebar />
+      </div>
+      <div className="flex-auto overflow-auto">
+        <Navbar />
+        <div>
+          <Provider>{children}</Provider>
+        </div>
       </div>
       <Toaster />
     </div>

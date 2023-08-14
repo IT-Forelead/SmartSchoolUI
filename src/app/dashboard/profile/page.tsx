@@ -1,41 +1,20 @@
 "use client"
 
-import * as React from "react"
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  ColumnDef
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, MoreHorizontal, PenIcon, PencilIcon, TrashIcon } from "lucide-react"
+import { ArrowUpDown, CopyIcon, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
 
+import TeacherProfile from "@/components/client/TeacherProfile"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { useTeachersList } from "@/hooks/useTeachers"
-import TeacherProfile from "@/components/client/TeacherProfile"
 
 export type Teacher = {
   data: {

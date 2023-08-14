@@ -33,6 +33,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useGroupsList } from "@/hooks/useGroups"
+import { getCookie } from "cookies-next"
+import { UserInfo } from "@/models/user.interface"
+import { useRouter } from "next/navigation"
 
 export type Group = {
   "id": string,
@@ -106,6 +109,13 @@ export const columns: ColumnDef<Group>[] = [
 ]
 
 export default function GroupsPage() {
+  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const router = useRouter()
+  React.useEffect(() => {
+    if(currentUser?.role !== 'admin') {
+      router.push('/dashboard/denied')
+    }
+  }, [currentUser?.role, router])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

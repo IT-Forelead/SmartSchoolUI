@@ -33,6 +33,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSubjectsList } from "@/hooks/useSubjects"
+import { getCookie } from "cookies-next"
+import { UserInfo } from "@/models/user.interface"
+import { useRouter } from "next/navigation"
 
 export type Subject = {
   "number": number,
@@ -62,6 +65,27 @@ export const columns: ColumnDef<Subject>[] = [
     },
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('name')}</div>
+    ),
+  },
+  {
+    accessorKey: "category",
+    header: 'Kategoriyasi',
+    cell: ({ row }) => (
+      <div className="uppercase">{row.getValue('category')}</div>
+    ),
+  }, 
+  {
+    accessorKey: "hourForBeginner",
+    header: 'Boshlang`ichlar uchun (dars soati)',
+    cell: ({ row }) => (
+      <div className="uppercase">{row.getValue('hourForBeginner')}</div>
+    ),
+  }, 
+  {
+    accessorKey: "hourForHigher",
+    header: 'Kattalar uchun (dars soati)',
+    cell: ({ row }) => (
+      <div className="uppercase">{row.getValue('hourForHigher')}</div>
     ),
   },
   {
@@ -97,6 +121,13 @@ export const columns: ColumnDef<Subject>[] = [
 ]
 
 export default function SubjectsPage() {
+  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const router = useRouter()
+  React.useEffect(() => {
+    if(currentUser?.role !== 'admin') {
+      router.push('/dashboard/denied')
+    }
+  }, [currentUser?.role, router])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

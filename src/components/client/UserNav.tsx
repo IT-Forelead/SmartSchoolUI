@@ -1,6 +1,7 @@
 'use client'
-import { deleteCookie } from "cookies-next";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { UserInfo } from "@/models/user.interface";
+import { deleteCookie, getCookie } from "cookies-next";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -13,6 +14,7 @@ import {
 } from "../ui/dropdown-menu";
 
 export function UserNav() {
+  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
   function logout() {
     // Logging out the user by removing all the tokens from local
     deleteCookie("access-token");
@@ -28,7 +30,7 @@ export function UserNav() {
         <Button variant="ghost" className="relative w-8 h-8 border rounded-full shadow">
           <Avatar className="w-8 h-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
-            <AvatarFallback>SA</AvatarFallback>
+            <AvatarFallback className="uppercase">{currentUser.role[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -36,12 +38,12 @@ export function UserNav() {
         <DropdownMenuLabel className="flex items-center font-normal">
           <Avatar className="w-8 h-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
-            <AvatarFallback>SA</AvatarFallback>
+            <AvatarFallback className="uppercase">{currentUser.role[0]}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col ml-3 space-y-1">
-            <p className="text-sm font-medium leading-none">Super admin</p>
+            <p className="text-sm font-medium leading-none capitalize">{currentUser.role}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              login here
+              {currentUser.phone}
             </p>
           </div>
         </DropdownMenuLabel>

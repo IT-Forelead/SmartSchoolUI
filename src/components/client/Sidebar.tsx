@@ -3,6 +3,7 @@ import { SolarBookMinimalisticBroken } from '@/icons/BooksIcon'
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
 import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { BiDoorOpen } from '@/icons/RoomIcon'
+import { SolarAlarmBroken } from '@/icons/StudyHoursIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { UserInfo } from '@/models/user.interface'
@@ -11,10 +12,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function Sidebar() {
-  const path = usePathname()
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const path = usePathname()
   return (
-    // <div className='flex items-center'>
     <div>
       <div>
         <h1 className='text-5xl'><span className='font-bold text-blue-600'>Edu</span><b className='font-extrabold'>CRM</b></h1>
@@ -40,6 +40,10 @@ export default function Sidebar() {
           <Link href={'/dashboard/subjects'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/subjects' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarBookMinimalisticBroken className='w-6 h-6 mr-3' />
             <p>Fanlar</p>
+          </Link>
+          <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
+            <SolarAlarmBroken className='w-6 h-6 mr-3' />
+            <p>Dars soatlari</p>
           </Link>
         </div> :
         <div className='mt-20 font-medium space-y-7'>

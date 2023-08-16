@@ -42,7 +42,8 @@ export type Group = {
   "createdAt": string,
   "level": number,
   "name": string,
-  "updatedAt": object
+  "updatedAt": object,
+  "studentCount": number
 }
 
 export const columns: ColumnDef<Group>[] = [

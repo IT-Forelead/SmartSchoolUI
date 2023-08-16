@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 /* APIs */
 const getTeachersList = async () => {
-  return await axios.get<Teacher[]>("/teacher");
+  return await axios.post<Teacher[]>("/teacher/fetch", {});
 };
 
 const editTeacher = async (data: Teacher) => {

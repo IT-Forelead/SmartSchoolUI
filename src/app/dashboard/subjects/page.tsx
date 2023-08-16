@@ -38,9 +38,12 @@ import { UserInfo } from "@/models/user.interface"
 import { useRouter } from "next/navigation"
 
 export type Subject = {
-  "number": number,
+  "id": string,
   "name": string,
-  "type": string
+  "category": string,
+  "hourForBeginner": number,
+  "hourForHigher": number,
+  "needDivideStudents": boolean
 }
 
 export const columns: ColumnDef<Subject>[] = [
@@ -58,7 +61,7 @@ export const columns: ColumnDef<Subject>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Xona nomi
+          Fan nomi
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
       )
@@ -86,6 +89,33 @@ export const columns: ColumnDef<Subject>[] = [
     header: 'Kattalar uchun (dars soati)',
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('hourForHigher')}</div>
+    ),
+  },
+  {
+    accessorKey: "category",
+    header: 'Kategoriya',
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue('category')}</div>
+    ),
+  },
+  {
+    accessorKey: "hourForBeginner",
+    header: 'Boshlang`ich sinflar uchun dars soati',
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue('hourForBeginner')}</div>
+    ),
+  },
+  {
+    accessorKey: "hourForHigher",
+    header: 'Yuqori sinflar uchun dars soati',
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue('hourForHigher')}</div>
+    ),
+  },
+  {
+    header: 'Jami',
+    cell: ({ row }) => (
+      <div className="capitalize">{parseInt(row.getValue('hourForHigher')) + parseInt(row.getValue('hourForBeginner'))}</div>
     ),
   },
   {
@@ -136,7 +166,7 @@ export default function SubjectsPage() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const { data, isError, isLoading } = useSubjectsList();
+  const { data, isLoading } = useSubjectsList();
 
   let d = data?.data ?? []
   const table = useReactTable({
@@ -158,12 +188,14 @@ export default function SubjectsPage() {
     },
   })
 
+  React.useEffect(() => {
+    console.log("Hello");
+    console.log(data);
+    // refetch()
+  }, [data])
+
   if (isLoading) {
     return <span>Loading...</span>
-  }
-
-  if (isError) {
-    return <span></span>
   }
 
   return (

@@ -60,7 +60,8 @@ export type Teacher = {
   phone?: string,
   photo?: string,
   subjectName: string
-  degree: string
+  degree: string,
+  workload: number
 }
 
 export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>): ColumnDef<Teacher>[] => [
@@ -91,7 +92,7 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
     accessorKey: "subjectName",
     header: 'Ixtisosligi',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('subjectName')}</div>
+      <div className="uppercase">{row.getValue('subjectName') ?? "-"}</div>
     ),
   },
   {
@@ -120,6 +121,13 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
     header: 'Darajasi',
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue('degree')}</div>
+    ),
+  },
+  {
+    accessorKey: "workload",
+    header: 'Dars soati',
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue('workload') ?? 0}</div>
     ),
   },
   {
@@ -233,7 +241,7 @@ export default function TeachersPage() {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full space-y-4 bg-white rounded">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-start space-x-4">
               {
                 image ?
                   <div>
@@ -259,6 +267,14 @@ export default function TeachersPage() {
                   </div>
                   <div className="w-full text-lg font-medium capitalize">
                     <Input className="w-full" {...register("phone", { required: false })} />
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="text-base text-gray-500 whitespace-nowrap">
+                    Dars soati:
+                  </div>
+                  <div className="w-full text-lg font-medium capitalize">
+                    <Input type="number" className="w-full" {...register("workload", { required: false })} />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -288,12 +304,12 @@ export default function TeachersPage() {
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input
-            placeholder="F.I.SH bo`yicha izlash..."
-            value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+            placeholder="Fan nomi bo`yicha izlash..."
+            value={(table.getColumn("subjectName")?.getFilterValue() as string) ?? ""}
             onChange={(event) => {
-              console.log(table.getColumn("fullName"))
+              console.log(table.getColumn("subjectName"))
 
-              return table.getColumn("fullName")?.setFilterValue(event.target.value)
+              return table.getColumn("subjectName")?.setFilterValue(event.target.value)
             }
             }
             className="max-w-sm"
@@ -365,7 +381,7 @@ export default function TeachersPage() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={8}
                     className="h-24 text-center"
                   >
                     Hech nima topilmadi.

@@ -1,12 +1,21 @@
+import { useTeacherProfile, useTeachersList } from '@/hooks/useTeachers'
 import { SolarUserBroken } from '@/icons/UserIcon'
+import { dateFormater } from '@/lib/composables'
+import { UserInfo } from '@/models/user.interface'
+import { getCookie } from 'cookies-next'
 import Image from 'next/image'
+import { Button } from '../ui/button'
+import { SolarAddCircleBroken } from '@/icons/PlusIcon'
 
 export default function TeacherProfile() {
   const image = null
+  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const teacherResponse = useTeacherProfile(currentUser.id)
+  const teacher = teacherResponse?.data?.data?.[0]
   return (
     <div className="px-4 py-2">
       <div className="p-5 space-y-4 bg-white rounded">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-start space-x-4">
           {
             image ?
               <div>
@@ -23,7 +32,7 @@ export default function TeacherProfile() {
                 F.I.SH:
               </div>
               <div className="text-lg font-medium capitalize">
-                John Done
+                {teacher?.fullName}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -31,7 +40,7 @@ export default function TeacherProfile() {
                 Telefon:
               </div>
               <div className="text-lg font-medium">
-                +998901234567
+                {teacher?.phone}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -39,7 +48,47 @@ export default function TeacherProfile() {
                 Jinsi:
               </div>
               <div className="text-lg font-medium">
-                Erkak
+                {teacher?.gender.includes('female') ? 'Ayol' : 'Erkak'}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500">
+                Fani:
+              </div>
+              <div className="text-lg font-medium">
+                {teacher?.subjectName ?? "-"}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500">
+                Daraja:
+              </div>
+              <div className="text-lg font-medium capitalize">
+                {teacher?.degree ?? "-"}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500">
+                Millati:
+              </div>
+              <div className="text-lg font-medium capitalize">
+                {teacher?.nationality ?? "-"}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500">
+                Hujjat turi:
+              </div>
+              <div className="text-lg font-medium capitalize">
+                {teacher?.documentType}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500">
+                Hujjat raqami:
+              </div>
+              <div className="text-lg font-medium capitalize">
+                {teacher?.documentSeries} {teacher?.documentNumber}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -47,13 +96,19 @@ export default function TeacherProfile() {
                 Yaratilgan sana:
               </div>
               <div className="text-lg font-medium">
-                09/08/2023 13:56
+                {dateFormater(teacher?.createdAt)}
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div className="text-xl font-bold">Sertifikatlar</div>
+          <div className='flex items-center justify-between'>
+            <div className="text-xl font-bold">Sertifikatlar</div>
+            <Button disabled={true}>
+              <SolarAddCircleBroken className='w-6 h-6 mr-2' />
+              Sertifikat qo`shish
+            </Button>
+          </div>
           <div className="overflow-auto max-h-48 xxl:overflow-x-hidden customer-tariffs-wrapper">
             <table className="w-full table-auto min-w-max">
               <thead className="sticky top-0 z-10 bg-white shadow">
@@ -67,7 +122,7 @@ export default function TeacherProfile() {
                 </tr>
               </thead>
               <tbody className="text-sm font-light text-gray-600">
-                
+
               </tbody>
             </table>
             <div className="w-full text-center text-red-500">Hech nima topilmadi</div>

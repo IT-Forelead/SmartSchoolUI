@@ -90,7 +90,7 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
   },
   {
     accessorKey: "subjectName",
-    header: 'Ixtisosligi',
+    header: 'Fani',
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('subjectName') ?? "-"}</div>
     ),
@@ -235,7 +235,7 @@ export default function TeachersPage() {
   const image = null
   return (
     <Dialog>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>O`qituvchi profili</DialogTitle>
         </DialogHeader>
@@ -258,7 +258,7 @@ export default function TeachersPage() {
                     F.I.SH:
                   </div>
                   <div className="w-full text-lg font-medium capitalize">
-                    <Input className="w-full" {...register("fullName", { required: false })} />
+                    <Input type="text" className="w-full" {...register("fullName", { required: false })} />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -279,10 +279,10 @@ export default function TeachersPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="text-base text-gray-500">
-                    Jinsi:
+                    Fani:
                   </div>
-                  <div className="text-lg font-medium">
-                    {teacher?.gender.includes('female') ? "Ayol": "Erkak"}
+                  <div className="w-full text-lg font-medium capitalize">
+                    <Input className="w-full" {...register("subjectName", { required: false })} />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -297,7 +297,7 @@ export default function TeachersPage() {
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <Button>Saqlash</Button>
+            <Button autoFocus={true}>Saqlash</Button>
           </div>
         </form>
       </DialogContent>

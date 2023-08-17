@@ -92,27 +92,6 @@ export const columns: ColumnDef<Subject>[] = [
     ),
   },
   {
-    accessorKey: "category",
-    header: 'Kategoriya',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('category')}</div>
-    ),
-  },
-  {
-    accessorKey: "hourForBeginner",
-    header: 'Boshlang`ich sinflar uchun dars soati',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('hourForBeginner')}</div>
-    ),
-  },
-  {
-    accessorKey: "hourForHigher",
-    header: 'Yuqori sinflar uchun dars soati',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('hourForHigher')}</div>
-    ),
-  },
-  {
     header: 'Jami',
     cell: ({ row }) => (
       <div className="capitalize">{parseInt(row.getValue('hourForHigher')) + parseInt(row.getValue('hourForBeginner'))}</div>

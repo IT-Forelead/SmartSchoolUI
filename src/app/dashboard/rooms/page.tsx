@@ -43,6 +43,13 @@ export type Room = {
   "type": string
 }
 
+function translateRoomType(rt: string) {
+  if(rt.includes('class_room')) {
+    return 'sinfxona'
+  }
+  return 'laboratoriya'
+}
+
 export const columns: ColumnDef<Room>[] = [
   {
     header: "No",
@@ -78,7 +85,7 @@ export const columns: ColumnDef<Room>[] = [
     accessorKey: "type",
     header: 'Xona turi',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('type')}</div>
+      <div className="uppercase">{translateRoomType(row.getValue('type'))}</div>
     ),
   },
   {

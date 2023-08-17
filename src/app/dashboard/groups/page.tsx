@@ -15,6 +15,7 @@ import {
 import { ArrowUpDown, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
+import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -33,8 +34,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useGroupsList } from "@/hooks/useGroups"
-import { getCookie } from "cookies-next"
 import { UserInfo } from "@/models/user.interface"
+import { getCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 
 export type Group = {
@@ -113,7 +114,7 @@ export default function GroupsPage() {
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
   const router = useRouter()
   React.useEffect(() => {
-    if(currentUser?.role !== 'admin') {
+    if (currentUser?.role !== 'admin') {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
@@ -148,11 +149,7 @@ export default function GroupsPage() {
   })
 
   if (isLoading) {
-    return <span>Loading...</span>
-  }
-
-  if (isError) {
-    return <span></span>
+    return <Loader />
   }
 
   return (

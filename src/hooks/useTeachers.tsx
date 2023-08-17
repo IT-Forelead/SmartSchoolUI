@@ -1,4 +1,4 @@
-import { Teacher } from "@/app/dashboard/teachers/page";
+import { Teacher, TeacherUpdate } from "@/app/dashboard/teachers/page";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -13,7 +13,7 @@ const getTeacherProfile = async (teacherId: string) => {
   });
 };
 
-const editTeacher = async (data: Teacher) => {
+const editTeacher = async (data: TeacherUpdate) => {
   return await axios.post<any>("/teacher/update", data);
 };
 
@@ -23,7 +23,7 @@ export const useTeachersList = () => {
 };
 
 export const useEditTeacher = () => {
-  return useMutation((data: Teacher) => editTeacher(data), {});
+  return useMutation((data: TeacherUpdate) => editTeacher(data), {});
 };
 
 export const useTeacherProfile = (tId: string) => {

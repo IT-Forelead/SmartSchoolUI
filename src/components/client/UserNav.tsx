@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
+import Link from "next/link";
 
 export function UserNav() {
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
@@ -49,9 +50,11 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profil
-          </DropdownMenuItem>
+          <Link href={'/dashboard/profile'}>
+            <DropdownMenuItem>
+              Profil
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             Sozlamalar
           </DropdownMenuItem>

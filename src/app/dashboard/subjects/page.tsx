@@ -36,6 +36,7 @@ import { useSubjectsList } from "@/hooks/useSubjects"
 import { getCookie } from "cookies-next"
 import { UserInfo } from "@/models/user.interface"
 import { useRouter } from "next/navigation"
+import Loader from "@/components/client/Loader"
 
 export type Subject = {
   "id": string,
@@ -76,14 +77,14 @@ export const columns: ColumnDef<Subject>[] = [
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('category')}</div>
     ),
-  }, 
+  },
   {
     accessorKey: "hourForBeginner",
     header: 'Boshlang`ichlar uchun (dars soati)',
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('hourForBeginner')}</div>
     ),
-  }, 
+  },
   {
     accessorKey: "hourForHigher",
     header: 'Kattalar uchun (dars soati)',
@@ -133,7 +134,7 @@ export default function SubjectsPage() {
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
   const router = useRouter()
   React.useEffect(() => {
-    if(currentUser?.role !== 'admin') {
+    if (currentUser?.role !== 'admin') {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
@@ -167,14 +168,8 @@ export default function SubjectsPage() {
     },
   })
 
-  React.useEffect(() => {
-    console.log("Hello");
-    console.log(data);
-    // refetch()
-  }, [data])
-
   if (isLoading) {
-    return <span>Loading...</span>
+    return <Loader />
   }
 
   return (

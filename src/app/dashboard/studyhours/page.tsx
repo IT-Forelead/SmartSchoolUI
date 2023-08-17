@@ -1,10 +1,11 @@
 "use client"
+import Loader from '@/components/client/Loader';
 import { Button } from '@/components/ui/button';
 import { useGroupsList } from '@/hooks/useGroups';
 import { useStudyHoursList } from '@/hooks/useStudyHours';
 import { useSubjectsList } from '@/hooks/useSubjects';
 import { SolarDownloadSquareBroken } from '@/icons/DownloadIcon';
-import xlsx from "json-as-xlsx"
+import xlsx from "json-as-xlsx";
 
 export type StudyHours = {
   "level": number,
@@ -59,7 +60,7 @@ export default function StudyHoursPage() {
           groups?.sort((a, b) => a.level - b.level)?.map(group => {
             return groupList[group.id] = getHour(group.level, item.id)
           }),
-          groupList["hourForBeginner"] = item.hourForBeginner
+            groupList["hourForBeginner"] = item.hourForBeginner
           groupList["hourForHigher"] = item.hourForHigher
           groupList["mod"] = 0
           groupList["total"] = item.hourForBeginner + item.hourForHigher
@@ -73,12 +74,14 @@ export default function StudyHoursPage() {
 
   return (
     <div className='p-2 px-5'>
-      <Button onClick={() => downloadExcel()} className='flex items-center mb-2'>
+      <div className='flex items-center justify-end w-full'>
+      <Button onClick={() => downloadExcel()} className='flex items-center mt-2 mb-3'>
         <SolarDownloadSquareBroken className='w-6 h-6 mr-2' />
         Excel formatda yuklash
       </Button>
+      </div>
       {!subjectResponse.isLoading ?
-        <table className='w-full border'>
+        <table className='w-full text-sm border'>
           <thead>
             <tr className='text-gray-500 border'>
               <th className="p-2 border">Fanlar</th>
@@ -112,7 +115,7 @@ export default function StudyHoursPage() {
             })}
           </tbody>
         </table> :
-        <div>Loading...</div>
+        <Loader />
       }
     </div>
   )

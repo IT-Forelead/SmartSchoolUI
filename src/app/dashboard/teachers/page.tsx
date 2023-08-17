@@ -44,6 +44,9 @@ import { dateFormater } from "@/lib/composables"
 import { getCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import { UserInfo } from "@/models/user.interface"
+import Loader from "@/components/client/Loader"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useSubjectsList } from "@/hooks/useSubjects"
 
 export type Teacher = {
   id: string,
@@ -62,6 +65,22 @@ export type Teacher = {
   subjectName: string
   degree: string,
   workload: number
+}
+
+export type TeacherUpdate = {
+  id: string,
+  dateOfBirth: string,
+  gender: "female" | "male",
+  fullName: string,
+  nationality: string,
+  citizenship: string,
+  documentType: string,
+  documentSeries: string,
+  documentNumber: string,
+  pinfl: string,
+  degree: string,
+  subjectId: string,
+  phone: string
 }
 
 export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>): ColumnDef<Teacher>[] => [
@@ -174,7 +193,7 @@ export default function TeachersPage() {
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
   const router = useRouter()
   React.useEffect(() => {
-    if(currentUser?.role !== 'admin') {
+    if (currentUser?.role !== 'admin') {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
@@ -187,23 +206,30 @@ export default function TeachersPage() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
-  const { register, handleSubmit, reset } = useForm<Teacher>();
+  const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
 
   React.useEffect(() => {
-    reset({...teacher})
+    reset({ ...teacher })
   }, [reset, teacher])
 
   React.useEffect(() => {
     if (isSuccess) {
       notifySuccess("O`zgarishlar saqlandi")
+      refetch()
     } else if (error) {
       notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
     } else return;
   }, [isSuccess, error]);
 
-  const onSubmit: SubmitHandler<Teacher> = (data) => editTeacher(data);
+  function getSelectData(sv: string) {
+    register("subjectId", { value: sv })
+  }
 
-  const { data, isError, isLoading } = useTeachersList();
+  const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
+
+  const { data, isError, isLoading, refetch } = useTeachersList();
+  const subjectsResponse = useSubjectsList();
+  const subjects = subjectsResponse?.data?.data
 
   let d = data?.data ?? []
   const table = useReactTable({
@@ -226,11 +252,7 @@ export default function TeachersPage() {
   })
 
   if (isLoading) {
-    return <span>Loading...</span>
-  }
-
-  if (isError) {
-    return <span></span>
+    return <Loader />
   }
   const image = null
   return (
@@ -269,20 +291,33 @@ export default function TeachersPage() {
                     <Input className="w-full" {...register("phone", { required: false })} />
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                   <div className="text-base text-gray-500 whitespace-nowrap">
                     Dars soati:
                   </div>
                   <div className="w-full text-lg font-medium capitalize">
                     <Input type="number" className="w-full" {...register("workload", { required: false })} />
                   </div>
-                </div>
+                </div> */}
                 <div className="flex items-center space-x-2">
                   <div className="text-base text-gray-500">
                     Fani:
                   </div>
-                  <div className="w-full text-lg font-medium capitalize">
-                    <Input className="w-full" {...register("subjectName", { required: false })} />
+                  <div className="w-full text-lg font-medium">
+                    <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Fanlar..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup className="overflow-auto h-52">
+                          {subjects?.map(({ name, id }) => {
+                            return (
+                              <SelectItem key={id} value={id}>{name}</SelectItem>
+                            )
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -313,6 +348,17 @@ export default function TeachersPage() {
             }
             }
             className="max-w-sm"
+          />
+          <Input
+            placeholder="F.I.SH bo`yicha izlash..."
+            value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+            onChange={(event) => {
+              console.log(table.getColumn("fullName"))
+
+              return table.getColumn("fullName")?.setFilterValue(event.target.value)
+            }
+            }
+            className="max-w-sm ml-3"
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

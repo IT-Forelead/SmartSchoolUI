@@ -36,6 +36,7 @@ import { useRoomsList } from "@/hooks/useRooms"
 import { getCookie } from "cookies-next"
 import { UserInfo } from "@/models/user.interface"
 import { useRouter } from "next/navigation"
+import Loader from "@/components/client/Loader"
 
 export type Room = {
   "number": number,
@@ -44,7 +45,7 @@ export type Room = {
 }
 
 function translateRoomType(rt: string) {
-  if(rt.includes('class_room')) {
+  if (rt.includes('class_room')) {
     return 'sinfxona'
   }
   return 'laboratoriya'
@@ -124,7 +125,7 @@ export default function RoomsPage() {
   const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
   const router = useRouter()
   React.useEffect(() => {
-    if(currentUser?.role !== 'admin') {
+    if (currentUser?.role !== 'admin') {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
@@ -159,11 +160,7 @@ export default function RoomsPage() {
   })
 
   if (isLoading) {
-    return <span>Loading...</span>
-  }
-
-  if (isError) {
-    return <span></span>
+    return <Loader />
   }
 
   return (

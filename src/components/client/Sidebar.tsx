@@ -5,6 +5,7 @@ import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { BiDoorOpen } from '@/icons/RoomIcon'
 import { SolarAlarmBroken } from '@/icons/StudyHoursIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
+import { SolarWindowFrameBroken } from '@/icons/TimeTable'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { UserInfo } from '@/models/user.interface'
 import { getCookie } from 'cookies-next'
@@ -44,6 +45,10 @@ export default function Sidebar() {
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />
             <p>Dars soatlari</p>
+          </Link>
+          <Link href={'/dashboard/timetable'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/timetable' ? "text-gray-900 font-semibold" : ''}`}>
+            <SolarWindowFrameBroken className='w-6 h-6 mr-3' />
+            <p>Dars jadvali</p>
           </Link>
         </div> :
         <div className='mt-20 font-medium space-y-7'>

@@ -12,8 +12,3 @@ export const useTimeTable = () => {
   return useQuery(['timetable'], () => getTimeTable());
 };
 
-
-export const useRebuildTimetable = () => {
-  return useQuery(['rebuildTimeTable'], () => rebuildTimeTable());
-};
-

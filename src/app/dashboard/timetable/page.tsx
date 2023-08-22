@@ -29,9 +29,10 @@ export default function TimeTablePage() {
     return weekdayMap.get(uwd);
   }
 
-  function regenerate() {
-      const timetable = await rebuildTimetable();
-      groups = Object.keys(timetable) ?? [];
+  async function regenerate() {
+    await rebuildTimetable().then(() => {
+      timeTableResponse.refetch();
+    });
   }
 
   return (

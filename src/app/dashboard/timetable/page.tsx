@@ -1,13 +1,14 @@
 "use client";
 import Loader from "@/components/client/Loader";
 import { Button } from "@/components/ui/button";
-import { useTimeTable } from "@/hooks/useTimeTable";
-import { SolarDownloadSquareBroken } from "@/icons/DownloadIcon";
+import { useTimeTable, rebuildTimetable } from "@/hooks/useTimeTable";
+import { SolarRefreshSquareBroken } from "@/icons/Reload";
+import React from "react";
 
 export default function TimeTablePage() {
   const timeTableResponse = useTimeTable();
   const timetable = timeTableResponse?.data?.data ?? {};
-  const groups: string[] = Object.keys(timetable) ?? [];
+  let groups: string[] = Object.keys(timetable) ?? [];
   const weekdays = [
     "Dushanba",
     "Seshanba",
@@ -28,8 +29,22 @@ export default function TimeTablePage() {
     return weekdayMap.get(uwd);
   }
 
+  function regenerate() {
+      const timetable = await rebuildTimetable();
+      groups = Object.keys(timetable) ?? [];
+  }
+
   return (
     <div className="p-2 px-5">
+      <div className="flex items-center justify-end w-full">
+        <Button
+          onClick={() => regenerate()}
+          className="flex items-center mt-2 mb-3"
+        >
+          <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
+          Qayta generatsiya qilish
+        </Button>
+      </div>
       {!false ? (
         <table className="w-full text-sm border">
           <thead>
@@ -83,7 +98,9 @@ export default function TimeTablePage() {
                                 return (
                                   <li className="p-1 border" key={subject}>
                                     {subject?.moment}. {subject?.subjectName}
-                                    <p className="text-[11px] text-right capitalize font-bold">{subject?.teacherName}</p>
+                                    <p className="text-[11px] text-right capitalize font-bold">
+                                      {subject?.teacherName}
+                                    </p>
                                   </li>
                                 );
                               }

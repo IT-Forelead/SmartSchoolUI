@@ -47,6 +47,7 @@ import { UserInfo } from "@/models/user.interface"
 import Loader from "@/components/client/Loader"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSubjectsList } from "@/hooks/useSubjects"
+import useUserInfo from "@/hooks/useUserInfo"
 
 export type Teacher = {
   id: string,
@@ -83,7 +84,7 @@ export type TeacherUpdate = {
   phone: string
 }
 
-export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>): ColumnDef<Teacher>[] => [
+export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
     cell: ({ row }) => (
@@ -190,7 +191,7 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
 ]
 
 export default function TeachersPage() {
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
     if (currentUser?.role !== 'admin') {

@@ -16,13 +16,14 @@ import { Input } from '../ui/input'
 import { notifyError, notifySuccess } from '@/lib/notify'
 import { Loader } from 'lucide-react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import useUserInfo from '@/hooks/useUserInfo'
 
 export default function TeacherProfile() {
   const image = null
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const currentUser = useUserInfo()
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
-  const teacherResponse = useTeacherProfile(currentUser.id)
+  const teacherResponse = useTeacherProfile(currentUser?.id)
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data

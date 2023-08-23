@@ -1,3 +1,4 @@
+import useUserInfo from '@/hooks/useUserInfo'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { UserInfo } from '@/models/user.interface'
 import { getCookie } from 'cookies-next'
@@ -5,7 +6,7 @@ import Image from 'next/image'
 
 export default function AdminProfile() {
   const image = null
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const currentUser = useUserInfo()
   return (
     <div className="px-4 py-2">
       <div className="p-5 space-y-4 bg-white rounded">

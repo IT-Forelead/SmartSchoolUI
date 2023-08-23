@@ -37,6 +37,7 @@ import { getCookie } from "cookies-next"
 import { UserInfo } from "@/models/user.interface"
 import { useRouter } from "next/navigation"
 import Loader from "@/components/client/Loader"
+import useUserInfo from "@/hooks/useUserInfo"
 
 export type Room = {
   "number": number,
@@ -122,7 +123,7 @@ export const columns: ColumnDef<Room>[] = [
 ]
 
 export default function RoomsPage() {
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
     if (currentUser?.role !== 'admin') {

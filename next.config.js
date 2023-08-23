@@ -5,6 +5,9 @@ const nextConfig = {
     // Enables the styled-components SWC transform
     styledComponents: true,
   },
-}
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

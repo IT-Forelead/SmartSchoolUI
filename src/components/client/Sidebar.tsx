@@ -10,10 +10,14 @@ import { SolarUserBroken } from '@/icons/UserIcon'
 import { UserInfo } from '@/models/user.interface'
 import { getCookie } from 'cookies-next'
 import Link from 'next/link'
+import { useCookies } from "react-cookie"
 import { usePathname } from 'next/navigation'
+import useUserInfo from '@/hooks/useUserInfo'
 
 export default function Sidebar() {
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  // const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  // const [cookies, setCookies] = useCookies()
+  const currentUser = useUserInfo()
   const path = usePathname()
   return (
     <div>

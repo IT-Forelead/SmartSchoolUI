@@ -37,6 +37,7 @@ import { useGroupsList } from "@/hooks/useGroups"
 import { UserInfo } from "@/models/user.interface"
 import { getCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
+import useUserInfo from "@/hooks/useUserInfo"
 
 export type Group = {
   "id": string,
@@ -111,7 +112,7 @@ export const columns: ColumnDef<Group>[] = [
 ]
 
 export default function GroupsPage() {
-  const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
+  const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
     if (currentUser?.role !== 'admin') {

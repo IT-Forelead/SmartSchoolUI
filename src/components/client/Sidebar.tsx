@@ -24,7 +24,7 @@ export default function Sidebar() {
       <div>
         <h1 className='text-5xl'><span className='font-bold text-blue-600'>Edu</span><b className='font-extrabold'>CRM</b></h1>
       </div>
-      {currentUser?.role === 'admin' ?
+      {currentUser?.role?.includes('admin') ?
         <div className='mt-20 font-medium space-y-7'>
           <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarHome2Broken className='w-6 h-6 mr-3' />

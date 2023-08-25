@@ -1,4 +1,5 @@
 "use client"
+import useUserInfo from '@/hooks/useUserInfo'
 import { SolarBookMinimalisticBroken } from '@/icons/BooksIcon'
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
 import { SolarHome2Broken } from '@/icons/HomeIcon'
@@ -7,29 +8,33 @@ import { SolarAlarmBroken } from '@/icons/StudyHoursIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarWindowFrameBroken } from '@/icons/TimeTable'
 import { SolarUserBroken } from '@/icons/UserIcon'
-import { UserInfo } from '@/models/user.interface'
-import { getCookie } from 'cookies-next'
 import Link from 'next/link'
-import { useCookies } from "react-cookie"
 import { usePathname } from 'next/navigation'
-import useUserInfo from '@/hooks/useUserInfo'
 
 export default function Sidebar() {
-  // const currentUser = JSON.parse(getCookie('user-info') + "") as UserInfo
-  // const [cookies, setCookies] = useCookies()
   const currentUser = useUserInfo()
   const path = usePathname()
   return (
     <div>
       <div>
-        <h1 className='text-5xl'><span className='font-bold text-blue-600'>Edu</span><b className='font-extrabold'>CRM</b></h1>
+        <h1 className='text-5xl'><span className='font-bold text-blue-600'>25</span><b className='text-3xl font-extrabold'>SCHOOL</b></h1>
+      </div>
+      <div className='mt-20 font-medium space-y-7'>
+        <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
+          <SolarHome2Broken className='w-6 h-6 mr-3' />
+          <p>Bosh sahifa</p>
+        </Link>
+        <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
+          <SolarAlarmBroken className='w-6 h-6 mr-3' />
+          <p>Dars soatlari</p>
+        </Link>
+        <Link href={'/dashboard/timetable'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/timetable' ? "text-gray-900 font-semibold" : ''}`}>
+          <SolarWindowFrameBroken className='w-6 h-6 mr-3' />
+          <p>Dars jadvali</p>
+        </Link>
       </div>
       {currentUser?.role?.includes('admin') ?
-        <div className='mt-20 font-medium space-y-7'>
-          <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
-            <SolarHome2Broken className='w-6 h-6 mr-3' />
-            <p>Bosh sahifa</p>
-          </Link>
+        <div className='font-medium space-y-7 mt-7'>
           <Link href={'/dashboard/teachers'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/teachers' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
             <p>O`qituvchilar</p>
@@ -46,16 +51,8 @@ export default function Sidebar() {
             <SolarBookMinimalisticBroken className='w-6 h-6 mr-3' />
             <p>Fanlar</p>
           </Link>
-          <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
-            <SolarAlarmBroken className='w-6 h-6 mr-3' />
-            <p>Dars soatlari</p>
-          </Link>
-          <Link href={'/dashboard/timetable'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/timetable' ? "text-gray-900 font-semibold" : ''}`}>
-            <SolarWindowFrameBroken className='w-6 h-6 mr-3' />
-            <p>Dars jadvali</p>
-          </Link>
         </div> :
-        <div className='mt-20 font-medium space-y-7'>
+        <div className='font-medium mt-7 space-y-7'>
           <Link href={'/dashboard/profile'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/profile' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarUserBroken className='w-6 h-6 mr-3' />
             <p>Profil</p>

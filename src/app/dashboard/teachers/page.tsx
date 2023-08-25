@@ -68,6 +68,12 @@ export type Teacher = {
   workload: number
 }
 
+export type TeacherDegree = {
+  id: string,
+  description: string,
+  point: number
+}
+
 export type TeacherUpdate = {
   id: string,
   dateOfBirth: string,
@@ -194,7 +200,7 @@ export default function TeachersPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
-    if (currentUser?.role !== 'admin') {
+    if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])

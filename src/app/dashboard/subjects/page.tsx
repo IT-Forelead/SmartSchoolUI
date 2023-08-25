@@ -15,6 +15,7 @@ import {
 import { ArrowUpDown, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
+import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -33,11 +34,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSubjectsList } from "@/hooks/useSubjects"
-import { getCookie } from "cookies-next"
-import { UserInfo } from "@/models/user.interface"
-import { useRouter } from "next/navigation"
-import Loader from "@/components/client/Loader"
 import useUserInfo from "@/hooks/useUserInfo"
+import { useRouter } from "next/navigation"
 
 export type Subject = {
   "id": string,
@@ -135,7 +133,7 @@ export default function SubjectsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
-    if (currentUser?.role !== 'admin') {
+    if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])

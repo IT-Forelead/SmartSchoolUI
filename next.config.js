@@ -8,6 +8,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

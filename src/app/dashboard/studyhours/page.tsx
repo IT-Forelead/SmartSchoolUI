@@ -75,10 +75,10 @@ export default function StudyHoursPage() {
   return (
     <div className='p-2 px-5'>
       <div className='flex items-center justify-end w-full'>
-      <Button onClick={() => downloadExcel()} className='flex items-center mt-2 mb-3'>
-        <SolarDownloadSquareBroken className='w-6 h-6 mr-2' />
-        Excel formatda yuklash
-      </Button>
+        <Button onClick={() => downloadExcel()} className='flex items-center mt-2 mb-3'>
+          <SolarDownloadSquareBroken className='w-6 h-6 mr-2' />
+          Excel formatda yuklash
+        </Button>
       </div>
       {!subjectResponse.isLoading ?
         <table className='w-full text-sm border'>

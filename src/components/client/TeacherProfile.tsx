@@ -1,22 +1,22 @@
 import { TeacherUpdate } from '@/app/dashboard/teachers/page'
 import { useSubjectsList } from '@/hooks/useSubjects'
-import { useEditTeacher, useTeacherProfile } from '@/hooks/useTeachers'
+import { useDegreesList, useEditTeacher, useTeacherProfile } from '@/hooks/useTeachers'
+import useUserInfo from '@/hooks/useUserInfo'
+import { SolarBoxMinimalisticBroken } from '@/icons/BoxIcon'
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon'
 import { SolarAddCircleBroken } from '@/icons/PlusIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { dateFormater } from '@/lib/composables'
-import { UserInfo } from '@/models/user.interface'
-import { getCookie } from 'cookies-next'
+import { notifyError, notifySuccess } from '@/lib/notify'
+import { Loader } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
-import { notifyError, notifySuccess } from '@/lib/notify'
-import { Loader } from 'lucide-react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import useUserInfo from '@/hooks/useUserInfo'
+import TakeLesson from './profile/TakeLesson'
 
 export default function TeacherProfile() {
   const image = null
@@ -27,7 +27,7 @@ export default function TeacherProfile() {
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
-  
+
   useEffect(() => {
     reset({ ...teacher })
   }, [reset, teacher])
@@ -140,7 +140,7 @@ export default function TeacherProfile() {
             </div>
           </div>
         </div>
-        <div className='flex items-start justify-end w-full'>
+        <div className='flex items-start justify-end w-full space-x-3'>
           <Dialog>
             <DialogTrigger>
               <Button>
@@ -220,6 +220,7 @@ export default function TeacherProfile() {
               </form>
             </DialogContent>
           </Dialog>
+          <TakeLesson />
         </div>
       </div>
       <div>

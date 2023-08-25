@@ -34,10 +34,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useGroupsList } from "@/hooks/useGroups"
-import { UserInfo } from "@/models/user.interface"
-import { getCookie } from "cookies-next"
-import { useRouter } from "next/navigation"
 import useUserInfo from "@/hooks/useUserInfo"
+import { useRouter } from "next/navigation"
 
 export type Group = {
   "id": string,
@@ -115,7 +113,7 @@ export default function GroupsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
-    if (currentUser?.role !== 'admin') {
+    if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])

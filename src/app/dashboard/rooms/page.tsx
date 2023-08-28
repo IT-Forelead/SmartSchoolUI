@@ -124,7 +124,7 @@ export default function RoomsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
   React.useEffect(() => {
-    if (currentUser?.role?.includes('admin')) {
+    if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])

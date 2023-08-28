@@ -6,12 +6,13 @@ import { SolarUserBroken } from '@/icons/UserIcon'
 import { Button } from '@/components/ui/button'
 import { SolarCheckCircleBroken } from '@/icons/ApproveIcon'
 import { SolarCloseCircleBroken } from '@/icons/RejectIcon'
-import { useTeacherLinkApprove, useTeacherLinkInfo } from '@/hooks/useTeachers'
+import { approveTeacherDoc, useTeacherLinkApprove, useTeacherLinkInfo } from '@/hooks/useTeachers'
 import Loader from '@/components/client/Loader'
 import { type } from 'os'
-import { SubmitHandler } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { error } from 'console'
 import Link from 'next/link'
+import { notifyError } from '@/lib/notify'
 
 export type TeacherLinkInfo = {
   "id": string,
@@ -60,14 +61,16 @@ export default function LinkPage({ params }: { params: { link: string } }) {
     }
   }, [teacherLinkResponse.error])
 
-  const [approved, setApproved] = useState(false)
-
-  const { data, mutate: save, isSuccess, isError, isLoading } = useTeacherLinkApprove();
-
-  const onSubmit: SubmitHandler<Approve> = () => save({
-    link: params.link,
-    approved: approved
-  });
+  function approveTeacherDocument(approved: boolean) {
+    approveTeacherDoc({
+      link: params.link,
+      approved: approved
+    }).then(() => {
+      window.location.href = window.location.origin; 
+    }).catch((err) => {
+      notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
+    })
+  }
 
   if (error) {
     return (
@@ -180,16 +183,16 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                 <Loader /> :
                 <div>
                   <Image src={image ?? ''} alt="sertifikat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
-                  <form className='flex items-center justify-center w-full space-x-5'>
-                    <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => setApproved(true)}>
+                  <div className='absolute z-30 flex items-center justify-center w-full space-x-5 bottom-5'>
+                    <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true)}>
                       <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
                       Tasdiqlash
                     </Button>
-                    <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => setApproved(false)}>
+                    <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false)}>
                       <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
                       Bekor qilish
                     </Button>
-                  </form>
+                  </div>
                 </div>
             }
           </div>

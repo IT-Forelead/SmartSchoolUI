@@ -13,7 +13,7 @@ const getTeacherDegreesList = async () => {
   return await axios.get<TeacherDegree[]>("/teacher/degrees");
 };
 
-const approveTeacherDoc = async (data: Approve) => {
+export const approveTeacherDoc = async (data: Approve) => {
   return await axios.get<any>(`/teacher/approve/degree/${data.link}?approved=${data.approved}`);
 };
 
@@ -62,8 +62,4 @@ export const useTeacherProfile = (tId: string) => {
 
 export const useTeacherLinkInfo = (link: string) => {
   return useQuery(['teacherLinkInfo'], () => getTeacherDocumentInfo(link));
-}
-
-export const useTeacherLinkApprove = () => {
-  return useMutation((data: Approve) => approveTeacherDoc(data));
 }

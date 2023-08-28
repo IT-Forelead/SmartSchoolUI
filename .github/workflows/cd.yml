@@ -2,7 +2,7 @@ name: Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 jobs:
   build:
     name: BUILD
@@ -15,7 +15,7 @@ jobs:
         run: |
           docker build -t smartschoolui .
           docker save smartschoolui:latest > ./ui.tar.gz
-          
+
       - name: Copy repository contents via scp
         uses: appleboy/scp-action@master
         with:
@@ -23,10 +23,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "ui.tar.gz"
-          target: "smartschool/ui"
+          target: "smartschool/ui"    
   deploy:
     name: DEPLOY
     runs-on: ubuntu-latest
+    needs: ["build"]
     steps:
       - name: Install SSH key of timeweb
         uses: appleboy/ssh-action@master

@@ -223,13 +223,27 @@ export default function TeacherProfile() {
           <TakeLesson />
         </div>
       </div>
-      {!teacherResponse.isLoading ?
-        teacher?.documents?.map(({ id, docUrl, approved }) => {
-          return (
-            <div key={id}>{docUrl}</div>
-          )
-        }) : <Loader />
-      }
+      <div className='flex flex-wrap items-center justify-start'>
+        {!teacherResponse.isLoading ?
+          teacher?.documents?.map(({ id, docUrl, approved }) => {
+            return (
+              <div key={id}>
+                <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                  <Image src={docUrl ?? ''} alt="Hujjat" layout='fill' className="top-0 object-cover duration-500 rounded-t-lg" />
+                  <div className="p-5">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hujjat {id?.slice(0, 4)}</h5>
+                  </div>
+                </div>
+                {
+                  approved ?
+                    <h1 className='text-green-500'>Tasdiqlangan</h1> :
+                    <h1 className='text-red-500'>Tasdiqlanmagan</h1>
+                }
+              </div>
+            )
+          }) : <Loader />
+        }
+      </div>
       {/* <div>
         <div className='flex items-center justify-between'>
           <div className="text-xl font-bold">Sertifikatlar</div>

@@ -1,10 +1,8 @@
 import { TeacherUpdate } from '@/app/dashboard/teachers/page'
 import { useSubjectsList } from '@/hooks/useSubjects'
-import { useDegreesList, useEditTeacher, useTeacherProfile } from '@/hooks/useTeachers'
+import { useEditTeacher, useTeacherProfile } from '@/hooks/useTeachers'
 import useUserInfo from '@/hooks/useUserInfo'
-import { SolarBoxMinimalisticBroken } from '@/icons/BoxIcon'
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon'
-import { SolarAddCircleBroken } from '@/icons/PlusIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { dateFormater } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
@@ -15,8 +13,8 @@ import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import TakeLesson from './profile/TakeLesson'
 import Loader from './Loader'
+import TakeLesson from './profile/TakeLesson'
 
 export default function TeacherProfile() {
   const image = null
@@ -223,7 +221,7 @@ export default function TeacherProfile() {
           <TakeLesson />
         </div>
       </div>
-      <div className='flex flex-wrap items-center justify-start'>
+      <div className='flex flex-wrap items-center justify-start space-x-5'>
         {!teacherResponse.isLoading ?
           teacher?.documents?.map(({ id, docUrl, approved }) => {
             return (
@@ -231,7 +229,7 @@ export default function TeacherProfile() {
                 <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                   <Image src={docUrl ?? ''} alt="Hujjat" layout='fill' className="top-0 object-cover duration-500 rounded-t-lg" />
                   <div className="p-5">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hujjat {id?.slice(0, 4)}</h5>
+                    <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hujjat</h5>
                   </div>
                 </div>
                 {

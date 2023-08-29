@@ -8,7 +8,6 @@ import { SolarAddCircleBroken } from '@/icons/PlusIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { dateFormater } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
-import { Loader } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -17,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import TakeLesson from './profile/TakeLesson'
+import Loader from './Loader'
 
 export default function TeacherProfile() {
   const image = null
@@ -223,7 +223,14 @@ export default function TeacherProfile() {
           <TakeLesson />
         </div>
       </div>
-      <div>
+      {!teacherResponse.isLoading ?
+        teacher?.documents?.map(({ id, docUrl, approved }) => {
+          return (
+            <div key={id}>{docUrl}</div>
+          )
+        }) : <Loader />
+      }
+      {/* <div>
         <div className='flex items-center justify-between'>
           <div className="text-xl font-bold">Sertifikatlar</div>
           <Button disabled={true}>
@@ -249,7 +256,7 @@ export default function TeacherProfile() {
           </table>
           <div className="w-full text-center text-red-500">Hech nima topilmadi</div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

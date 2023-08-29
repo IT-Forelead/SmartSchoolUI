@@ -49,6 +49,34 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useSubjectsList } from "@/hooks/useSubjects"
 import useUserInfo from "@/hooks/useUserInfo"
 
+
+export type TeacherDoc = {
+  id: string,
+  createdAt: string,
+  dateOfBirth: string,
+  gender: "female" | "male",
+  fullName: string,
+  nationality: string,
+  citizenship: string,
+  documentType: string,
+  documentSeries: string,
+  documentNumber: string,
+  pinfl: string,
+  phone?: string,
+  photo?: string,
+  subjectName: string
+  degree: string,
+  workload: number,
+  documents: [
+    {
+      "id": string,
+      "teacherId": string,
+      "docUrl": string,
+      "approved": string
+    }
+  ]
+}
+
 export type Teacher = {
   id: string,
   createdAt: string,
@@ -65,7 +93,15 @@ export type Teacher = {
   photo?: string,
   subjectName: string
   degree: string,
-  workload: number
+  workload: number,
+  documents: [
+    {
+      "id": string,
+      "teacherId": string,
+      "docUrl": string,
+      "approved": string
+    }
+  ]
 }
 
 export type TeacherDegree = {

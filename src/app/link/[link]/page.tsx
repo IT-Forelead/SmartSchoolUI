@@ -1,18 +1,15 @@
 "use client"
-import { dateFormater } from '@/lib/composables'
-import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { SolarUserBroken } from '@/icons/UserIcon'
+import Loader from '@/components/client/Loader'
 import { Button } from '@/components/ui/button'
+import { approveTeacherDoc, useTeacherLinkInfo } from '@/hooks/useTeachers'
 import { SolarCheckCircleBroken } from '@/icons/ApproveIcon'
 import { SolarCloseCircleBroken } from '@/icons/RejectIcon'
-import { approveTeacherDoc, useTeacherLinkApprove, useTeacherLinkInfo } from '@/hooks/useTeachers'
-import Loader from '@/components/client/Loader'
-import { type } from 'os'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { error } from 'console'
-import Link from 'next/link'
+import { SolarUserBroken } from '@/icons/UserIcon'
+import { dateFormater } from '@/lib/composables'
 import { notifyError } from '@/lib/notify'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export type TeacherLinkInfo = {
   "id": string,
@@ -66,7 +63,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
       link: params.link,
       approved: approved
     }).then(() => {
-      window.location.href = window.location.origin; 
+      window.location.href = window.location.origin;
     }).catch((err) => {
       notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
     })

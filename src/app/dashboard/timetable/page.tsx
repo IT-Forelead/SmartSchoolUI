@@ -2,10 +2,12 @@
 import Loader from "@/components/client/Loader";
 import { Button } from "@/components/ui/button";
 import { useTimeTable, rebuildTimetable } from "@/hooks/useTimeTable";
+import useUserInfo from "@/hooks/useUserInfo";
 import { SolarRefreshSquareBroken } from "@/icons/Reload";
 import React from "react";
 
 export default function TimeTablePage() {
+  const currentUser = useUserInfo()
   const timeTableResponse = useTimeTable();
   const timetable = timeTableResponse?.data?.data ?? {};
   let groups: string[] = Object.keys(timetable) ?? [];
@@ -37,19 +39,22 @@ export default function TimeTablePage() {
 
   return (
     <div className="p-2 px-5">
-      <div className="flex items-center justify-end w-full">
-        <Button
-          onClick={() => regenerate()}
-          className="flex items-center mt-2 mb-3"
-        >
-          <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
-          Qayta generatsiya qilish
-        </Button>
-      </div>
-      {!false ? (
+      {currentUser?.role?.includes('admin') ?
+        <div className="flex items-center justify-end w-full">
+          <Button
+            onClick={() => regenerate()}
+            className="flex items-center mt-2 mb-3"
+          >
+            <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
+            Qayta generatsiya qilish
+          </Button>
+        </div> : <div></div>
+      }
+
+      {!timeTableResponse.isLoading ? (
         <table className="w-full text-sm border">
           <thead>
-            <tr className="text-gray-500 border bg-gray-100">
+            <tr className="text-gray-500 bg-gray-100 border">
               <th className="p-2 text-white bg-gray-500 border">
                 Dars jadvali
               </th>
@@ -80,9 +85,8 @@ export default function TimeTablePage() {
                 return (
                   <tr
                     key={item}
-                    className={`border ${
-                      idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
-                    }`}
+                    className={`border ${idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
+                      }`}
                   >
                     <td className="p-1 font-medium text-center text-gray-500 border">
                       {item}
@@ -91,7 +95,7 @@ export default function TimeTablePage() {
                       return (
                         <td
                           key={day}
-                          className="p-1 align-top font-medium text-gray-500 border"
+                          className="p-1 font-medium text-gray-500 align-top border"
                         >
                           <ol className="space-y-1">
                             {timetable[item][translateWeekday(day)]?.map(

@@ -71,7 +71,7 @@ export type TeacherDoc = {
     {
       "id": string,
       "teacherId": string,
-      "docUrl": string,
+      "certificateId": string,
       "approved": string
     }
   ]
@@ -98,7 +98,7 @@ export type Teacher = {
     {
       "id": string,
       "teacherId": string,
-      "docUrl": string,
+      "certificateId": string,
       "approved": string
     }
   ]

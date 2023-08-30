@@ -32,7 +32,7 @@ export type TeacherLinkInfo = {
     {
       "id": string,
       "teacherId": string,
-      "docUrl": string,
+      "certificateId": string,
       "approved": string
     }
   ]
@@ -49,7 +49,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
   const [image, setImage] = useState('')
   const [error, setError] = useState('')
   useEffect(() => {
-    setImage(teacher?.documents[0]?.docUrl as string)
+    setImage(`http://25-school.uz/school/api/v1/asset/${teacher?.documents[0]?.certificateId}`)
   }, [teacher?.documents])
 
   useEffect(() => {

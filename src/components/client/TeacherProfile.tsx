@@ -223,14 +223,11 @@ export default function TeacherProfile() {
       </div>
       <div className='flex flex-wrap items-center justify-start space-x-5'>
         {!teacherResponse.isLoading ?
-          teacher?.documents?.map(({ id, docUrl, approved }) => {
+          teacher?.documents?.map(({ id, certificateId, approved }) => {
             return (
               <div key={id}>
-                <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                  <Image src={docUrl ?? ''} alt="Hujjat" layout='fill' className="top-0 object-cover duration-500 rounded-t-lg" />
-                  <div className="p-5">
-                    <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hujjat</h5>
-                  </div>
+                <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                  <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                 </div>
                 {
                   approved ?

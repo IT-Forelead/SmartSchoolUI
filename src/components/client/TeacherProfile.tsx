@@ -15,6 +15,7 @@ import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import Loader from './Loader'
 import TakeLesson from './profile/TakeLesson'
+import EditCertificate from './profile/EditCertificate'
 
 export default function TeacherProfile() {
   const image = null
@@ -138,87 +139,134 @@ export default function TeacherProfile() {
             </div>
           </div>
         </div>
-        <div className='flex items-start justify-end w-full space-x-3'>
-          <Dialog>
-            <DialogTrigger>
-              <Button>
-                <SolarPenNewSquareBroken className='w-6 h-6 mr-2' />
-                Profilni tahrirlash
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Profilni tahrirlash</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="w-full space-y-4 bg-white rounded">
-                  <div className="flex items-start space-x-4">
-                    {
-                      image ?
-                        <div>
-                          <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                            className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                        </div> :
-                        <div>
-                          <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+        <div>
+          <div className='flex items-start justify-end w-full space-x-3'>
+            <Dialog>
+              <DialogTrigger>
+                <Button>
+                  <SolarPenNewSquareBroken className='w-6 h-6 mr-2' />
+                  Profilni tahrirlash
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Profilni tahrirlash</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="w-full space-y-4 bg-white rounded">
+                    <div className="flex items-start space-x-4">
+                      {
+                        image ?
+                          <div>
+                            <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                              className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                          </div> :
+                          <div>
+                            <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                          </div>
+                      }
+                      <div className="w-full space-y-3">
+                        <div className="flex items-center w-full space-x-2">
+                          <div className="text-base text-gray-500">
+                            F.I.SH:
+                          </div>
+                          <div className="w-full text-lg font-medium capitalize">
+                            <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                          </div>
                         </div>
-                    }
-                    <div className="w-full space-y-3">
-                      <div className="flex items-center w-full space-x-2">
-                        <div className="text-base text-gray-500">
-                          F.I.SH:
+                        <div className="flex items-center space-x-2">
+                          <div className="text-base text-gray-500">
+                            Telefon:
+                          </div>
+                          <div className="w-full text-lg font-medium capitalize">
+                            <Input className="w-full" {...register("phone", { required: false })} />
+                          </div>
                         </div>
-                        <div className="w-full text-lg font-medium capitalize">
-                          <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                        <div className="flex items-center space-x-2">
+                          <div className="text-base text-gray-500">
+                            Fani:
+                          </div>
+                          <div className="w-full text-lg font-medium">
+                            <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Fanlar..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup className="overflow-auto h-52">
+                                  {subjects?.map(({ name, id }) => {
+                                    return (
+                                      <SelectItem key={id} value={id}>{name}</SelectItem>
+                                    )
+                                  })}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-base text-gray-500">
-                          Telefon:
-                        </div>
-                        <div className="w-full text-lg font-medium capitalize">
-                          <Input className="w-full" {...register("phone", { required: false })} />
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-base text-gray-500">
-                          Fani:
-                        </div>
-                        <div className="w-full text-lg font-medium">
-                          <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Fanlar..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup className="overflow-auto h-52">
-                                {subjects?.map(({ name, id }) => {
-                                  return (
-                                    <SelectItem key={id} value={id}>{name}</SelectItem>
-                                  )
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-base text-gray-500">
-                          Yaratilgan sana:
-                        </div>
-                        <div className="text-lg font-medium">
-                          {dateFormater(teacher?.createdAt)}
+                        <div className="flex items-center space-x-2">
+                          <div className="text-base text-gray-500">
+                            Yaratilgan sana:
+                          </div>
+                          <div className="text-lg font-medium">
+                            {dateFormater(teacher?.createdAt)}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div className="flex items-center justify-end">
+                    <Button autoFocus={true}>Saqlash</Button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+            <TakeLesson />
+          </div>
+          <div className='flex items-center justify-end mt-5'>
+            <div className='p-3 border rounded-lg w-96 h-fit'>
+              <h1 className='font-bold'>Dars bo`lish formulasi</h1>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  X:
                 </div>
-                <div className="flex items-center justify-end">
-                  <Button autoFocus={true}>Saqlash</Button>
+                <div className="text-lg font-medium">
+                  0
                 </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-          <TakeLesson />
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  Jami:
+                </div>
+                <div className="text-lg font-medium">
+                  0
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  O`qituvchi Nomi 1:
+                </div>
+                <div className="text-lg font-medium">
+                  0
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  O`qituvchi Nomi 2:
+                </div>
+                <div className="text-lg font-medium">
+                  0
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  Qoldiq:
+                </div>
+                <div className="text-lg font-medium">
+                  0
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className='flex flex-wrap items-center justify-start space-x-5'>
@@ -228,6 +276,12 @@ export default function TeacherProfile() {
               <div key={id}>
                 <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
+                  {
+                    approved ? "" :
+                      <div className='absolute top-5 right-5 hover:cursor-pointer hover:scale-105'>
+                        <EditCertificate degId={id}/>
+                      </div>
+                  }
                 </div>
                 {
                   approved ?
@@ -266,6 +320,6 @@ export default function TeacherProfile() {
           <div className="w-full text-center text-red-500">Hech nima topilmadi</div>
         </div>
       </div> */}
-    </div>
+    </div >
   )
 }

@@ -396,8 +396,6 @@ export default function TeachersPage() {
             placeholder="F.I.SH bo`yicha izlash..."
             value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
             onChange={(event) => {
-              console.log(table.getColumn("fullName"))
-
               return table.getColumn("fullName")?.setFilterValue(event.target.value)
             }
             }

@@ -35,6 +35,14 @@ const addTeacherPosition = async (data: TeacherPositionUpdate) => {
   });
 };
 
+const updateTeacherPosition = async (data: TeacherPositionUpdate) => {
+  return await axios.post<any>("/teacher/update/document", data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 const getTeacherDocumentInfo = async (link: string) => {
   return await axios.get<TeacherLinkInfo>(`/teacher/document/${link}`);
 };
@@ -54,6 +62,10 @@ export const useEditTeacher = () => {
 
 export const useAddTeacherPosition = () => {
   return useMutation((data: TeacherPositionUpdate) => addTeacherPosition(data), {});
+};
+
+export const useUpdateTeacherPosition = () => {
+  return useMutation((data: TeacherPositionUpdate) => updateTeacherPosition(data), {});
 };
 
 export const useTeacherProfile = (tId: string) => {

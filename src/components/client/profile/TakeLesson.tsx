@@ -89,7 +89,7 @@ export default function TakeLesson() {
                           <SelectGroup className="overflow-auto h-52">
                             {degrees?.map(({ description, id }) => {
                               return (
-                                <SelectItem key={id} value={id} className='overflow-auto w-[450px]'>
+                                <SelectItem key={id} value={id} className='overflow-auto w-[300px] md:w-[450px]'>
                                   {description}
                                 </SelectItem>
                               )

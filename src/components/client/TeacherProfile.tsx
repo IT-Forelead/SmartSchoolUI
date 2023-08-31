@@ -66,8 +66,8 @@ export default function TeacherProfile() {
 
   return (
     <div className="px-4 py-2">
-      <div className="grid grid-cols-2 p-5 space-y-4 bg-white rounded">
-        <div className="flex items-start space-x-4">
+      <div className="grid grid-cols-1 space-y-4 bg-white rounded md:p-5 md:grid-cols-2">
+        <div className="flex items-start space-x-4 scale-90 md:scale-100">
           {
             image ?
               <div>
@@ -153,9 +153,9 @@ export default function TeacherProfile() {
             </div>
           </div>
         </div>
-        <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-1 md:grid-cols-2'>
           <div>
-            <div className='p-3 border rounded-lg w-96 h-fit'>
+            <div className='w-full p-3 border rounded-lg md:w-96 h-fit'>
               <h1 className='font-bold'>Dars bo`lish formulasi</h1>
               <div className="flex items-center space-x-2">
                 <div className="text-base text-gray-500">
@@ -195,7 +195,7 @@ export default function TeacherProfile() {
               </div>
             </div>
           </div>
-          <div className='flex items-start justify-end w-full space-x-3'>
+          <div className='flex items-start justify-center w-full my-3 space-x-3 md:justify-end md:my-0'>
             <Dialog>
               <DialogTrigger>
                 <Button>
@@ -210,16 +210,18 @@ export default function TeacherProfile() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="w-full space-y-4 bg-white rounded">
                     <div className="flex items-start space-x-4">
-                      {
-                        image ?
-                          <div>
-                            <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                              className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                          </div> :
-                          <div>
-                            <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                          </div>
-                      }
+                      <div className='hidden md:block'>
+                        {
+                          image ?
+                            <div>
+                              <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                                className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                            </div> :
+                            <div>
+                              <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                            </div>
+                        }
+                      </div>
                       <div className="w-full space-y-3">
                         <div className="flex items-center w-full space-x-2">
                           <div className="text-base text-gray-500">
@@ -279,12 +281,12 @@ export default function TeacherProfile() {
           </div>
         </div>
       </div>
-      <div className='flex flex-wrap items-center justify-start space-x-5'>
+      <div className='items-center justify-start md:space-x-5 md:flex md:flex-wrap'>
         {!teacherResponse.isLoading ?
           teacher?.documents?.map(({ id, certificateId, approved }) => {
             return (
               <div key={id} className='my-3'>
-                <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-[350px] md:w-96 dark:bg-gray-800 dark:border-gray-700">
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   {
                     approved ? "" :

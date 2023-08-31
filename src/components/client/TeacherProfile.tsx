@@ -283,7 +283,7 @@ export default function TeacherProfile() {
         {!teacherResponse.isLoading ?
           teacher?.documents?.map(({ id, certificateId, approved }) => {
             return (
-              <div key={id}>
+              <div key={id} className='my-3'>
                 <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   {

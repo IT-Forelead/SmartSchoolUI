@@ -94,7 +94,7 @@ export const columns: ColumnDef<Subject>[] = [
   {
     header: 'Jami',
     cell: ({ row }) => (
-      <div className="capitalize">{parseInt(row.getValue('hourForHigher')) + parseInt(row.getValue('hourForBeginner'))}</div>
+      <div className="capitalize">{parseInt(row.getValue('hourForHigher')) + parseInt(row.getValue('hourForBeginner')) || 0}</div>
     ),
   },
   {

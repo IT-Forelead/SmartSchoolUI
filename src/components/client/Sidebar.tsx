@@ -1,6 +1,7 @@
 "use client"
 import useUserInfo from '@/hooks/useUserInfo'
 import { SolarBookMinimalisticBroken } from '@/icons/BooksIcon'
+import { SolarChatRoundLineBroken } from '@/icons/ChatIcon'
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
 import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { BiDoorOpen } from '@/icons/RoomIcon'
@@ -50,6 +51,10 @@ export default function Sidebar() {
           <Link href={'/dashboard/subjects'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/subjects' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarBookMinimalisticBroken className='w-6 h-6 mr-3' />
             <p>Fanlar</p>
+          </Link>
+          <Link href={'/dashboard/messages'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/messages' ? "text-gray-900 font-semibold" : ''}`}>
+            <SolarChatRoundLineBroken className='w-6 h-6 mr-3' />
+            <p>SMS xabarlar</p>
           </Link>
         </div> :
         <div className='font-medium mt-7 space-y-7'>

@@ -42,7 +42,11 @@ export default function TakeLesson() {
       notifySuccess("O`zgarishlar saqlandi")
       teacherResponse.refetch()
     } else if (error) {
-      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+      if (error?.response?.data?.includes('avval')) {
+        notifyError(error?.response?.data)
+      } else {
+        notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+      }
     } else return;
   }, [isSuccess, error])
 

@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
+import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { approveTeacherDoc, approveTeacherDocAsAdmin, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import Image from "next/image"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -48,7 +48,8 @@ import Loader from "@/components/client/Loader"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSubjectsList } from "@/hooks/useSubjects"
 import useUserInfo from "@/hooks/useUserInfo"
-
+import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
+import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
 
 export type TeacherDoc = {
   id: string,
@@ -110,6 +111,12 @@ export type TeacherDegree = {
   point: number
 }
 
+export type ApproveAsAdmin = {
+  "approved": boolean,
+  "degreeId": string,
+  "teacherId": string
+}
+
 export type TeacherUpdate = {
   id: string,
   dateOfBirth: string,
@@ -126,7 +133,11 @@ export type TeacherUpdate = {
   phone: string
 }
 
-export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>): ColumnDef<Teacher, any>[] => [
+function returnLength(list: any) {
+  return list?.length
+}
+
+export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
     cell: ({ row }) => (
@@ -193,7 +204,15 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
     ),
   },
   {
+    accessorKey: "documents",
+    header: 'Sertifikatlar soni',
+    cell: ({ row }) => (
+      <div className="capitalize">{returnLength(row.getValue('documents')) ?? 0}</div>
+    ),
+  },
+  {
     id: "actions",
+    header: "Amallar",
     enableHiding: false,
     cell: ({ row }) => {
       const teacher = row.original
@@ -215,8 +234,14 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
               <CopyIcon className="w-4 h-4 mr-1" />
               Nusxalash
             </DropdownMenuItem>
+            <DropdownMenuItem className="text-green-600">
+              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
+                <EyeIcon className="w-4 h-4 mr-1" />
+                Sertifikatlar
+              </DialogTrigger>
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-blue-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => setTeacher(teacher)}>
+              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('', teacher)}>
                 <PencilIcon className="w-4 h-4 mr-1" />
                 Tahrirlash
               </DialogTrigger>
@@ -235,12 +260,49 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
 export default function TeachersPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
+
+  function showCertificates(mode: string, teacher: Teacher) {
+    setMode(mode)
+    setTeacher(teacher)
+  }
+
+  const [isApproving, setIsApproving] = React.useState<boolean>(false)
+  const [isRejecting, setIsRejecting] = React.useState<boolean>(false)
+
+  function approveTeacherDocument(approved: boolean, id: string) {
+    if (approved) {
+      setIsApproving(true)
+    } else {
+      setIsRejecting(true)
+    }
+    approveTeacherDocAsAdmin(
+      {
+        approved: approved,
+        degreeId: id,
+        teacherId: teacher?.id ?? ""
+      }
+    ).then(() => {
+      setIsApproving(false)
+      setIsRejecting(false)
+      notifySuccess("Sertifikat muvaffaqiyatli tasdiqlandi")
+      refetch()
+    }).catch((err) => {
+      notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
+      setTimeout(() => {
+        setIsApproving(false)
+        setIsRejecting(false)
+      }, 2000)
+    })
+  }
+
   React.useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
   const [teacher, setTeacher] = React.useState<Teacher | null>(null)
+  const [mode, setMode] = React.useState<string>('')
+  const [open, setOpen] = React.useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -259,6 +321,7 @@ export default function TeachersPage() {
     if (isSuccess) {
       notifySuccess("O`zgarishlar saqlandi")
       refetch()
+      setOpen(false)
     } else if (error) {
       notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
     } else return;
@@ -277,7 +340,7 @@ export default function TeachersPage() {
   let d = data?.data ?? []
   const table = useReactTable({
     data: d,
-    columns: columns(setTeacher),
+    columns: columns(setTeacher, showCertificates),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -299,99 +362,218 @@ export default function TeachersPage() {
   }
   const image = null
   return (
-    <Dialog>
-      <DialogContent className="max-w-2xl">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className={mode ? `max-w-4xl` : `max-w-2xl`}>
         <DialogHeader>
-          <DialogTitle>O`qituvchi profili</DialogTitle>
+          {mode ?
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> :
+            <DialogTitle>O`qituvchi profili</DialogTitle>
+          }
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full space-y-4 bg-white rounded">
-            <div className="flex items-start space-x-4">
-              {
-                image ?
-                  <div>
-                    <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                  </div> :
-                  <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+        {mode ?
+          <div className="px-4 py-2">
+            <div className="flex p-5 space-y-4 bg-white rounded">
+              <div className="flex items-start space-x-4">
+                {
+                  image ?
+                    <div>
+                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                    </div> :
+                    <div>
+                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    </div>
+                }
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      F.I.SH:
+                    </div>
+                    <div className="text-lg font-medium capitalize">
+                      {teacher?.fullName}
+                    </div>
                   </div>
-              }
-              <div className="w-full space-y-3">
-                <div className="flex items-center w-full space-x-2">
-                  <div className="text-base text-gray-500">
-                    F.I.SH:
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Telefon:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {teacher?.phone}
+                    </div>
                   </div>
-                  <div className="w-full text-lg font-medium capitalize">
-                    <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Jinsi:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {teacher?.gender.includes('female') ? 'Ayol' : 'Erkak'}
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="text-base text-gray-500">
-                    Telefon:
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Fani:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {teacher?.subjectName ?? "-"}
+                    </div>
                   </div>
-                  <div className="w-full text-lg font-medium capitalize">
-                    <Input className="w-full" {...register("phone", { required: false })} />
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Daraja:
+                    </div>
+                    <div className="text-lg font-medium capitalize">
+                      {teacher?.degree ?? "-"}
+                    </div>
                   </div>
-                </div>
-                {/* <div className="flex items-center space-x-2">
-                  <div className="text-base text-gray-500 whitespace-nowrap">
-                    Dars soati:
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Millati:
+                    </div>
+                    <div className="text-lg font-medium capitalize">
+                      {teacher?.nationality ?? "-"}
+                    </div>
                   </div>
-                  <div className="w-full text-lg font-medium capitalize">
-                    <Input type="number" className="w-full" {...register("workload", { required: false })} />
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Hujjat turi:
+                    </div>
+                    <div className="text-lg font-medium capitalize">
+                      {teacher?.documentType}
+                    </div>
                   </div>
-                </div> */}
-                <div className="flex items-center space-x-2">
-                  <div className="text-base text-gray-500">
-                    Fani:
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Hujjat raqami:
+                    </div>
+                    <div className="text-lg font-medium capitalize">
+                      {teacher?.documentSeries} {teacher?.documentNumber}
+                    </div>
                   </div>
-                  <div className="w-full text-lg font-medium">
-                    <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Fanlar..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup className="overflow-auto h-52">
-                          {subjects?.map(({ name, id }) => {
-                            return (
-                              <SelectItem key={id} value={id}>{name}</SelectItem>
-                            )
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="text-base text-gray-500">
-                    Yaratilgan sana:
-                  </div>
-                  <div className="text-lg font-medium">
-                    {dateFormater(teacher?.createdAt)}
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Yaratilgan sana:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {dateFormater(teacher?.createdAt)}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex items-center justify-end">
-            <Button autoFocus={true}>Saqlash</Button>
-          </div>
-        </form>
+            <div className='flex flex-wrap items-center justify-start space-x-5 overflow-auto max-h-[420px]'>
+              {!isLoading ?
+                teacher?.documents?.map(({ id, certificateId, approved }) => {
+                  return (
+                    <div key={id} className="my-3">
+                      <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                        <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
+                        {
+                          !approved ?
+                            <div className='absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5'>
+                              {isApproving ?
+                                <Button className='bg-green-400 hover:bg-green-700 whitespace-nowrap' disabled={true}>
+                                  <Loader2 className='w-6 h-6 mr-2' />
+                                  Tasdiqlanmoqda...
+                                </Button>
+                                : <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true, id)}>
+                                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                                  Tasdiqlash
+                                </Button>
+                              }
+                              {isRejecting ?
+                                <Button className='bg-red-400 hover:bg-red-700 whitespace-nowrap' disabled={true}>
+                                  <Loader2 className='w-6 h-6 mr-2' />
+                                  Rad qilinmoqda...
+                                </Button>
+                                : <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false, id)}>
+                                  <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
+                                  Rad qilish
+                                </Button>
+                              }
+                            </div> : ""
+                        }
+                      </div>
+                      {
+                        approved ?
+                          <h1 className='text-green-500'>Tasdiqlangan</h1> :
+                          <h1 className='text-red-500'>Tasdiqlanmagan</h1>
+                      }
+                    </div>
+                  )
+                }) : <Loader />
+              }
+            </div>
+          </div >
+          : <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="w-full space-y-4 bg-white rounded">
+              <div className="flex items-start space-x-4">
+                {
+                  image ?
+                    <div>
+                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                    </div> :
+                    <div>
+                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    </div>
+                }
+                <div className="w-full space-y-3">
+                  <div className="flex items-center w-full space-x-2">
+                    <div className="text-base text-gray-500">
+                      F.I.SH:
+                    </div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Telefon:
+                    </div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      <Input className="w-full" {...register("phone", { required: false })} />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Fani:
+                    </div>
+                    <div className="w-full text-lg font-medium">
+                      <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Fanlar..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup className="overflow-auto h-52">
+                            {subjects?.map(({ name, id }) => {
+                              return (
+                                <SelectItem key={id} value={id}>{name}</SelectItem>
+                              )
+                            })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Yaratilgan sana:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {dateFormater(teacher?.createdAt)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end">
+              <Button autoFocus={true}>Saqlash</Button>
+            </div>
+          </form>
+        }
       </DialogContent>
       <div className="w-full p-5">
         <div className="flex items-center py-4">
-          <Input
-            placeholder="Fan nomi bo`yicha izlash..."
-            value={(table.getColumn("subjectName")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => {
-              console.log(table.getColumn("subjectName"))
-
-              return table.getColumn("subjectName")?.setFilterValue(event.target.value)
-            }
-            }
-            className="max-w-sm"
-          />
           <Input
             placeholder="F.I.SH bo`yicha izlash..."
             value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
@@ -399,7 +581,7 @@ export default function TeachersPage() {
               return table.getColumn("fullName")?.setFilterValue(event.target.value)
             }
             }
-            className="max-w-sm ml-3"
+            className="max-w-sm"
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

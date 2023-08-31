@@ -27,6 +27,7 @@ import {
 import useUserInfo from "@/hooks/useUserInfo"
 import { useRouter } from "next/navigation"
 import { useMessagesList } from "@/hooks/useMessages"
+import { dateFormater } from "@/lib/composables"
 
 export type Message = {
   "id": string,
@@ -39,6 +40,12 @@ export type Message = {
 function translateSMSStatus(status: string) {
   if (status === 'Sent') {
     return 'Yuborilgan'
+  } else if (status === 'Delivered') {
+    return 'Yetkazilgan'
+  } else if (status === 'NotDelivered') {
+    return 'Yetkazilmagan'
+  } else if (status === 'Failed') {
+    return 'Yuborilmagan'
   }
   return 'Noma`lum'
 }
@@ -68,14 +75,14 @@ export const columns: ColumnDef<Message>[] = [
     accessorKey: "createdAt",
     header: "SMS yuborilgan sana",
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('createdAt')}</div>
+      <div className="uppercase">{dateFormater(row.getValue('createdAt'))}</div>
     ),
   },
   {
     accessorKey: "status",
     header: 'Status',
     cell: ({ row }) => (
-      <div className="uppercase">{translateSMSStatus(row.getValue('status'))}</div>
+      <div className="lowercase">{translateSMSStatus(row.getValue('status'))}</div>
     ),
   }
 ]

@@ -7,6 +7,7 @@ import { SolarCloseCircleBroken } from '@/icons/RejectIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { dateFormater } from '@/lib/composables'
 import { notifyError } from '@/lib/notify'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -48,6 +49,8 @@ export default function LinkPage({ params }: { params: { link: string } }) {
   const teacher = teacherLinkResponse?.data?.data
   const [image, setImage] = useState('')
   const [error, setError] = useState('')
+  const [isApproving, setIsApproving] = useState<boolean>(false)
+  const [isRejecting, setIsRejecting] = useState<boolean>(false)
   useEffect(() => {
     setImage(`http://25-school.uz/school/api/v1/asset/${teacher?.documents[0]?.certificateId}`)
   }, [teacher?.documents])
@@ -59,20 +62,31 @@ export default function LinkPage({ params }: { params: { link: string } }) {
   }, [teacherLinkResponse.error])
 
   function approveTeacherDocument(approved: boolean) {
+    if (approved) {
+      setIsApproving(true)
+    } else {
+      setIsRejecting(true)
+    }
     approveTeacherDoc({
       link: params.link,
       approved: approved
     }).then(() => {
+      setIsApproving(false)
+      setIsRejecting(false)
       window.location.href = window.location.origin;
     }).catch((err) => {
       notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
+      setTimeout(() => {
+        setIsApproving(false)
+        setIsRejecting(false)
+      }, 2000)
     })
   }
 
   if (error) {
     return (
       <div className='flex flex-col items-center justify-center w-full h-screen space-y-5'>
-        <h1 className='text-3xl font-bold text-red-500'>{error}</h1>
+        <h1 className='text-3xl font-bold text-red-500 text-center'>{error}</h1>
         <Link href="/">
           <Button>Bosh sahifa</Button>
         </Link>
@@ -181,14 +195,26 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                 <div>
                   <Image src={image ?? ''} alt="sertifikat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   <div className='absolute z-30 flex items-center justify-center w-full space-x-5 bottom-5'>
-                    <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true)}>
-                      <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
-                      Tasdiqlash
-                    </Button>
-                    <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false)}>
-                      <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
-                      Bekor qilish
-                    </Button>
+                    {isApproving ?
+                      <Button className='bg-green-400 hover:bg-green-700 whitespace-nowrap' disabled={true}>
+                        <Loader2 className='w-6 h-6 mr-2' />
+                        Tasdiqlanmoqda...
+                      </Button>
+                      : <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true)}>
+                        <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                        Tasdiqlash
+                      </Button>
+                    }
+                    {isRejecting ?
+                      <Button className='bg-red-400 hover:bg-red-700 whitespace-nowrap' disabled={true}>
+                        <Loader2 className='w-6 h-6 mr-2' />
+                        Rad qilinmoqda...
+                      </Button>
+                      : <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false)}>
+                        <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
+                        Rad qilish
+                      </Button>
+                    }
                   </div>
                 </div>
             }

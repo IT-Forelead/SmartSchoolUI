@@ -1,4 +1,4 @@
-import { Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
+import { ApproveAsAdmin, Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
 import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
 import { WorkloadFormula } from "@/components/client/TeacherProfile";
 import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
@@ -16,6 +16,10 @@ const getTeacherDegreesList = async () => {
 
 export const approveTeacherDoc = async (data: Approve) => {
   return await axios.get<any>(`/teacher/approve/degree/${data.link}?approved=${data.approved}`);
+};
+
+export const approveTeacherDocAsAdmin = async (data: ApproveAsAdmin) => {
+  return await axios.post<any>(`/teacher/approve/degree`, data);
 };
 
 const getTeacherProfile = async (teacherId: string) => {

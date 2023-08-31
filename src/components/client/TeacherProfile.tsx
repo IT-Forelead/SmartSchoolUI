@@ -1,6 +1,6 @@
-import { TeacherUpdate } from '@/app/dashboard/teachers/page'
+import { Teacher, TeacherUpdate } from '@/app/dashboard/teachers/page'
 import { useSubjectsList } from '@/hooks/useSubjects'
-import { useEditTeacher, useTeacherProfile } from '@/hooks/useTeachers'
+import { useEditTeacher, useTeacherProfile, useTeacherWorkloadInfo } from '@/hooks/useTeachers'
 import useUserInfo from '@/hooks/useUserInfo'
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
@@ -17,6 +17,18 @@ import Loader from './Loader'
 import TakeLesson from './profile/TakeLesson'
 import EditCertificate from './profile/EditCertificate'
 
+export type WorkloadFormula = {
+  "x": number,
+  "total": number,
+  "teachers": [
+    {
+      "teacher": Teacher,
+      "hour": number
+    }
+  ],
+  "mode": number
+}
+
 export default function TeacherProfile() {
   const image = null
   const currentUser = useUserInfo()
@@ -26,6 +38,8 @@ export default function TeacherProfile() {
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
+  const workloadInfoResponse = useTeacherWorkloadInfo();
+  const workloadInfo = workloadInfoResponse?.data?.data[0]
 
   useEffect(() => {
     reset({ ...teacher })
@@ -139,7 +153,48 @@ export default function TeacherProfile() {
             </div>
           </div>
         </div>
-        <div>
+        <div className='grid grid-cols-2'>
+          <div>
+            <div className='p-3 border rounded-lg w-96 h-fit'>
+              <h1 className='font-bold'>Dars bo`lish formulasi</h1>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  X:
+                </div>
+                <div className="text-lg font-medium">
+                  {workloadInfo?.x ?? 0}
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  Jami:
+                </div>
+                <div className="text-lg font-medium">
+                  {workloadInfo?.total ?? 0}
+                </div>
+              </div>
+              {workloadInfo?.teachers?.map((info, idx) => {
+                return (
+                  <div key={idx} className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      {info?.teacher?.fullName}:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {info?.hour}
+                    </div>
+                  </div>
+                )
+              })}
+              <div className="flex items-center space-x-2">
+                <div className="text-base text-gray-500">
+                  Qoldiq:
+                </div>
+                <div className="text-lg font-medium">
+                  {workloadInfo?.mode}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className='flex items-start justify-end w-full space-x-3'>
             <Dialog>
               <DialogTrigger>
@@ -222,51 +277,6 @@ export default function TeacherProfile() {
             </Dialog>
             <TakeLesson />
           </div>
-          <div className='flex items-center justify-end mt-5'>
-            <div className='p-3 border rounded-lg w-96 h-fit'>
-              <h1 className='font-bold'>Dars bo`lish formulasi</h1>
-              <div className="flex items-center space-x-2">
-                <div className="text-base text-gray-500">
-                  X:
-                </div>
-                <div className="text-lg font-medium">
-                  0
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="text-base text-gray-500">
-                  Jami:
-                </div>
-                <div className="text-lg font-medium">
-                  0
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="text-base text-gray-500">
-                  O`qituvchi Nomi 1:
-                </div>
-                <div className="text-lg font-medium">
-                  0
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="text-base text-gray-500">
-                  O`qituvchi Nomi 2:
-                </div>
-                <div className="text-lg font-medium">
-                  0
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="text-base text-gray-500">
-                  Qoldiq:
-                </div>
-                <div className="text-lg font-medium">
-                  0
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className='flex flex-wrap items-center justify-start space-x-5'>
@@ -279,7 +289,7 @@ export default function TeacherProfile() {
                   {
                     approved ? "" :
                       <div className='absolute top-5 right-5 hover:cursor-pointer hover:scale-105'>
-                        <EditCertificate degId={id}/>
+                        <EditCertificate degId={id} />
                       </div>
                   }
                 </div>

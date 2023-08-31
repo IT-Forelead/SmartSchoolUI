@@ -1,5 +1,6 @@
 import { Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
 import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
+import { WorkloadFormula } from "@/components/client/TeacherProfile";
 import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -47,6 +48,10 @@ const getTeacherDocumentInfo = async (link: string) => {
   return await axios.get<TeacherLinkInfo>(`/teacher/document/${link}`);
 };
 
+const getTeacherWorkloadInfo = async () => {
+  return await axios.get<WorkloadFormula[]>('/teacher/workload-info');
+};
+
 /* Hooks */
 export const useDegreesList = () => {
   return useQuery(['degrees'], () => getTeacherDegreesList());
@@ -74,4 +79,8 @@ export const useTeacherProfile = (tId: string) => {
 
 export const useTeacherLinkInfo = (link: string) => {
   return useQuery(['teacherLinkInfo'], () => getTeacherDocumentInfo(link));
+}
+
+export const useTeacherWorkloadInfo = () => {
+  return useQuery(['teacherWorkloadInfo'], () => getTeacherWorkloadInfo());
 }

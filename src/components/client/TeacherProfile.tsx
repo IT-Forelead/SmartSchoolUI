@@ -1,6 +1,6 @@
 import { Teacher, TeacherUpdate } from '@/app/dashboard/teachers/page'
 import { useSubjectsList } from '@/hooks/useSubjects'
-import { useEditTeacher, useTeacherProfile, useTeacherWorkloadInfo } from '@/hooks/useTeachers'
+import { useDegreesList, useEditTeacher, useTeacherProfile, useTeacherWorkloadInfo } from '@/hooks/useTeachers'
 import useUserInfo from '@/hooks/useUserInfo'
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
@@ -40,6 +40,12 @@ export default function TeacherProfile() {
   const subjects = subjectsResponse?.data?.data
   const workloadInfoResponse = useTeacherWorkloadInfo();
   const workloadInfo = workloadInfoResponse?.data?.data[0]
+  const degreesResponse = useDegreesList();
+  const degrees = degreesResponse?.data?.data
+
+  function getDegree(id: string) {
+    return degrees?.find(deg => deg?.id === id)?.description
+  }
 
   useEffect(() => {
     reset({ ...teacher })
@@ -281,11 +287,12 @@ export default function TeacherProfile() {
           </div>
         </div>
       </div>
-      <div className='items-center justify-start md:space-x-5 md:flex md:flex-wrap'>
+      <div className='items-center justify-start md:space-x-3 md:flex md:flex-wrap'>
         {!teacherResponse.isLoading ?
           teacher?.documents?.map(({ id, certificateId, approved }) => {
             return (
-              <div key={id} className='my-3'>
+              <div key={id} className='p-1 my-3 bg-white border shadow rounded-xl'>
+                <div className='my-3 w-96'>{getDegree(id)}</div>
                 <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-[350px] md:w-96 dark:bg-gray-800 dark:border-gray-700">
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   {

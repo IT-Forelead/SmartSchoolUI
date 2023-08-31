@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { approveTeacherDoc, approveTeacherDocAsAdmin, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { approveTeacherDoc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import Image from "next/image"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -313,6 +313,13 @@ export default function TeachersPage() {
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
 
+  const degreesResponse = useDegreesList();
+  const degrees = degreesResponse?.data?.data
+
+  function getDegree(id: string) {
+    return degrees?.find(deg => deg?.id === id)?.description
+  }
+
   React.useEffect(() => {
     reset({ ...teacher })
   }, [reset, teacher])
@@ -363,7 +370,7 @@ export default function TeachersPage() {
   const image = null
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={mode ? `max-w-4xl` : `max-w-2xl`}>
+      <DialogContent className={mode ? `max-w-5xl` : `max-w-2xl`}>
         <DialogHeader>
           {mode ?
             <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> :
@@ -460,11 +467,12 @@ export default function TeachersPage() {
                 </div>
               </div>
             </div>
-            <div className='flex flex-wrap items-center justify-start space-x-5 overflow-auto max-h-[420px]'>
+            <div className='items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]'>
               {!isLoading ?
                 teacher?.documents?.map(({ id, certificateId, approved }) => {
                   return (
-                    <div key={id} className="my-3">
+                    <div key={id} className="p-1 my-3 bg-white border shadow rounded-xl">
+                      <div className='my-3 w-96'>{getDegree(id)}</div>
                       <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
                         <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                         {

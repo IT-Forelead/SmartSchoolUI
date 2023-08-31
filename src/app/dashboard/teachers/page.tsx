@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
+import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { approveTeacherDoc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { addSubjectToTeacherFunc, approveTeacherDoc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import Image from "next/image"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -92,7 +92,14 @@ export type Teacher = {
   pinfl: string,
   phone?: string,
   photo?: string,
-  subjectName: string
+  subjects: [{
+    id: string,
+    name: string,
+    category: string,
+    needDivideStudents: boolean,
+    hourForBeginner: number,
+    hourForHigher: number,
+  }]
   degree: string,
   workload: number,
   documents: [
@@ -137,6 +144,10 @@ function returnLength(list: any) {
   return list?.length
 }
 
+function listToString(list: any) {
+  return list?.map((subject: any) => subject?.name)?.join(', ')
+}
+
 export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
@@ -162,10 +173,10 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
     ),
   },
   {
-    accessorKey: "subjectName",
-    header: 'Fani',
+    accessorKey: "subjects",
+    header: 'Fanlar',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('subjectName') ?? "-"}</div>
+      <div className="uppercase">{listToString(row.getValue('subjects')) || "-"}</div>
     ),
   },
   {
@@ -234,6 +245,12 @@ export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher 
               <CopyIcon className="w-4 h-4 mr-1" />
               Nusxalash
             </DropdownMenuItem>
+            <DropdownMenuItem className="text-indigo-600">
+              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
+                <PlusCircleIcon className="w-4 h-4 mr-1" />
+                Fan biriktirish
+              </DialogTrigger>
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-green-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
                 <EyeIcon className="w-4 h-4 mr-1" />
@@ -262,6 +279,7 @@ export default function TeachersPage() {
   const router = useRouter()
 
   function showCertificates(mode: string, teacher: Teacher) {
+    setSubjectIdsList([])
     setMode(mode)
     setTeacher(teacher)
   }
@@ -295,6 +313,27 @@ export default function TeachersPage() {
     })
   }
 
+  const [subjectIdsList, setSubjectIdsList] = React.useState<string[]>([])
+
+  function addSubjectToTeacher() {
+    setIsSaving(true)
+    addSubjectToTeacherFunc(
+      {
+        teacherId: teacher?.id ?? "",
+        subjectIds: subjectIdsList
+      }
+    ).then(() => {
+      notifySuccess("Fan muvaffaqiyatli qo`shildi")
+      refetch()
+      setIsSaving(false)
+    }).catch((err) => {
+      notifyError("Fanni qo`shishda muammo yuzaga keldi!")
+      setTimeout(() => {
+        setIsSaving(false)
+      }, 2000)
+    })
+  }
+
   React.useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
@@ -303,6 +342,7 @@ export default function TeachersPage() {
   const [teacher, setTeacher] = React.useState<Teacher | null>(null)
   const [mode, setMode] = React.useState<string>('')
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isSaving, setIsSaving] = React.useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -335,7 +375,7 @@ export default function TeachersPage() {
   }, [isSuccess, error]);
 
   function getSelectData(sv: string) {
-    register("subjectId", { value: sv })
+    setSubjectIdsList([...subjectIdsList, sv])
   }
 
   const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
@@ -370,14 +410,15 @@ export default function TeachersPage() {
   const image = null
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={mode ? `max-w-5xl` : `max-w-2xl`}>
+      <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
         <DialogHeader>
-          {mode ?
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> :
-            <DialogTitle>O`qituvchi profili</DialogTitle>
+          {mode?.includes('show') ?
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('subject') ?
+              <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
+              <DialogTitle>O`qituvchi profili</DialogTitle>
           }
         </DialogHeader>
-        {mode ?
+        {mode?.includes('show') ?
           <div className="px-4 py-2">
             <div className="flex p-5 space-y-4 bg-white rounded">
               <div className="flex items-start space-x-4">
@@ -421,7 +462,7 @@ export default function TeachersPage() {
                       Fani:
                     </div>
                     <div className="text-lg font-medium">
-                      {teacher?.subjectName ?? "-"}
+                      {teacher?.subjects?.map(s => s?.name)?.join(', ') || "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -512,7 +553,71 @@ export default function TeachersPage() {
               }
             </div>
           </div >
-          : <form onSubmit={handleSubmit(onSubmit)}>
+          : mode?.includes('subject') ? <div className="space-y-3">
+            <p>{subjectIdsList}</p>
+            <div className="flex items-center w-full space-x-2">
+              <div className="text-base text-gray-500">
+                F.I.SH:
+              </div>
+              <div className="w-full text-lg font-medium capitalize">
+                {teacher?.fullName}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500 whitespace-nowrap">
+                Birinchi fan:
+              </div>
+              <div className="w-full text-lg font-medium">
+                <Select onValueChange={(val) => getSelectData(val)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Fanlar..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup className="overflow-auto h-52">
+                      {subjects?.map(({ name, id }) => {
+                        return (
+                          <SelectItem key={id} value={id}>{name}</SelectItem>
+                        )
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="text-base text-gray-500 whitespace-nowrap">
+                Ikkinchi fan:
+              </div>
+              <div className="w-full text-lg font-medium">
+                <Select onValueChange={(val) => getSelectData(val)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Fanlar..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup className="overflow-auto h-52">
+                      {subjects?.map(({ name, id }) => {
+                        return (
+                          <SelectItem key={id} value={id}>{name}</SelectItem>
+                        )
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center justify-end">
+              {isSaving ?
+                <Button disabled={true}>
+                  <Loader2 className='w-6 h-6 mr-2' />
+                  Saqlanmoqda...
+                </Button>
+                : <Button onClick={() => addSubjectToTeacher()}>
+                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                  Saqlash
+                </Button>
+              }
+            </div>
+          </div> : <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full space-y-4 bg-white rounded">
               <div className="flex items-start space-x-4">
                 {
@@ -534,33 +639,20 @@ export default function TeachersPage() {
                       <Input type="text" className="w-full" {...register("fullName", { required: false })} />
                     </div>
                   </div>
+                  <div className="flex items-center w-full space-x-2">
+                    <div className="text-base text-gray-500">
+                      Fan:
+                    </div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      {teacher?.degree}
+                    </div>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <div className="text-base text-gray-500">
                       Telefon:
                     </div>
                     <div className="w-full text-lg font-medium capitalize">
                       <Input className="w-full" {...register("phone", { required: false })} />
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Fani:
-                    </div>
-                    <div className="w-full text-lg font-medium">
-                      <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Fanlar..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup className="overflow-auto h-52">
-                            {subjects?.map(({ name, id }) => {
-                              return (
-                                <SelectItem key={id} value={id}>{name}</SelectItem>
-                              )
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">

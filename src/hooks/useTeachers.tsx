@@ -5,6 +5,11 @@ import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+export type AddSubjects = {
+  teacherId: string,
+  subjectIds: string[]
+}
+
 /* APIs */
 const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
@@ -16,6 +21,10 @@ const getTeacherDegreesList = async () => {
 
 export const approveTeacherDoc = async (data: Approve) => {
   return await axios.get<any>(`/teacher/approve/degree/${data.link}?approved=${data.approved}`);
+};
+
+export const addSubjectToTeacherFunc = async (data: AddSubjects) => {
+  return await axios.post<any>(`/teacher/add/subject`, data);
 };
 
 export const approveTeacherDocAsAdmin = async (data: ApproveAsAdmin) => {

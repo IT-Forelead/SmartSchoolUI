@@ -1,7 +1,9 @@
+import { WorkloadHistory } from "@/app/dashboard/lesson/hours/page";
 import { ApproveAsAdmin, Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
 import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
 import { WorkloadFormula } from "@/components/client/TeacherProfile";
 import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
+import { TeacherWorkloadChange } from "@/components/client/teachers/ChangeWorkload";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -17,6 +19,10 @@ const getTeachersList = async () => {
 
 const getTeacherDegreesList = async () => {
   return await axios.get<TeacherDegree[]>("/teacher/degrees");
+};
+
+const getWorkloadHistoryList = async () => {
+  return await axios.get<WorkloadHistory[]>("/teacher/change/workload/history");
 };
 
 export const approveTeacherDoc = async (data: Approve) => {
@@ -43,6 +49,14 @@ const editTeacher = async (data: TeacherUpdate) => {
 
 const addTeacherPosition = async (data: TeacherPositionUpdate) => {
   return await axios.post<any>("/teacher/document", data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+const changeTeacherWorkload = async (data: TeacherWorkloadChange) => {
+  return await axios.post<any>("/teacher/change/workload", data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -82,6 +96,10 @@ export const useAddTeacherPosition = () => {
   return useMutation((data: TeacherPositionUpdate) => addTeacherPosition(data), {});
 };
 
+export const useChangeTeacherWorkload = () => {
+  return useMutation((data: TeacherWorkloadChange) => changeTeacherWorkload(data), {});
+};
+
 export const useUpdateTeacherPosition = () => {
   return useMutation((data: TeacherPositionUpdate) => updateTeacherPosition(data), {});
 };
@@ -96,4 +114,8 @@ export const useTeacherLinkInfo = (link: string) => {
 
 export const useTeacherWorkloadInfo = () => {
   return useQuery(['teacherWorkloadInfo'], () => getTeacherWorkloadInfo());
+}
+
+export const useWorkloadHistoryList = () => {
+  return useQuery(['teacherWorkloadHistory'], () => getWorkloadHistoryList());
 }

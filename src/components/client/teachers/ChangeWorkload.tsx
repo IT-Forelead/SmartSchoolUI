@@ -195,7 +195,7 @@ export function ChangeWorkload() {
             <p className="font-semibold">Asos hujjat</p>
             <Input type="file" onChange={(event) => catchFile(event)} />
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end mt-5">
             {!isLoading ?
               <Button autoFocus={true}>Saqlash</Button> :
               <Button disabled className="select-none">

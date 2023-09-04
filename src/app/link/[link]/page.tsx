@@ -5,7 +5,7 @@ import { approveTeacherDoc, useTeacherLinkInfo } from '@/hooks/useTeachers'
 import { SolarCheckCircleBroken } from '@/icons/ApproveIcon'
 import { SolarCloseCircleBroken } from '@/icons/RejectIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
-import { dateFormater } from '@/lib/composables'
+import { dateFormatter } from '@/lib/composables'
 import { notifyError } from '@/lib/notify'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
@@ -26,9 +26,15 @@ export type TeacherLinkInfo = {
   "pinfl": string,
   "phone": string,
   "photo": string,
-  "subjectId": string,
   "workload": number,
-  "subjectName": string,
+  "subjects": [{
+    "id": string,
+    "name": string,
+    "category": string,
+    "needDivideStudents": boolean,
+    "hourForBeginner": number,
+    "hourForHigher": number,
+  }]
   "documents": [
     {
       "id": string,
@@ -86,7 +92,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
   if (error) {
     return (
       <div className='flex flex-col items-center justify-center w-full h-screen space-y-5'>
-        <h1 className='text-3xl font-bold text-red-500 text-center'>{error}</h1>
+        <h1 className='text-3xl font-bold text-center text-red-500'>{error}</h1>
         <Link href="/">
           <Button>Bosh sahifa</Button>
         </Link>
@@ -140,7 +146,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                   Fani:
                 </div>
                 <div className="text-lg font-medium">
-                  {teacher?.subjectName ?? "-"}
+                  {teacher?.subjects?.join(', ') ?? "-"}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -180,7 +186,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                   Yaratilgan sana:
                 </div>
                 <div className="text-lg font-medium">
-                  {dateFormater(teacher?.createdAt)}
+                  {dateFormatter(teacher?.createdAt)}
                 </div>
               </div>
             </div>

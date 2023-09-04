@@ -27,7 +27,7 @@ import {
 import useUserInfo from "@/hooks/useUserInfo"
 import { useRouter } from "next/navigation"
 import { useMessagesList } from "@/hooks/useMessages"
-import { dateFormater } from "@/lib/composables"
+import { dateFormatter } from "@/lib/composables"
 
 export type Message = {
   "id": string,
@@ -75,7 +75,7 @@ export const columns: ColumnDef<Message>[] = [
     accessorKey: "createdAt",
     header: "SMS yuborilgan sana",
     cell: ({ row }) => (
-      <div className="uppercase">{dateFormater(row.getValue('createdAt'))}</div>
+      <div className="uppercase">{dateFormatter(row.getValue('createdAt'))}</div>
     ),
   },
   {

@@ -4,7 +4,7 @@ import { useDegreesList, useEditTeacher, useTeacherProfile, useTeacherWorkloadIn
 import useUserInfo from '@/hooks/useUserInfo'
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
-import { dateFormater } from '@/lib/composables'
+import { dateFormatter } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
 import Image from 'next/image'
 import { useEffect } from 'react'
@@ -114,7 +114,7 @@ export default function TeacherProfile() {
                 Fani:
               </div>
               <div className="text-lg font-medium">
-                {teacher?.subjectName ?? "-"}
+                {teacher?.subjects?.join(', ') ?? "-"}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -154,7 +154,7 @@ export default function TeacherProfile() {
                 Yaratilgan sana:
               </div>
               <div className="text-lg font-medium">
-                {dateFormater(teacher?.createdAt)}
+                {dateFormatter(teacher?.createdAt)}
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function TeacherProfile() {
                             Fani:
                           </div>
                           <div className="w-full text-lg font-medium">
-                            <Select onValueChange={(val) => getSelectData(val)} defaultValue={subjects?.find(({ name }) => name === teacher?.subjectName)?.id}>
+                            <Select onValueChange={(val) => getSelectData(val)}>
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Fanlar..." />
                               </SelectTrigger>
@@ -271,7 +271,7 @@ export default function TeacherProfile() {
                             Yaratilgan sana:
                           </div>
                           <div className="text-lg font-medium">
-                            {dateFormater(teacher?.createdAt)}
+                            {dateFormatter(teacher?.createdAt)}
                           </div>
                         </div>
                       </div>

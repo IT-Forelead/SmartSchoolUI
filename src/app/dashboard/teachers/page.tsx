@@ -15,6 +15,7 @@ import {
 import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
+import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
@@ -27,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -35,21 +37,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { addSubjectToTeacherFunc, approveTeacherDoc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
-import { SolarUserBroken } from "@/icons/UserIcon"
-import Image from "next/image"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { notifyError, notifySuccess } from "@/lib/notify"
-import { dateFormater } from "@/lib/composables"
-import { getCookie } from "cookies-next"
-import { useRouter } from "next/navigation"
-import { UserInfo } from "@/models/user.interface"
-import Loader from "@/components/client/Loader"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSubjectsList } from "@/hooks/useSubjects"
+import { addSubjectToTeacherFunc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
 import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
+import { SolarUserBroken } from "@/icons/UserIcon"
+import { dateFormatter } from "@/lib/composables"
+import { notifyError, notifySuccess } from "@/lib/notify"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 export type TeacherDoc = {
   id: string,
@@ -502,7 +500,7 @@ export default function TeachersPage() {
                       Yaratilgan sana:
                     </div>
                     <div className="text-lg font-medium">
-                      {dateFormater(teacher?.createdAt)}
+                      {dateFormatter(teacher?.createdAt)}
                     </div>
                   </div>
                 </div>
@@ -660,7 +658,7 @@ export default function TeachersPage() {
                       Yaratilgan sana:
                     </div>
                     <div className="text-lg font-medium">
-                      {dateFormater(teacher?.createdAt)}
+                      {dateFormatter(teacher?.createdAt)}
                     </div>
                   </div>
                 </div>

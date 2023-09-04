@@ -210,7 +210,3 @@ export function ChangeWorkload() {
   )
 }
 
-function register(arg0: string, arg1: { required: boolean }): React.JSX.IntrinsicAttributes & import("@/components/ui/input").InputProps & React.RefAttributes<HTMLInputElement> {
-  throw new Error("Function not implemented.")
-}
-

@@ -372,8 +372,13 @@ export default function TeachersPage() {
     } else return;
   }, [isSuccess, error]);
 
-  function getSelectData(sv: string) {
-    setSubjectIdsList([...subjectIdsList, sv])
+  function getSelectData(order: number, sv: string) {
+    if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
+      setSubjectIdsList([...subjectIdsList, sv])
+    } else {
+      subjectIdsList[order] = sv
+      setSubjectIdsList(subjectIdsList)
+    }
   }
 
   const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
@@ -552,7 +557,6 @@ export default function TeachersPage() {
             </div>
           </div >
           : mode?.includes('subject') ? <div className="space-y-3">
-            <p>{subjectIdsList}</p>
             <div className="flex items-center w-full space-x-2">
               <div className="text-base text-gray-500">
                 F.I.SH:
@@ -566,7 +570,7 @@ export default function TeachersPage() {
                 Birinchi fan:
               </div>
               <div className="w-full text-lg font-medium">
-                <Select onValueChange={(val) => getSelectData(val)}>
+                <Select onValueChange={(val) => getSelectData(0, val)}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Fanlar..." />
                   </SelectTrigger>
@@ -587,7 +591,7 @@ export default function TeachersPage() {
                 Ikkinchi fan:
               </div>
               <div className="w-full text-lg font-medium">
-                <Select onValueChange={(val) => getSelectData(val)}>
+                <Select onValueChange={(val) => getSelectData(1, val)}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Fanlar..." />
                   </SelectTrigger>

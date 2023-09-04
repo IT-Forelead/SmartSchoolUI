@@ -233,7 +233,7 @@ export default function TeacherWorkloadPage() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={6}
                   className="h-24 text-center"
                 >
                   Hech nima topilmadi.

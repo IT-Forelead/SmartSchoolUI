@@ -24,10 +24,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import useUserInfo from "@/hooks/useUserInfo"
-import { useRouter } from "next/navigation"
 import { useMessagesList } from "@/hooks/useMessages"
+import useUserInfo from "@/hooks/useUserInfo"
 import { dateFormatter } from "@/lib/composables"
+import { Link2Icon } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export type Message = {
   "id": string,
@@ -68,7 +69,11 @@ export const columns: ColumnDef<Message>[] = [
     accessorKey: "text",
     header: 'Xabar matni',
     cell: ({ row }) => (
-      <div>{row.getValue('text')}</div>
+      <div>{(row.getValue('text') as string)?.includes('25-school.uz/link/') ?
+        <a href={row.getValue('text')} className="flex items-center text-blue-600" target="_blank">
+          <Link2Icon className="mr-1" />{row.getValue('text')}
+        </a> : row.getValue('text')}
+      </div>
     ),
   },
   {

@@ -114,7 +114,7 @@ export default function TeacherProfile() {
                 Fani:
               </div>
               <div className="text-lg font-medium">
-                {teacher?.subjects?.join(', ') ?? "-"}
+                {teacher?.subjects?.map(s => s?.name)?.join(', ') || "-"}
               </div>
             </div>
             <div className="flex items-center space-x-2">

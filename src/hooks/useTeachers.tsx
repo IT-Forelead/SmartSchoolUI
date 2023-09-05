@@ -4,6 +4,7 @@ import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
 import { WorkloadFormula } from "@/components/client/TeacherProfile";
 import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
 import { TeacherWorkloadChange } from "@/components/client/teachers/ChangeWorkload";
+import { AbsentLessonBody } from "@/components/client/timetable/AbsentLesson";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -63,6 +64,10 @@ const changeTeacherWorkload = async (data: TeacherWorkloadChange) => {
   });
 };
 
+const changeTeacherLesson = async (data: AbsentLessonBody) => {
+  return await axios.post<any>("/teacher/substitution/lesson", data);
+};
+
 const updateTeacherPosition = async (data: TeacherPositionUpdate) => {
   return await axios.post<any>("/teacher/update/document", data, {
     headers: {
@@ -98,6 +103,10 @@ export const useAddTeacherPosition = () => {
 
 export const useChangeTeacherWorkload = () => {
   return useMutation((data: TeacherWorkloadChange) => changeTeacherWorkload(data), {});
+};
+
+export const useChangeTeacherLesson = () => {
+  return useMutation((data: AbsentLessonBody) => changeTeacherLesson(data), {});
 };
 
 export const useUpdateTeacherPosition = () => {

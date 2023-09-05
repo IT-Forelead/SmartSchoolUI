@@ -1,5 +1,6 @@
 "use client";
 import Loader from "@/components/client/Loader";
+import AbsentLesson from "@/components/client/timetable/AbsentLesson";
 import { Button } from "@/components/ui/button";
 import { useTimeTable, rebuildTimetable } from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -85,9 +86,7 @@ export default function TimeTablePage() {
                 return (
                   <tr
                     key={item}
-                    className={`border ${idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
-                      }`}
-                  >
+                    className={`border ${idx % 2 !== 1 ? "bg-white" : "bg-gray-100"}`}>
                     <td className="p-1 font-medium text-center text-gray-500 border">
                       {item}
                     </td>
@@ -99,14 +98,9 @@ export default function TimeTablePage() {
                         >
                           <ol className="space-y-1">
                             {timetable[item][translateWeekday(day)]?.map(
-                              (subject: any) => {
+                              (subject: any, idx: any) => {
                                 return (
-                                  <li className="p-1 border" key={subject}>
-                                    {subject?.moment}. {subject?.subjectName}
-                                    <p className="text-[11px] text-right capitalize font-bold">
-                                      {subject?.teacherName}
-                                    </p>
-                                  </li>
+                                  <AbsentLesson key={idx} subject={subject} class={item} day={day} />
                                 );
                               }
                             )}

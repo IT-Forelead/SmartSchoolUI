@@ -1,4 +1,5 @@
 import { WorkloadHistory } from "@/app/dashboard/lesson/hours/page";
+import { Subject } from "@/app/dashboard/subjects/page";
 import { ApproveAsAdmin, Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
 import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
 import { WorkloadFormula } from "@/components/client/TeacherProfile";
@@ -121,8 +122,8 @@ export const useTeacherLinkInfo = (link: string) => {
   return useQuery(['teacherLinkInfo'], () => getTeacherDocumentInfo(link));
 }
 
-export const useTeacherWorkloadInfo = () => {
-  return useQuery(['teacherWorkloadInfo'], () => getTeacherWorkloadInfo());
+export const useTeacherWorkloadInfo = (teacherSubjects: Subject[]) => {
+  return useQuery(['teacherWorkloadInfo'], () => teacherSubjects?.length > 0 ? getTeacherWorkloadInfo() : null);
 }
 
 export const useWorkloadHistoryList = () => {

@@ -46,7 +46,7 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
       weekday: translateWeekday(props.day),
       moment: subject?.moment
     })
-  })
+  }, [reset])
 
   const onSubmit: SubmitHandler<AbsentLessonBody> = (data) => {
     if (data?.groupId) {

@@ -76,6 +76,15 @@ export type TeacherDoc = {
   ]
 }
 
+export type Subject = {
+  id: string,
+  name: string,
+  category: string,
+  needDivideStudents: boolean,
+  hourForBeginner: number,
+  hourForHigher: number,
+}
+
 export type Teacher = {
   id: string,
   createdAt: string,

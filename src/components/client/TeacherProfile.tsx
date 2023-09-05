@@ -38,7 +38,7 @@ export default function TeacherProfile() {
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
-  const workloadInfoResponse = useTeacherWorkloadInfo();
+  const workloadInfoResponse = useTeacherWorkloadInfo(teacher?.subjects);
   const workloadInfo = workloadInfoResponse?.data?.data[0]
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data

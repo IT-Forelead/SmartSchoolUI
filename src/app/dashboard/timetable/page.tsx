@@ -1,6 +1,8 @@
 "use client";
+
 import Loader from "@/components/client/Loader";
 import AbsentLesson from "@/components/client/timetable/AbsentLesson";
+import TargetLesson from "@/components/client/timetable/TargetLesson";
 import { Button } from "@/components/ui/button";
 import { useTimeTable, rebuildTimetable } from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -42,13 +44,16 @@ export default function TimeTablePage() {
     <div className="p-2 px-5">
       {currentUser?.role?.includes('admin') ?
         <div className="flex items-center justify-end w-full">
-          <Button
-            onClick={() => regenerate()}
-            className="flex items-center mt-2 mb-3"
-          >
-            <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
-            Qayta generatsiya qilish
-          </Button>
+          <div className="flex items-center justify-center my-3 space-x-5">
+            <TargetLesson />
+            <Button
+              onClick={() => regenerate()}
+              className="flex items-center whitespace-nowrap"
+            >
+              <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
+              Qayta generatsiya qilish
+            </Button>
+          </div>
         </div> : <div></div>
       }
 

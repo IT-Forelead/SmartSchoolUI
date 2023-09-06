@@ -125,7 +125,7 @@ export function ChangeWorkload() {
                 <CommandInput placeholder="Izlash..." />
                 <CommandEmpty>O`qituvchi topilmadi.</CommandEmpty>
                 <CommandGroup className="overflow-auto max-h-80">
-                  {teachers.map((teacher) => (
+                  {teachers?.map((teacher) => (
                     <CommandItem
                       key={teacher?.id}
                       onSelect={() => {

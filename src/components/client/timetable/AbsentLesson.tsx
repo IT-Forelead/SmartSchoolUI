@@ -58,7 +58,7 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
     if (isSuccess) {
       notifySuccess("So`rov yuborildi")
     } else if (error) {
-      if(error?.response?.data) {
+      if (error?.response?.data) {
         notifyError(error?.response?.data || "So`rov yuborishda muammo yuzaga keldi")
       } else {
         notifyError("So`rov yuborishda muammo yuzaga keldi")
@@ -76,12 +76,14 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
               {subject?.teacherName}
             </p>
           </li>
-        </DialogTrigger> : <li className="p-1 border" key={subject}>
-          {subject?.moment}. {subject?.subjectName}
-          <p className="text-[11px] text-right capitalize font-bold">
-            {subject?.teacherName}
-          </p>
-        </li>
+        </DialogTrigger> : <div className='w-full text-left'>
+          <li className="p-1 border" key={subject}>
+            {subject?.moment}. {subject?.subjectName}
+            <p className="text-[11px] text-right capitalize font-bold">
+              {subject?.teacherName}
+            </p>
+          </li>
+        </div>
       }
       <DialogContent>
         <DialogHeader>

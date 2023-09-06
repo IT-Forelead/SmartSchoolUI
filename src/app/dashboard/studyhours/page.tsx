@@ -1,5 +1,6 @@
 "use client"
 import Loader from '@/components/client/Loader';
+import ChangeLessonHour from '@/components/client/studyhours/ChangeLessonHour';
 import { Button } from '@/components/ui/button';
 import { useGroupsList } from '@/hooks/useGroups';
 import { useStudyHoursList } from '@/hooks/useStudyHours';
@@ -103,7 +104,8 @@ export default function StudyHoursPage() {
                   <td className="p-1 font-medium text-gray-500 border whitespace-nowrap">{item.name}</td>
                   {groups?.map(({ level, id, studentCount }) => {
                     return (
-                      <td className={`p-2 text-center border ${fillColor(studentCount, item.needDivideStudents)}`} key={id}>{getHour(level, item.id)}</td>
+                      // <td className={`p-2 text-center border ${fillColor(studentCount, item.needDivideStudents)}`} key={id}>{getHour(level, item.id)}</td>
+                      <ChangeLessonHour refetch={studyHoursResponse.refetch} refetchSubjects={subjectResponse?.refetch} subject={item} level={level} studentCount={studentCount} studyHours={studyHours} subjectId={item?.id} key={id} />
                     )
                   })}
                   <td className="p-1 font-medium text-center border">{item.hourForBeginner}</td>

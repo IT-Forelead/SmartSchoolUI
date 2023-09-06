@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useChangeTeacherLesson } from '@/hooks/useTeachers'
+import { lessonForSwap } from '@/hooks/useTimeTable'
 import useUserInfo from '@/hooks/useUserInfo'
 import { notifyError, notifySuccess, notifyWarn } from '@/lib/notify'
 import { Loader2 } from 'lucide-react'
@@ -14,7 +15,23 @@ export type AbsentLessonBody = {
   "moment": number
 }
 
-export default function AbsentLesson(props: { subject: any, class: any, day: string }) {
+export type LessonBody = {
+  "teacherId": string,
+  "subjectId": string,
+  "groupId": string,
+  "weekday": string,
+  "moment": number
+}
+
+export default function AbsentLesson(props: {
+  subject: any,
+  class: any,
+  day: string,
+  getAvailableLessonForSwap: (lesson: LessonBody) => void,
+  availableLessons: LessonBody[],
+  selectedSubject?: LessonBody,
+  setSelectedSubject: React.Dispatch<React.SetStateAction<LessonBody | undefined>>
+}) {
   const subject = props.subject
   const user = useUserInfo()
   const weekdays = [
@@ -48,6 +65,14 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
     })
   }, [reset])
 
+  const lessonBody = {
+    groupId: subject?.groupId,
+    moment: subject?.moment,
+    subjectId: subject?.subjectId,
+    teacherId: subject?.teacherId,
+    weekday: translateWeekday(props.day)
+  } as LessonBody
+
   const onSubmit: SubmitHandler<AbsentLessonBody> = (data) => {
     if (data?.groupId) {
       changeTeacherLesson(data)
@@ -66,6 +91,26 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
     } else return;
   }, [isSuccess, error])
 
+  function compareLessonBody(lesson: LessonBody) {
+    if (props.availableLessons?.find((l) => {
+      return l?.moment === lesson.moment &&
+        l.groupId === lesson.groupId && l.subjectId === lesson.subjectId &&
+        l.teacherId === lesson.teacherId && l.weekday === lesson.weekday
+    })) {
+      return 'bg-green-500 text-white'
+    }
+    return
+  }
+
+  function fillColorSelectedSubject(lesson: LessonBody) {
+    if (props.selectedSubject?.moment === lesson.moment && props.selectedSubject.groupId === lesson.groupId
+      && props.selectedSubject.subjectId === lesson.subjectId && props.selectedSubject.teacherId === lesson.teacherId
+      && props.selectedSubject.weekday === lesson.weekday) {
+      return 'bg-indigo-500 text-white'
+    }
+    return
+  }
+
   return (
     <Dialog>
       {user?.id === subject?.teacherId ?
@@ -76,7 +121,13 @@ export default function AbsentLesson(props: { subject: any, class: any, day: str
               {subject?.teacherName}
             </p>
           </li>
-        </DialogTrigger> : <div className='w-full text-left'>
+        </DialogTrigger> :
+        <div onClick={
+          () => {
+            props.getAvailableLessonForSwap(lessonBody)
+            props.setSelectedSubject(lessonBody)
+          }}
+          className={`w-full text-left hover:cursor-pointer hover:bg-gray-200 ${fillColorSelectedSubject(lessonBody)} ${compareLessonBody(lessonBody)}`}>
           <li className="p-1 border" key={subject}>
             {subject?.moment}. {subject?.subjectName}
             <p className="text-[11px] text-right capitalize font-bold">

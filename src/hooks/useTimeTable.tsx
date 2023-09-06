@@ -1,3 +1,4 @@
+import { LessonBody } from "@/components/client/timetable/AbsentLesson";
 import { TargetLessonBody } from "@/components/client/timetable/TargetLesson";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -12,6 +13,10 @@ export const rebuildTimetable = async () => {
 
 export const targetLesson = async (data: TargetLessonBody) => {
   return await axios.post<any>("/timetable", data);
+};
+
+export const lessonForSwap = async (data: LessonBody) => {
+  return await axios.post<any>("/timetable/available/lesson", data);
 };
 
 /* Hooks */

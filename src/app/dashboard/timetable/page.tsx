@@ -1,13 +1,14 @@
 "use client";
 
 import Loader from "@/components/client/Loader";
-import AbsentLesson from "@/components/client/timetable/AbsentLesson";
+import AbsentLesson, { LessonBody } from "@/components/client/timetable/AbsentLesson";
 import TargetLesson from "@/components/client/timetable/TargetLesson";
 import { Button } from "@/components/ui/button";
-import { useTimeTable, rebuildTimetable } from "@/hooks/useTimeTable";
+import { useTimeTable, rebuildTimetable, lessonForSwap } from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarRefreshSquareBroken } from "@/icons/Reload";
-import React from "react";
+import { notifyError, notifySuccess } from "@/lib/notify";
+import React, { useState } from "react";
 
 export default function TimeTablePage() {
   const currentUser = useUserInfo()
@@ -38,6 +39,17 @@ export default function TimeTablePage() {
     await rebuildTimetable().then(() => {
       timeTableResponse.refetch();
     });
+  }
+
+  const [availableLessons, setAvailableLessons] = useState<LessonBody[]>([])
+  const [selectedSubject, setSelectedSubject] = useState<LessonBody>()
+
+  function getAvailableLessonForSwap(lesson: LessonBody) {
+    lessonForSwap(lesson).then((res) => {
+      setAvailableLessons(res.data)
+    }).catch((err) => {
+      notifyError('Dars pozitsiyalarini olishda muammo yuzaga keldi')
+    })
   }
 
   return (
@@ -105,7 +117,12 @@ export default function TimeTablePage() {
                             {timetable[item][translateWeekday(day)]?.map(
                               (subject: any, idx: any) => {
                                 return (
-                                  <AbsentLesson key={idx} subject={subject} class={item} day={day} />
+                                  <AbsentLesson key={idx} subject={subject} class={item} day={day} 
+                                  getAvailableLessonForSwap={getAvailableLessonForSwap} 
+                                  availableLessons={availableLessons}
+                                  setSelectedSubject={setSelectedSubject}
+                                  selectedSubject={selectedSubject}
+                                  />
                                 );
                               }
                             )}

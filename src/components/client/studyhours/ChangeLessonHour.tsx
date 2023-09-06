@@ -35,17 +35,10 @@ export default function ChangeLessonHour(props: {
   const { handleSubmit, reset, register } = useForm<LessonHour>();
   const { mutate: changeTeacherLessonHour, isSuccess, error, isLoading } = useChangeTeacherLessonHour();
 
-  useEffect(() => {
-    reset({
-      subjectId: props?.subjectId,
-      level: props?.level
-    })
-  }, [reset])
-
   const onSubmit: SubmitHandler<LessonHour> = (data) => {
-    if (data?.subjectId) {
-      changeTeacherLessonHour(data)
-    }
+    data.subjectId = props?.subjectId
+    data.level = props?.level
+    changeTeacherLessonHour(data)
   };
 
   function getHour(level: number, sId: string) {
@@ -71,7 +64,7 @@ export default function ChangeLessonHour(props: {
 
   return (
     <td className={`p-2 border cursor-pointer ${fillColor(props?.studentCount, subject?.needDivideStudents)}`}>
-      <Dialog>
+      <Dialog defaultOpen={false}>
         <DialogTrigger className='w-full text-left'>
           <div className='text-center'>{getHour(props?.level, subject.id) || <span className='opacity-0'>0</span>}</div>
         </DialogTrigger>
@@ -84,7 +77,7 @@ export default function ChangeLessonHour(props: {
             <p>Fan: {subject?.name}</p>
             <p>Soat:</p>
             <Input type="text" {...register("hour", { required: true })} placeholder='5' />
-            <div className="flex items-center justify-end mt-5">
+            <DialogTrigger className="flex items-center justify-end w-full mt-5">
               {!isLoading ?
                 <Button autoFocus={true}>Saqlash</Button> :
                 <Button disabled className="select-none">
@@ -92,7 +85,7 @@ export default function ChangeLessonHour(props: {
                   Saqlanmoqda...
                 </Button>
               }
-            </div>
+            </DialogTrigger>
           </form>
         </DialogContent>
       </Dialog>

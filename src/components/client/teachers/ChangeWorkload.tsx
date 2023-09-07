@@ -2,8 +2,6 @@
 
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react"
 import * as React from "react"
-
-import { Teacher } from "@/app/dashboard/teachers/page"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -32,14 +30,7 @@ import { notifyError, notifySuccess, notifyWarn } from "@/lib/notify"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-
-export type TeacherWorkloadChange = {
-  from: string,
-  to: string,
-  userId: string,
-  workload: number,
-  filename: object
-}
+import { Teacher, TeacherWorkloadChange } from "@/models/common.interface"
 
 export function ChangeWorkload() {
   const [open, setOpen] = useState(false)
@@ -90,8 +81,8 @@ export function ChangeWorkload() {
   }, [toTeacher, setValue, user])
 
   const teacherResponse = useTeachersList();
-
   const teachers = teacherResponse?.data?.data || []
+  
   return (
     <Dialog>
       <DialogTrigger>

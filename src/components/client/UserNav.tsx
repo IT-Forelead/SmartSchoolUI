@@ -1,6 +1,7 @@
 'use client'
-import { UserInfo } from "@/models/user.interface";
-import { deleteCookie, getCookie } from "cookies-next";
+import useUserInfo from "@/hooks/useUserInfo";
+import { deleteCookie } from "cookies-next";
+import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
@@ -12,8 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
-import Link from "next/link";
-import useUserInfo from "@/hooks/useUserInfo";
 
 export function UserNav() {
   const currentUser = useUserInfo()

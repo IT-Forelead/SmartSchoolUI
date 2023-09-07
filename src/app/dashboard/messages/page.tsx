@@ -26,30 +26,11 @@ import {
 } from "@/components/ui/table"
 import { useMessagesList } from "@/hooks/useMessages"
 import useUserInfo from "@/hooks/useUserInfo"
-import { dateFormatter } from "@/lib/composables"
+import { dateFormatter, translateSMSStatus } from "@/lib/composables"
 import { Link2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
-
-export type Message = {
-  "id": string,
-  "createdAt": string,
-  "to": string,
-  "text": string,
-  "status": string
-}
-
-function translateSMSStatus(status: string) {
-  if (status === 'Sent') {
-    return 'Yuborilgan'
-  } else if (status === 'Delivered') {
-    return 'Yetkazilgan'
-  } else if (status === 'NotDelivered') {
-    return 'Yetkazilmagan'
-  } else if (status === 'Failed') {
-    return 'Yuborilmagan'
-  }
-  return 'Noma`lum'
-}
+import { Message } from "@/models/common.interface"
+import { useEffect, useState } from "react"
 
 export const columns: ColumnDef<Message>[] = [
   {
@@ -95,18 +76,18 @@ export const columns: ColumnDef<Message>[] = [
 export default function MessagesPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const { data, isError, isLoading } = useMessagesList();
 

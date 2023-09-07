@@ -1,7 +1,7 @@
-import { StudyHours } from "@/app/dashboard/studyhours/page";
-import { LessonHour } from "@/components/client/studyhours/ChangeLessonHour";
+import { LessonHour, StudyHours } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 /* APIs */
 const getStudyHoursList = async () => {
@@ -14,9 +14,17 @@ const changeTeacherLessonHour = async (data: LessonHour) => {
 
 /* Hooks */
 export const useStudyHoursList = () => {
-  return useQuery(['studyHours'], () => getStudyHoursList());
+  return useQuery({
+    queryKey: ['studyHours'],
+    queryFn: () => getStudyHoursList(),
+    onError: (err: AxiosError) => err
+  })
 };
 
 export const useChangeTeacherLessonHour = () => {
-  return useMutation((data: LessonHour) => changeTeacherLessonHour(data), {});
+  // return useMutation((data: LessonHour) => changeTeacherLessonHour(data), {});
+  return useMutation({
+    mutationFn: (data: LessonHour) => changeTeacherLessonHour(data),
+    onError: (err: AxiosError) => err
+  })
 };

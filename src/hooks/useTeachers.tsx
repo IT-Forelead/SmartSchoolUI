@@ -1,13 +1,7 @@
-import { WorkloadHistory } from "@/app/dashboard/lesson/hours/page";
-import { Subject } from "@/app/dashboard/subjects/page";
-import { ApproveAsAdmin, Teacher, TeacherDegree, TeacherUpdate } from "@/app/dashboard/teachers/page";
-import { Approve, TeacherLinkInfo } from "@/app/link/[link]/page";
-import { WorkloadFormula } from "@/components/client/TeacherProfile";
-import { TeacherPositionUpdate } from "@/components/client/profile/TakeLesson";
-import { TeacherWorkloadChange } from "@/components/client/teachers/ChangeWorkload";
-import { AbsentLessonBody } from "@/components/client/timetable/AbsentLesson";
+import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Teacher, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export type AddSubjects = {
   teacherId: string,
@@ -78,7 +72,7 @@ const updateTeacherPosition = async (data: TeacherPositionUpdate) => {
 };
 
 const getTeacherDocumentInfo = async (link: string) => {
-  return await axios.get<TeacherLinkInfo>(`/teacher/document/${link}`);
+  return await axios.get<Teacher>(`/teacher/document/${link}`);
 };
 
 const getTeacherWorkloadInfo = async () => {
@@ -87,45 +81,90 @@ const getTeacherWorkloadInfo = async () => {
 
 /* Hooks */
 export const useDegreesList = () => {
-  return useQuery(['degrees'], () => getTeacherDegreesList());
+  return useQuery({
+    queryKey: ['degrees'],
+    queryFn: () => getTeacherDegreesList(),
+    onError: (err: AxiosError) => err
+  })
 };
 
 export const useTeachersList = () => {
-  return useQuery(['teachers'], () => getTeachersList());
-};
-
-export const useEditTeacher = () => {
-  return useMutation((data: TeacherUpdate) => editTeacher(data), {});
-};
-
-export const useAddTeacherPosition = () => {
-  return useMutation((data: TeacherPositionUpdate) => addTeacherPosition(data), {});
-};
-
-export const useChangeTeacherWorkload = () => {
-  return useMutation((data: TeacherWorkloadChange) => changeTeacherWorkload(data), {});
-};
-
-export const useChangeTeacherLesson = () => {
-  return useMutation((data: AbsentLessonBody) => changeTeacherLesson(data), {});
-};
-
-export const useUpdateTeacherPosition = () => {
-  return useMutation((data: TeacherPositionUpdate) => updateTeacherPosition(data), {});
+  return useQuery({
+    queryKey: ['teachers'],
+    queryFn: () => getTeachersList(),
+    onError: (err: AxiosError) => err
+  })
 };
 
 export const useTeacherProfile = (tId: string) => {
-  return useQuery(['teacher'], () => getTeacherProfile(tId));
+  return useQuery({
+    queryKey: ['teacher'],
+    queryFn: () => getTeacherProfile(tId),
+    onError: (err: AxiosError) => err
+  })
 }
 
 export const useTeacherLinkInfo = (link: string) => {
-  return useQuery(['teacherLinkInfo'], () => getTeacherDocumentInfo(link));
+  return useQuery({
+    queryKey: ['teacherLinkInfo'],
+    queryFn: () => getTeacherDocumentInfo(link),
+    onError: (err: AxiosError) => err
+  })
 }
 
 export const useTeacherWorkloadInfo = (teacherSubjects: Subject[]) => {
-  return useQuery(['teacherWorkloadInfo'], () => teacherSubjects?.length > 0 ? getTeacherWorkloadInfo() : null);
+  return useQuery({
+    queryKey: ['teacherWorkloadInfo'],
+    queryFn: () => teacherSubjects?.length > 0 ? getTeacherWorkloadInfo() : null,
+    onError: (err: AxiosError) => err
+  })
 }
 
 export const useWorkloadHistoryList = () => {
-  return useQuery(['teacherWorkloadHistory'], () => getWorkloadHistoryList());
+  return useQuery({
+    queryKey: ['teacherWorkloadHistory'],
+    queryFn: () => getWorkloadHistoryList(),
+    onError: (err: AxiosError) => err
+  })
 }
+
+/* Mutations */
+export const useEditTeacher = () => {
+  // return useMutation((data: TeacherUpdate) => editTeacher(data), {});
+  return useMutation({
+    mutationFn: (data: TeacherUpdate) => editTeacher(data),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useAddTeacherPosition = () => {
+  // return useMutation((data: TeacherPositionUpdate) => addTeacherPosition(data), {});
+  return useMutation({
+    mutationFn: (data: TeacherPositionUpdate) => addTeacherPosition(data),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useChangeTeacherWorkload = () => {
+  // return useMutation((data: TeacherWorkloadChange) => changeTeacherWorkload(data), {});
+  return useMutation({
+    mutationFn: (data: TeacherWorkloadChange) => changeTeacherWorkload(data),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useChangeTeacherLesson = () => {
+  // return useMutation((data: AbsentLessonBody) => changeTeacherLesson(data), {});
+  return useMutation({
+    mutationFn: (data: AbsentLessonBody) => changeTeacherLesson(data),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useUpdateTeacherPosition = () => {
+  // return useMutation((data: TeacherPositionUpdate) => updateTeacherPosition(data), {});
+  return useMutation({
+    mutationFn: (data: TeacherPositionUpdate) => updateTeacherPosition(data),
+    onError: (err: AxiosError) => err
+  })
+};

@@ -10,11 +10,7 @@ export const metadata: Metadata = {
   description: "Education CRM System",
 };
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex h-screen">
       <div className='relative hidden md:block md:w-64 h-screen py-2.5 bg-white border-r border-gray-200 px-7'>

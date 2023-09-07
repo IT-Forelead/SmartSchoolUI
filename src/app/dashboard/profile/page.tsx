@@ -5,10 +5,10 @@ import TeacherProfile from "@/components/client/TeacherProfile"
 import useUserInfo from "@/hooks/useUserInfo"
 
 export default function ProfilePage() {
-  const currentUser = useUserInfo()
+  const user = useUserInfo()
   return (
     <>
-      {currentUser?.role?.includes('admin') ?
+      {user?.role?.includes('admin') ?
         <AdminProfile /> :
         <TeacherProfile />
       }

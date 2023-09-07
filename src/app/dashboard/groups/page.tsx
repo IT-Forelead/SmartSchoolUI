@@ -36,15 +36,8 @@ import {
 import { useGroupsList } from "@/hooks/useGroups"
 import useUserInfo from "@/hooks/useUserInfo"
 import { useRouter } from "next/navigation"
-
-export type Group = {
-  "id": string,
-  "createdAt": string,
-  "level": number,
-  "name": string,
-  "updatedAt": object,
-  "studentCount": number
-}
+import { Group } from "@/models/common.interface"
+import { useEffect, useState } from "react"
 
 export const columns: ColumnDef<Group>[] = [
   {
@@ -112,24 +105,24 @@ export const columns: ColumnDef<Group>[] = [
 export default function GroupsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
-  const { data, isError, isLoading } = useGroupsList();
+  const { data, isLoading } = useGroupsList();
 
-  let d = data?.data ?? []
+  let groups = data?.data ?? []
   const table = useReactTable({
-    data: d,
+    data: groups,
     columns: columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

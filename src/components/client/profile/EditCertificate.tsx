@@ -1,21 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAddTeacherPosition, useDegreesList, useTeacherProfile, useUpdateTeacherPosition } from '@/hooks/useTeachers';
+import { useTeacherProfile, useUpdateTeacherPosition } from '@/hooks/useTeachers';
 import useUserInfo from '@/hooks/useUserInfo';
-import { SolarBoxMinimalisticBroken } from '@/icons/BoxIcon';
 import { SolarPenNewSquareBroken } from '@/icons/PencilIcon';
 import { notifyError, notifySuccess, notifyWarn } from '@/lib/notify';
+import { TeacherPositionUpdate } from '@/models/common.interface';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-export type TeacherPositionUpdate = {
-  "teacherId": string,
-  "degreeId": string,
-  "filename": null
-}
 
 export default function EditCertificate(prop: { degId: string }) {
   const { handleSubmit, setValue } = useForm<TeacherPositionUpdate>();

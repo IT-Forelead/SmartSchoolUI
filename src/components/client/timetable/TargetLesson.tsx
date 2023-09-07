@@ -1,8 +1,5 @@
 "use client"
 
-import { Group } from '@/app/dashboard/groups/page'
-import { Subject } from '@/app/dashboard/subjects/page'
-import { Teacher } from '@/app/dashboard/teachers/page'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -29,41 +26,13 @@ import { useSubjectsList } from '@/hooks/useSubjects'
 import { useTeachersList } from '@/hooks/useTeachers'
 import { useTargetLesson } from '@/hooks/useTimeTable'
 import { SolarBoxMinimalisticBroken } from '@/icons/BoxIcon'
+import { moments, translateWeekday, weekdays } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
 import { cn } from '@/lib/utils'
+import { Group, LessonBody, Subject, Teacher } from '@/models/common.interface'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
-export type TargetLessonBody = {
-  "teacherId": string,
-  "groupId": string,
-  "subjectId": string,
-  "weekday": string,
-  "moment": number
-}
-
-const moments = [1, 2, 3, 4, 5, 6];
-
-const weekdays = [
-  "Dushanba",
-  "Seshanba",
-  "Chorshanba",
-  "Payshanba",
-  "Juma",
-  "Shanba",
-];
-
-const weekdaysThreeLetter = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function translateWeekday(uwd: string) {
-  const weekdayMap = new Map();
-
-  for (let i = 0; i < weekdays.length; i++) {
-    weekdayMap.set(weekdays[i], weekdaysThreeLetter[i]);
-  }
-  return weekdayMap.get(uwd);
-}
 
 export default function TargetLesson() {
 
@@ -88,19 +57,17 @@ export default function TargetLesson() {
 
 
   function getSelectedDay(givenDay: string) {
-    console.log("Day: ", givenDay);
     setDay(givenDay)
   }
 
   function getSelectedMoment(order: string) {
-    console.log("Moment: ", +order);
     setMoment(+order)
   }
 
-  const { handleSubmit } = useForm<TargetLessonBody>();
+  const { handleSubmit } = useForm<LessonBody>();
   const { mutate: targetLesson, isSuccess, error, isLoading } = useTargetLesson();
 
-  const onSubmit: SubmitHandler<TargetLessonBody> = (data) => {
+  const onSubmit: SubmitHandler<LessonBody> = (data) => {
     data.teacherId = selectedTeacher?.id || ''
     data.groupId = selectedGroup?.id || ''
     data.subjectId = selectedSubject?.id || ''
@@ -126,7 +93,7 @@ export default function TargetLesson() {
       notifySuccess("So`rov yuborildi")
     } else if (error) {
       if (error?.response?.data) {
-        notifyError(error?.response?.data || "So`rov yuborishda muammo yuzaga keldi")
+        notifyError(error?.response?.data as string || "So`rov yuborishda muammo yuzaga keldi")
       } else {
         notifyError("So`rov yuborishda muammo yuzaga keldi")
       }

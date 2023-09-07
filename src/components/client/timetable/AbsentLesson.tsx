@@ -1,27 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useChangeTeacherLesson } from '@/hooks/useTeachers'
-import { lessonForSwap } from '@/hooks/useTimeTable'
 import useUserInfo from '@/hooks/useUserInfo'
-import { notifyError, notifySuccess, notifyWarn } from '@/lib/notify'
+import { translateWeekday } from '@/lib/composables'
+import { notifyError, notifySuccess } from '@/lib/notify'
+import { AbsentLessonBody, LessonBody } from '@/models/common.interface'
 import { Loader2 } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
-export type AbsentLessonBody = {
-  "subjectId": string,
-  "groupId": string,
-  "weekday": string,
-  "moment": number
-}
-
-export type LessonBody = {
-  "teacherId": string,
-  "subjectId": string,
-  "groupId": string,
-  "weekday": string,
-  "moment": number
-}
 
 export default function AbsentLesson(props: {
   subject: any,
@@ -34,24 +20,6 @@ export default function AbsentLesson(props: {
 }) {
   const subject = props.subject
   const user = useUserInfo()
-  const weekdays = [
-    "Dushanba",
-    "Seshanba",
-    "Chorshanba",
-    "Payshanba",
-    "Juma",
-    "Shanba",
-  ];
-
-  const weekdaysThreeLetter = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  function translateWeekday(uwd: string) {
-    const weekdayMap = new Map();
-
-    for (let i = 0; i < weekdays.length; i++) {
-      weekdayMap.set(weekdays[i], weekdaysThreeLetter[i]);
-    }
-    return weekdayMap.get(uwd);
-  }
 
   const { handleSubmit, reset } = useForm<AbsentLessonBody>();
   const { mutate: changeTeacherLesson, isSuccess, error, isLoading } = useChangeTeacherLesson();
@@ -63,7 +31,7 @@ export default function AbsentLesson(props: {
       weekday: translateWeekday(props.day),
       moment: subject?.moment
     })
-  }, [reset])
+  }, [props.day, reset, subject?.groupId, subject?.moment, subject?.subjectId])
 
   const lessonBody = {
     groupId: subject?.groupId,
@@ -84,7 +52,7 @@ export default function AbsentLesson(props: {
       notifySuccess("So`rov yuborildi")
     } else if (error) {
       if (error?.response?.data) {
-        notifyError(error?.response?.data || "So`rov yuborishda muammo yuzaga keldi")
+        notifyError(error?.response?.data as string || "So`rov yuborishda muammo yuzaga keldi")
       } else {
         notifyError("So`rov yuborishda muammo yuzaga keldi")
       }

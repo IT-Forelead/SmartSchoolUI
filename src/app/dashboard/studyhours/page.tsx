@@ -8,12 +8,6 @@ import { useSubjectsList } from '@/hooks/useSubjects';
 import { SolarDownloadSquareBroken } from '@/icons/DownloadIcon';
 import xlsx from "json-as-xlsx";
 
-export type StudyHours = {
-  "level": number,
-  "hour": number,
-  "subjectId": string
-}
-
 const settings = {
   fileName: "Dars soatlari", // Name of the resulting spreadsheet
   extraLength: 3, // A bigger number means that columns will be wider
@@ -32,13 +26,6 @@ export default function StudyHoursPage() {
 
   function getHour(level: number, sId: string) {
     return studyHours.find(sh => sh.subjectId === sId && sh.level === level)?.hour
-  }
-
-  function fillColor(studentsCount: number, divide: boolean) {
-    if (divide && studentsCount >= 25) {
-      return 'bg-green-500'
-    }
-    return 'bg-white'
   }
 
   function downloadExcel() {
@@ -93,7 +80,6 @@ export default function StudyHoursPage() {
               })}
               <th className="p-2 text-center border">Jami <br /> (boshlang`ich)</th>
               <th className="p-2 text-center border">Jami <br /> (yuqori)</th>
-              <th className="p-2 text-center border">Qoldiq</th>
               <th className="p-2 text-center border">Jami</th>
             </tr>
           </thead>
@@ -104,13 +90,11 @@ export default function StudyHoursPage() {
                   <td className="p-1 font-medium text-gray-500 border whitespace-nowrap">{item.name}</td>
                   {groups?.map(({ level, id, studentCount }) => {
                     return (
-                      // <td className={`p-2 text-center border ${fillColor(studentCount, item.needDivideStudents)}`} key={id}>{getHour(level, item.id)}</td>
                       <ChangeLessonHour refetch={studyHoursResponse.refetch} refetchSubjects={subjectResponse?.refetch} subject={item} level={level} studentCount={studentCount} studyHours={studyHours} subjectId={item?.id} key={id} />
                     )
                   })}
                   <td className="p-1 font-medium text-center border">{item.hourForBeginner}</td>
                   <td className="p-1 font-medium text-center border">{item.hourForHigher}</td>
-                  <td className="p-1 font-medium text-center border"></td>
                   <td className="p-1 font-medium text-center border">{item.hourForHigher + item.hourForBeginner}</td>
                 </tr>
               )

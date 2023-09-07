@@ -12,44 +12,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-export type TeacherLinkInfo = {
-  "id": string,
-  "createdAt": string,
-  "dateOfBirth": string,
-  "gender": "male" | "female",
-  "fullName": string,
-  "nationality": string,
-  "citizenship": string,
-  "documentType": string,
-  "documentSeries": string,
-  "documentNumber": string,
-  "pinfl": string,
-  "phone": string,
-  "photo": string,
-  "workload": number,
-  "subjects": [{
-    "id": string,
-    "name": string,
-    "category": string,
-    "needDivideStudents": boolean,
-    "hourForBeginner": number,
-    "hourForHigher": number,
-  }]
-  "documents": [
-    {
-      "id": string,
-      "teacherId": string,
-      "certificateId": string,
-      "approved": string
-    }
-  ]
-}
-
-export type Approve = {
-  link: string,
-  approved: boolean
-}
-
 export default function LinkPage({ params }: { params: { link: string } }) {
   const teacherLinkResponse = useTeacherLinkInfo(params.link)
   const teacher = teacherLinkResponse?.data?.data
@@ -63,7 +25,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   useEffect(() => {
     if (teacherLinkResponse?.error?.response?.data) {
-      setError(teacherLinkResponse?.error?.response?.data);
+      setError(teacherLinkResponse?.error?.response?.data as string);
     }
   }, [teacherLinkResponse.error])
 

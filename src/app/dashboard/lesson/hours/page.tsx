@@ -35,20 +35,10 @@ import {
 } from "@/components/ui/table"
 import { useTeachersList, useWorkloadHistoryList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
+import { SolarDownloadSquareBroken } from "@/icons/DownloadIcon"
+import { Teacher, WorkloadHistory } from "@/models/common.interface"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Teacher } from "../../teachers/page"
-import { SolarDownloadSquareBroken } from "@/icons/DownloadIcon"
-
-export type WorkloadHistory = {
-  id: string,
-  createdAt: string,
-  from: string,
-  to: string,
-  userId: string,
-  workload: number,
-  reasonDocId: string,
-}
 
 function getTeacherData(list: Teacher[], id: string) {
   return list.find(teacher => teacher?.id === id)?.fullName

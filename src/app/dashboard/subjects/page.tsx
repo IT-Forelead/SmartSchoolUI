@@ -36,15 +36,8 @@ import {
 import { useSubjectsList } from "@/hooks/useSubjects"
 import useUserInfo from "@/hooks/useUserInfo"
 import { useRouter } from "next/navigation"
-
-export type Subject = {
-  "id": string,
-  "name": string,
-  "category": string,
-  "hourForBeginner": number,
-  "hourForHigher": number,
-  "needDivideStudents": boolean
-}
+import { Subject } from "@/models/common.interface"
+import { useEffect, useState } from "react"
 
 export const columns: ColumnDef<Subject>[] = [
   {
@@ -132,18 +125,18 @@ export const columns: ColumnDef<Subject>[] = [
 export default function SubjectsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const { data, isLoading } = useSubjectsList();
 

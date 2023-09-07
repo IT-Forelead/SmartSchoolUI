@@ -36,19 +36,9 @@ import {
 import { useRoomsList } from "@/hooks/useRooms"
 import useUserInfo from "@/hooks/useUserInfo"
 import { useRouter } from "next/navigation"
-
-export type Room = {
-  "number": number,
-  "name": string,
-  "type": string
-}
-
-function translateRoomType(rt: string) {
-  if (rt.includes('class_room')) {
-    return 'sinfxona'
-  }
-  return 'laboratoriya'
-}
+import { Room } from "@/models/common.interface"
+import { translateRoomType } from "@/lib/composables"
+import { useEffect, useState } from "react"
 
 export const columns: ColumnDef<Room>[] = [
   {
@@ -123,18 +113,18 @@ export const columns: ColumnDef<Room>[] = [
 export default function RoomsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const { data, isError, isLoading } = useRoomsList();
 

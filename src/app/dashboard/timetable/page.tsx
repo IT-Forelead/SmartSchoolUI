@@ -1,43 +1,36 @@
 "use client";
 
 import Loader from "@/components/client/Loader";
-import AbsentLesson, { LessonBody } from "@/components/client/timetable/AbsentLesson";
+import AbsentLesson from "@/components/client/timetable/AbsentLesson";
 import TargetLesson from "@/components/client/timetable/TargetLesson";
 import { Button } from "@/components/ui/button";
-import { useTimeTable, rebuildTimetable, lessonForSwap } from "@/hooks/useTimeTable";
+import { lessonForSwap, rebuildTimetable, useTimeTable } from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarRefreshSquareBroken } from "@/icons/Reload";
-import { notifyError, notifySuccess } from "@/lib/notify";
-import React, { useState } from "react";
+import { translateWeekday, weekdays } from "@/lib/composables";
+import { notifyError } from "@/lib/notify";
+import { LessonBody } from "@/models/common.interface";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function TimeTablePage() {
   const currentUser = useUserInfo()
   const timeTableResponse = useTimeTable();
   const timetable = timeTableResponse?.data?.data ?? {};
   let groups: string[] = Object.keys(timetable) ?? [];
-  const weekdays = [
-    "Dushanba",
-    "Seshanba",
-    "Chorshanba",
-    "Payshanba",
-    "Juma",
-    "Shanba",
-  ];
 
-  const weekdaysThreeLetter = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  function translateWeekday(uwd: string) {
-    const weekdayMap = new Map();
-
-    for (let i = 0; i < weekdays.length; i++) {
-      weekdayMap.set(weekdays[i], weekdaysThreeLetter[i]);
-    }
-    return weekdayMap.get(uwd);
-  }
+  const [isGenerating, setIsGenerating] = useState<boolean>(false)
 
   async function regenerate() {
-    await rebuildTimetable().then(() => {
+    setIsGenerating(true)
+    await rebuildTimetable().then((res) => {
+      setIsGenerating(false)
       timeTableResponse.refetch();
+    }).catch((err) => {
+      notifyError('Dars jadvalini qayta shakllantirishda muammo yuzaga keldi!')
+      setTimeout(() => {
+        setIsGenerating(false)
+      }, 3000)
     });
   }
 
@@ -58,13 +51,17 @@ export default function TimeTablePage() {
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center justify-center my-3 space-x-5">
             <TargetLesson />
-            <Button
-              onClick={() => regenerate()}
-              className="flex items-center whitespace-nowrap"
-            >
-              <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
-              Qayta generatsiya qilish
-            </Button>
+            {!isGenerating ?
+              <Button onClick={() => regenerate()} className="flex items-center whitespace-nowrap">
+                <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
+                Qayta generatsiya qilish
+              </Button>
+              : <Button disabled className="select-none">
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Qayta generatsiya qilinmoqda...
+              </Button>
+            }
+
           </div>
         </div> : <div></div>
       }
@@ -117,11 +114,11 @@ export default function TimeTablePage() {
                             {timetable[item][translateWeekday(day)]?.map(
                               (subject: any, idx: any) => {
                                 return (
-                                  <AbsentLesson key={idx} subject={subject} class={item} day={day} 
-                                  getAvailableLessonForSwap={getAvailableLessonForSwap} 
-                                  availableLessons={availableLessons}
-                                  setSelectedSubject={setSelectedSubject}
-                                  selectedSubject={selectedSubject}
+                                  <AbsentLesson key={idx} subject={subject} class={item} day={day}
+                                    getAvailableLessonForSwap={getAvailableLessonForSwap}
+                                    availableLessons={availableLessons}
+                                    setSelectedSubject={setSelectedSubject}
+                                    selectedSubject={selectedSubject}
                                   />
                                 );
                               }

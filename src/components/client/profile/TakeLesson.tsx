@@ -6,15 +6,10 @@ import { useAddTeacherPosition, useDegreesList, useTeacherProfile } from '@/hook
 import useUserInfo from '@/hooks/useUserInfo';
 import { SolarBoxMinimalisticBroken } from '@/icons/BoxIcon';
 import { notifyError, notifySuccess, notifyWarn } from '@/lib/notify';
+import { TeacherPositionUpdate } from '@/models/common.interface';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-export type TeacherPositionUpdate = {
-  "teacherId": string,
-  "degreeId": string,
-  "filename": null
-}
 
 export default function TakeLesson() {
   const { handleSubmit, setValue } = useForm<TeacherPositionUpdate>();
@@ -42,8 +37,8 @@ export default function TakeLesson() {
       notifySuccess("O`zgarishlar saqlandi")
       teacherResponse.refetch()
     } else if (error) {
-      if (error?.response?.data?.includes('avval')) {
-        notifyError(error?.response?.data)
+      if ((error?.response?.data as string)?.includes('avval')) {
+        notifyError(error?.response?.data as string)
       } else {
         notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
       }

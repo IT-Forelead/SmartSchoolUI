@@ -32,7 +32,7 @@ export default function Login() {
     } else if (isError) {
       notifyError('Login yoki parol noto`g`ri')
     } else return;
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, data?.data.accessToken, data?.data.refreshToken]);
 
   const quotes: string[] = ["Avtomatlashgan ta'lim tizimi", "Bizning tizim orqali dars jadvalini yarating", "FaceID orqali davomat qilishni ta'minlash"]
   return (

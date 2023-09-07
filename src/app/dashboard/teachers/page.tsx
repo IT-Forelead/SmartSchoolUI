@@ -45,107 +45,11 @@ import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import { dateFormatter } from "@/lib/composables"
 import { notifyError, notifySuccess } from "@/lib/notify"
+import { Teacher, TeacherUpdate } from "@/models/common.interface"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
-
-export type TeacherDoc = {
-  id: string,
-  createdAt: string,
-  dateOfBirth: string,
-  gender: "female" | "male",
-  fullName: string,
-  nationality: string,
-  citizenship: string,
-  documentType: string,
-  documentSeries: string,
-  documentNumber: string,
-  pinfl: string,
-  phone?: string,
-  photo?: string,
-  subjectName: string
-  degree: string,
-  workload: number,
-  documents: [
-    {
-      "id": string,
-      "teacherId": string,
-      "certificateId": string,
-      "approved": string
-    }
-  ]
-}
-
-export type Subject = {
-  id: string,
-  name: string,
-  category: string,
-  needDivideStudents: boolean,
-  hourForBeginner: number,
-  hourForHigher: number,
-}
-
-export type Teacher = {
-  id: string,
-  createdAt: string,
-  dateOfBirth: string,
-  gender: "female" | "male",
-  fullName: string,
-  nationality: string,
-  citizenship: string,
-  documentType: string,
-  documentSeries: string,
-  documentNumber: string,
-  pinfl: string,
-  phone?: string,
-  photo?: string,
-  subjects: [{
-    id: string,
-    name: string,
-    category: string,
-    needDivideStudents: boolean,
-    hourForBeginner: number,
-    hourForHigher: number,
-  }]
-  degree: string,
-  workload: number,
-  documents: [
-    {
-      "id": string,
-      "teacherId": string,
-      "certificateId": string,
-      "approved": string
-    }
-  ]
-}
-
-export type TeacherDegree = {
-  id: string,
-  description: string,
-  point: number
-}
-
-export type ApproveAsAdmin = {
-  "approved": boolean,
-  "degreeId": string,
-  "teacherId": string
-}
-
-export type TeacherUpdate = {
-  id: string,
-  dateOfBirth: string,
-  gender: "female" | "male",
-  fullName: string,
-  nationality: string,
-  citizenship: string,
-  documentType: string,
-  documentSeries: string,
-  documentNumber: string,
-  pinfl: string,
-  degree: string,
-  subjectId: string,
-  phone: string
-}
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 function returnLength(list: any) {
   return list?.length
@@ -155,7 +59,7 @@ function listToString(list: any) {
   return list?.map((subject: any) => subject?.name)?.join(', ')
 }
 
-export const columns = (setTeacher: React.Dispatch<React.SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
+export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
     cell: ({ row }) => (
@@ -291,8 +195,8 @@ export default function TeachersPage() {
     setTeacher(teacher)
   }
 
-  const [isApproving, setIsApproving] = React.useState<boolean>(false)
-  const [isRejecting, setIsRejecting] = React.useState<boolean>(false)
+  const [isApproving, setIsApproving] = useState<boolean>(false)
+  const [isRejecting, setIsRejecting] = useState<boolean>(false)
 
   function approveTeacherDocument(approved: boolean, id: string) {
     if (approved) {
@@ -320,7 +224,7 @@ export default function TeachersPage() {
     })
   }
 
-  const [subjectIdsList, setSubjectIdsList] = React.useState<string[]>([])
+  const [subjectIdsList, setSubjectIdsList] = useState<string[]>([])
 
   function addSubjectToTeacher() {
     setIsSaving(true)
@@ -341,22 +245,22 @@ export default function TeachersPage() {
     })
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
-  const [teacher, setTeacher] = React.useState<Teacher | null>(null)
-  const [mode, setMode] = React.useState<string>('')
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [isSaving, setIsSaving] = React.useState<boolean>(false);
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [teacher, setTeacher] = useState<Teacher | null>(null)
+  const [mode, setMode] = useState<string>('')
+  const [open, setOpen] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
 
@@ -367,19 +271,9 @@ export default function TeachersPage() {
     return degrees?.find(deg => deg?.id === id)?.description
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     reset({ ...teacher })
   }, [reset, teacher])
-
-  React.useEffect(() => {
-    if (isSuccess) {
-      notifySuccess("O`zgarishlar saqlandi")
-      refetch()
-      setOpen(false)
-    } else if (error) {
-      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
-    } else return;
-  }, [isSuccess, error]);
 
   function getSelectData(order: number, sv: string) {
     if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
@@ -392,13 +286,24 @@ export default function TeachersPage() {
 
   const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
 
-  const { data, isError, isLoading, refetch } = useTeachersList();
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
 
-  let d = data?.data ?? []
+  const { data, isError, isLoading, refetch } = useTeachersList();
+
+  useEffect(() => {
+    if (isSuccess) {
+      notifySuccess("O`zgarishlar saqlandi")
+      refetch()
+      setOpen(false)
+    } else if (error) {
+      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+    } else return;
+  }, [isSuccess, error]);
+
+  let teachers = data?.data ?? []
   const table = useReactTable({
-    data: d,
+    data: teachers,
     columns: columns(setTeacher, showCertificates),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -688,11 +593,10 @@ export default function TeachersPage() {
           <Input
             placeholder="F.I.SH bo`yicha izlash..."
             value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+            className="max-w-sm"
             onChange={(event) => {
               return table.getColumn("fullName")?.setFilterValue(event.target.value)
-            }
-            }
-            className="max-w-sm"
+            }}
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

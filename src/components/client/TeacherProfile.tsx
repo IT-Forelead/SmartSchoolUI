@@ -1,4 +1,3 @@
-import { Teacher, TeacherUpdate } from '@/app/dashboard/teachers/page'
 import { useSubjectsList } from '@/hooks/useSubjects'
 import { useDegreesList, useEditTeacher, useTeacherProfile, useTeacherWorkloadInfo } from '@/hooks/useTeachers'
 import useUserInfo from '@/hooks/useUserInfo'
@@ -16,18 +15,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import Loader from './Loader'
 import TakeLesson from './profile/TakeLesson'
 import EditCertificate from './profile/EditCertificate'
-
-export type WorkloadFormula = {
-  "x": number,
-  "total": number,
-  "teachers": [
-    {
-      "teacher": Teacher,
-      "hour": number
-    }
-  ],
-  "mode": number
-}
+import { TeacherUpdate } from '@/models/common.interface'
 
 export default function TeacherProfile() {
   const image = null
@@ -38,7 +26,7 @@ export default function TeacherProfile() {
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
-  const workloadInfoResponse = useTeacherWorkloadInfo(teacher?.subjects);
+  const workloadInfoResponse = useTeacherWorkloadInfo(teacher?.subjects ?? []);
   const workloadInfo = workloadInfoResponse?.data?.data[0]
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data
@@ -312,33 +300,6 @@ export default function TeacherProfile() {
           }) : <Loader />
         }
       </div>
-      {/* <div>
-        <div className='flex items-center justify-between'>
-          <div className="text-xl font-bold">Sertifikatlar</div>
-          <Button disabled={true}>
-            <SolarAddCircleBroken className='w-6 h-6 mr-2' />
-            Sertifikat qo`shish
-          </Button>
-        </div>
-        <div className="overflow-auto max-h-48 xxl:overflow-x-hidden customer-tariffs-wrapper">
-          <table className="w-full table-auto min-w-max">
-            <thead className="sticky top-0 z-10 bg-white shadow">
-              <tr className="text-lg leading-normal text-gray-600 capitalize">
-                <th className="px-4 py-2 text-center">No</th>
-                <th className="px-4 py-2 text-left">Bergan tashkilot</th>
-                <th className="px-4 py-2 text-left">Hujjat seriyasi</th>
-                <th className="px-4 py-2 text-left">Nomer</th>
-                <th className="px-4 py-2 text-center">Fan</th>
-                <th className="px-4 py-2 text-center">Berilgan sanasi</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm font-light text-gray-600">
-
-            </tbody>
-          </table>
-          <div className="w-full text-center text-red-500">Hech nima topilmadi</div>
-        </div>
-      </div> */}
     </div >
   )
 }

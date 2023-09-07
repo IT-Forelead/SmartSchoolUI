@@ -1,7 +1,5 @@
 import useUserInfo from '@/hooks/useUserInfo'
 import { SolarUserBroken } from '@/icons/UserIcon'
-import { UserInfo } from '@/models/user.interface'
-import { getCookie } from 'cookies-next'
 import Image from 'next/image'
 
 export default function AdminProfile() {

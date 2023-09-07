@@ -1,21 +1,14 @@
-import { StudyHours } from '@/app/dashboard/studyhours/page'
-import { Subject } from '@/app/dashboard/subjects/page'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { useChangeTeacherLessonHour } from '@/hooks/useStudyHours'
+import { fillColor } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
+import { LessonHour, StudyHours, Subject } from '@/models/common.interface'
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from '@tanstack/react-query'
-import { spawn } from 'child_process'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
-export type LessonHour = {
-  "subjectId": string,
-  "hour": number,
-  "level": number
-}
 
 export default function ChangeLessonHour(props: {
   subject: Subject,
@@ -43,13 +36,6 @@ export default function ChangeLessonHour(props: {
 
   function getHour(level: number, sId: string) {
     return props?.studyHours?.find(sh => sh.subjectId === sId && sh.level === level)?.hour
-  }
-
-  function fillColor(studentsCount: number, divide: boolean) {
-    if (divide && studentsCount >= 25) {
-      return 'bg-green-500 hover:bg-green-600'
-    }
-    return 'bg-white hover:bg-gray-100'
   }
 
   useEffect(() => {

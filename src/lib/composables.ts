@@ -48,6 +48,15 @@ export function translateWeekday(uwd: string) {
   return weekdayMap.get(uwd);
 }
 
+export function translateEnToUzbWeekday(wd: string) {
+  const weekdayMap = new Map();
+
+  for (let i = 0; i < weekdays.length; i++) {
+    weekdayMap.set(weekdaysThreeLetter[i], weekdays[i]);
+  }
+  return weekdayMap.get(wd);
+}
+
 export function fillColor(studentsCount: number, divide: boolean) {
   if (divide && studentsCount >= 25) {
     return 'bg-green-500 hover:bg-green-600'

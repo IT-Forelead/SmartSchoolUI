@@ -24,11 +24,23 @@ export const switchTwoLessonOrder = async (data: LessonBodyData) => {
   return await axios.patch<any>("/timetable", data);
 };
 
+export const getTimetableHistory = async () => {
+  return await axios.get<LessonBody[]>("/timetable/available/lesson");
+};
+
 /* Hooks */
 export const useTimeTable = () => {
   return useQuery({
     queryKey: ['timetable'],
     queryFn: () => getTimeTable(),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useTimeTableHistory = () => {
+  return useQuery({
+    queryKey: ['timetableHistory'],
+    queryFn: () => getTimetableHistory(),
     onError: (err: AxiosError) => err
   })
 };

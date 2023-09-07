@@ -3,6 +3,7 @@
 import Loader from "@/components/client/Loader";
 import AbsentLesson from "@/components/client/timetable/AbsentLesson";
 import TargetLesson from "@/components/client/timetable/TargetLesson";
+import TimetableChangesHistory from "@/components/client/timetable/TimetableChangesHistory";
 import { Button } from "@/components/ui/button";
 import { lessonForSwap, rebuildTimetable, useTimeTable } from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -50,6 +51,7 @@ export default function TimeTablePage() {
       {currentUser?.role?.includes('admin') ?
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center justify-center my-3 space-x-5">
+            <TimetableChangesHistory />
             <TargetLesson />
             {!isGenerating ?
               <Button onClick={() => regenerate()} className="flex items-center whitespace-nowrap">

@@ -1,4 +1,5 @@
 import { LessonBody } from "@/models/common.interface";
+import { LessonBodyData } from "@/models/user.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -19,6 +20,10 @@ export const lessonForSwap = async (data: LessonBody) => {
   return await axios.post<any>("/timetable/available/lesson", data);
 };
 
+export const switchTwoLessonOrder = async (data: LessonBodyData) => {
+  return await axios.patch<any>("/timetable", data);
+};
+
 /* Hooks */
 export const useTimeTable = () => {
   return useQuery({
@@ -30,9 +35,15 @@ export const useTimeTable = () => {
 
 /* Mutations */
 export const useTargetLesson = () => {
-  // return useMutation((body: TargetLessonBody) => targetLesson(body), {});
   return useMutation({
     mutationFn: (body: LessonBody) => targetLesson(body),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useSwitchTwoLessonOrder = () => {
+  return useMutation({
+    mutationFn: (body: LessonBodyData) => switchTwoLessonOrder(body),
     onError: (err: AxiosError) => err
   })
 };

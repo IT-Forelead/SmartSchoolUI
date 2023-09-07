@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useChangeTeacherLesson } from '@/hooks/useTeachers'
+import { useSwitchTwoLessonOrder } from '@/hooks/useTimeTable'
 import useUserInfo from '@/hooks/useUserInfo'
 import { translateWeekday } from '@/lib/composables'
 import { notifyError, notifySuccess } from '@/lib/notify'
 import { AbsentLessonBody, LessonBody } from '@/models/common.interface'
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function AbsentLesson(props: {
@@ -14,9 +16,13 @@ export default function AbsentLesson(props: {
   class: any,
   day: string,
   getAvailableLessonForSwap: (lesson: LessonBody) => void,
+  setAvailableLessons: Dispatch<SetStateAction<LessonBody[]>>,
   availableLessons: LessonBody[],
   selectedSubject?: LessonBody,
-  setSelectedSubject: React.Dispatch<React.SetStateAction<LessonBody | undefined>>
+  setSelectedSubject: React.Dispatch<React.SetStateAction<LessonBody | undefined>>,
+  refetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>,
+  ) => Promise<QueryObserverResult<any, any>>
 }) {
   const subject = props.subject
   const user = useUserInfo()
@@ -67,7 +73,7 @@ export default function AbsentLesson(props: {
     })) {
       return 'bg-green-500 text-white'
     }
-    return
+    return ''
   }
 
   function fillColorSelectedSubject(lesson: LessonBody) {
@@ -78,6 +84,39 @@ export default function AbsentLesson(props: {
     }
     return
   }
+
+
+  const {
+    mutate: switchTwoLessonOrder,
+    isSuccess: isSuccessSwitchTwoLessonOrder,
+    error: errorSwitchTwoLessonOrder,
+    isLoading: isLoadingSwitchTwoLessonOrder
+  } = useSwitchTwoLessonOrder();
+
+  useEffect(() => {
+    if (isSuccessSwitchTwoLessonOrder) {
+      notifySuccess("O`zgarishlar saqlandi")
+      props.setAvailableLessons([])
+      props.refetch()
+    } else if (error) {
+      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+    } else return;
+  }, [isSuccessSwitchTwoLessonOrder, error]);
+
+  function doSomethingFunc(changeFunc: string) {
+    props.setSelectedSubject(lessonBody)
+    if (changeFunc) {
+      if (window.confirm('Darslar joylashuvini o`zgartirishga rozimisiz?')) {
+        switchTwoLessonOrder({
+          lesson1: lessonBody,
+          lesson2: props.selectedSubject
+        })
+      }
+    } else {
+      props.getAvailableLessonForSwap(lessonBody)
+    }
+  }
+
 
   return (
     <Dialog>
@@ -90,11 +129,7 @@ export default function AbsentLesson(props: {
             </p>
           </li>
         </DialogTrigger> :
-        <div onClick={
-          () => {
-            props.getAvailableLessonForSwap(lessonBody)
-            props.setSelectedSubject(lessonBody)
-          }}
+        <div onClick={() => doSomethingFunc(compareLessonBody(lessonBody))}
           className={`w-full text-left hover:cursor-pointer hover:bg-gray-200 ${fillColorSelectedSubject(lessonBody)} ${compareLessonBody(lessonBody)}`}>
           <li className="p-1 border" key={subject}>
             {subject?.moment}. {subject?.subjectName}

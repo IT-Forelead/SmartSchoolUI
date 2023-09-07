@@ -116,9 +116,11 @@ export default function TimeTablePage() {
                                 return (
                                   <AbsentLesson key={idx} subject={subject} class={item} day={day}
                                     getAvailableLessonForSwap={getAvailableLessonForSwap}
+                                    setAvailableLessons={setAvailableLessons}
                                     availableLessons={availableLessons}
                                     setSelectedSubject={setSelectedSubject}
                                     selectedSubject={selectedSubject}
+                                    refetch={timeTableResponse.refetch}
                                   />
                                 );
                               }

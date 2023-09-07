@@ -33,93 +33,100 @@ import {
 import { useGroupsList } from '@/hooks/useGroups'
 import { useSubjectsList } from '@/hooks/useSubjects'
 import { useTeachersList } from '@/hooks/useTeachers'
-import { useTimeTableHistory } from '@/hooks/useTimeTable'
+import { useDeleteTimeTableHistory, useTimeTableHistory } from '@/hooks/useTimeTable'
 import { SolarHistoryBroken } from '@/icons/HistoryIcon'
 import { translateEnToUzbWeekday } from '@/lib/composables'
+import { notifyError, notifySuccess } from '@/lib/notify'
 import { LessonBody } from "@/models/common.interface"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Loader from '../Loader'
+import { UseMutateFunction } from '@tanstack/react-query'
+import { AxiosError, AxiosResponse } from 'axios'
 
-export const columns = (getSubject: (sId: string) => any, getTeacher: (tId: string) => any, getGroup: (gId: string) => any): ColumnDef<LessonBody>[] => [
-  {
-    header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
-  },
-  {
-    accessorKey: "teacherId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          O`qituvchi
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      )
+export const columns = (
+  getSubject: (sId: string) => any,
+  getTeacher: (tId: string) => any,
+  getGroup: (gId: string) => any,
+  deleteTimetableHistory: (lesson: LessonBody) => any): ColumnDef<LessonBody>[] => [
+    {
+      header: "No",
+      cell: ({ row }) => (
+        <div>{parseInt(row.id, 10) + 1}</div>
+      ),
     },
-    cell: ({ row }) => (
-      <div className="uppercase">{getTeacher(row.getValue('teacherId'))?.fullName}</div>
-    ),
-  },
-  {
-    accessorKey: "subjectId",
-    header: 'Fan nomi',
-    cell: ({ row }) => (
-      <div className="uppercase">{getSubject(row.getValue('subjectId'))?.name}</div>
-    ),
-  },
-  {
-    accessorKey: "groupId",
-    header: 'Sinf',
-    cell: ({ row }) => (
-      <div className="uppercase">{`${getGroup(row.getValue('groupId'))?.level}-${getGroup(row.getValue('groupId'))?.name}`}</div>
-    ),
-  },
-  {
-    accessorKey: "weekday",
-    header: 'Hafta kuni',
-    cell: ({ row }) => (
-      <div className="uppercase">{translateEnToUzbWeekday(row.getValue('weekday'))}</div>
-    ),
-  },
-  {
-    accessorKey: "moment",
-    header: 'Dars joylashuvi',
-    cell: ({ row }) => (
-      <div className="uppercase">{`${row.getValue('moment')}-para`}</div>
-    ),
-  },
-  {
-    id: "actions",
-    header: "Amallar",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const timetableHistory = row.original
+    {
+      accessorKey: "teacherId",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            O`qituvchi
+            <ArrowUpDown className="w-4 h-4 ml-2" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => (
+        <div className="uppercase">{getTeacher(row.getValue('teacherId'))?.fullName}</div>
+      ),
+    },
+    {
+      accessorKey: "subjectId",
+      header: 'Fan nomi',
+      cell: ({ row }) => (
+        <div className="uppercase">{getSubject(row.getValue('subjectId'))?.name}</div>
+      ),
+    },
+    {
+      accessorKey: "groupId",
+      header: 'Sinf',
+      cell: ({ row }) => (
+        <div className="uppercase">{`${getGroup(row.getValue('groupId'))?.level}-${getGroup(row.getValue('groupId'))?.name}`}</div>
+      ),
+    },
+    {
+      accessorKey: "weekday",
+      header: 'Hafta kuni',
+      cell: ({ row }) => (
+        <div className="uppercase">{translateEnToUzbWeekday(row.getValue('weekday'))}</div>
+      ),
+    },
+    {
+      accessorKey: "moment",
+      header: 'Dars joylashuvi',
+      cell: ({ row }) => (
+        <div className="uppercase">{`${row.getValue('moment')}-para`}</div>
+      ),
+    },
+    {
+      id: "actions",
+      header: "Amallar",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const timetableHistory = row.original
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
-              <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Amallar</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="w-4 h-4 mr-1" />
-              O`chirish
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-8 h-8 p-0">
+                <span className="sr-only">Amallar</span>
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Amallar</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => { deleteTimetableHistory(timetableHistory) }} className="text-red-600">
+                <TrashIcon className="w-4 h-4 mr-1" />
+                O`chirish
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
     },
-  },
-]
+  ]
 
 export default function TimetableChangesHistory() {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -148,12 +155,24 @@ export default function TimetableChangesHistory() {
     return groups?.find((group) => group.id === gId)
   }
 
-  const { data, isError, isLoading } = useTimeTableHistory();
+  const { data, isError, isLoading, refetch } = useTimeTableHistory();
 
-  let d = data?.data ?? []
+  const { mutate: deleteTimetableHistory, isSuccess, error } = useDeleteTimeTableHistory()
+
+  useEffect(() => {
+    if (isSuccess) {
+      notifySuccess("Muvaffaqiyatli o`chirildi")
+      refetch()
+    } else if (error) {
+      notifyError("O`chirish muammo yuzaga keldi")
+    } else return;
+  }, [error, isSuccess]);
+
+  let timetableHistories = data?.data ?? []
+
   const table = useReactTable({
-    data: d,
-    columns: columns(getSubject, getTeacher, getGroup),
+    data: timetableHistories,
+    columns: columns(getSubject, getTeacher, getGroup, deleteTimetableHistory),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -173,7 +192,7 @@ export default function TimetableChangesHistory() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className='bg-indigo-700 hover:bg-indigo-900'>
+        <Button onClick={() => { refetch() }} className='bg-indigo-700 hover:bg-indigo-900'>
           <SolarHistoryBroken className='w-6 h-6 mr-2' />
           Dars jadvali o`zgarishlari
         </Button>
@@ -224,7 +243,7 @@ export default function TimetableChangesHistory() {
                   ) : (
                     <TableRow>
                       <TableCell
-                        colSpan={columns.length}
+                        colSpan={6}
                         className="h-24 text-center"
                       >
                         Hech nima topilmadi.

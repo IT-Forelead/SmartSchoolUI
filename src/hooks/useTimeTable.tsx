@@ -28,6 +28,10 @@ export const getTimetableHistory = async () => {
   return await axios.get<LessonBody[]>("/timetable/available/lesson");
 };
 
+export const deleteTimetableHistory = async (data: LessonBody) => {
+  return await axios.patch<any>("/timetable/available/lesson", data);
+};
+
 /* Hooks */
 export const useTimeTable = () => {
   return useQuery({
@@ -56,6 +60,13 @@ export const useTargetLesson = () => {
 export const useSwitchTwoLessonOrder = () => {
   return useMutation({
     mutationFn: (body: LessonBodyData) => switchTwoLessonOrder(body),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useDeleteTimeTableHistory = () => {
+  return useMutation({
+    mutationFn: (body: LessonBody) => deleteTimetableHistory(body),
     onError: (err: AxiosError) => err
   })
 };

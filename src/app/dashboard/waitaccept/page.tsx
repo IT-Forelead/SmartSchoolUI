@@ -47,6 +47,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import ImageFull from "@/components/client/timetable/ImageFull"
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length
@@ -362,6 +363,9 @@ export default function TeachersPage() {
                     <div key={id} className="p-1 my-3 bg-white border shadow rounded-xl">
                       <div className='my-3 w-96'>{getDegree(id)}</div>
                       <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                        <div className='absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105'>
+                          <ImageFull cId={certificateId} />
+                        </div>
                         <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                         {
                           approved || rejected ? "" :

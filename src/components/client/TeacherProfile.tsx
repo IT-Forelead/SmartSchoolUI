@@ -16,6 +16,7 @@ import Loader from './Loader'
 import TakeLesson from './profile/TakeLesson'
 import EditCertificate from './profile/EditCertificate'
 import { TeacherUpdate } from '@/models/common.interface'
+import ImageFull from './timetable/ImageFull'
 
 export default function TeacherProfile() {
   const image = null
@@ -282,10 +283,13 @@ export default function TeacherProfile() {
               <div key={id} className='p-1 my-3 bg-white border shadow rounded-xl'>
                 <div className='my-3 w-96'>{getDegree(id)}</div>
                 <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-[350px] md:w-96 dark:bg-gray-800 dark:border-gray-700">
+                  <div className='absolute z-30 top-5 right-5 hover:cursor-pointer hover:scale-105'>
+                    <ImageFull cId={certificateId} />
+                  </div>
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   {
                     approved || rejected ? "" :
-                      <div className='absolute top-5 right-5 hover:cursor-pointer hover:scale-105'>
+                      <div className='absolute top-14 right-5 hover:cursor-pointer hover:scale-105'>
                         <EditCertificate degId={id} />
                       </div>
                   }

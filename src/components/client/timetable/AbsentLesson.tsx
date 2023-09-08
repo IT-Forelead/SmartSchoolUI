@@ -8,7 +8,7 @@ import { notifyError, notifySuccess } from '@/lib/notify'
 import { AbsentLessonBody, LessonBody } from '@/models/common.interface'
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function AbsentLesson(props: {

@@ -7,6 +7,7 @@ import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
 import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { BiDoorOpen } from '@/icons/RoomIcon'
 import { SolarAlarmBroken } from '@/icons/StudyHoursIcon'
+import { SolarSquareTransferHorizontalBroken } from '@/icons/SwitchIcon'
 import { SolarClockSquareBroken } from '@/icons/TeacherHourIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarWindowFrameBroken } from '@/icons/TimeTable'
@@ -66,6 +67,10 @@ export default function Sidebar() {
             <Link href={'/dashboard/lesson/hours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/lesson/hours' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarClockSquareBroken className='w-6 h-6 mr-3' />
               <p>Dars soatlarini boshqarish</p>
+            </Link>
+            <Link href={'/dashboard/substitution'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/substitution' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarSquareTransferHorizontalBroken className='w-6 h-6 mr-3' />
+              <p>Dars almashtirishlar</p>
             </Link>
           </div> :
           <div className='font-medium mt-7 space-y-7'>

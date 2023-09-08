@@ -1,4 +1,4 @@
-import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Teacher, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory } from "@/models/common.interface";
+import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Substitution, Teacher, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,6 +11,10 @@ export type AddSubjects = {
 /* APIs */
 const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
+};
+
+const getTeachersSubstitutionList = async () => {
+  return await axios.get<Substitution[]>("/teacher/substitution/lesson");
 };
 
 const getTeachersNotCheckedList = async () => {
@@ -29,6 +33,10 @@ const getWorkloadHistoryList = async () => {
 
 export const approveTeacherDoc = async (data: Approve) => {
   return await axios.get<any>(`/teacher/approve/degree/${data.link}?approved=${data.approved}`);
+};
+
+export const approveAbsentTeacherLesson = async (data: Approve) => {
+  return await axios.get<any>(`/teacher/confirm/lesson/${data.link}?approved=${data.approved}`);
 };
 
 export const addSubjectToTeacherFunc = async (data: AddSubjects) => {
@@ -90,6 +98,14 @@ export const useDegreesList = () => {
   return useQuery({
     queryKey: ['degrees'],
     queryFn: () => getTeacherDegreesList(),
+    onError: (err: AxiosError) => err
+  })
+};
+
+export const useSubstitutionList = () => {
+  return useQuery({
+    queryKey: ['substitution'],
+    queryFn: () => getTeachersSubstitutionList(),
     onError: (err: AxiosError) => err
   })
 };

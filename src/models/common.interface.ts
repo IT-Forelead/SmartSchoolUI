@@ -72,7 +72,7 @@ export type Teacher = {
       teacherId: string;
       certificateId: string;
       approved: string;
-      rejected: string
+      rejected: string;
     }
   ];
 };
@@ -161,4 +161,15 @@ export type StudyHours = {
   level: number;
   hour: number;
   subjectId: string;
+};
+
+export type Substitution = {
+  id: string;
+  createdAt: string;
+  from: string;
+  to: string;
+  subjectId: string;
+  groupId: string;
+  weekday: string;
+  moment: number;
 };

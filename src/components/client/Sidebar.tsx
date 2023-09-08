@@ -1,5 +1,6 @@
 "use client"
 import useUserInfo from '@/hooks/useUserInfo'
+import { SolarCheckCircleBroken } from '@/icons/ApproveIcon'
 import { SolarBookMinimalisticBroken } from '@/icons/BooksIcon'
 import { SolarChatRoundLineBroken } from '@/icons/ChatIcon'
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
@@ -41,6 +42,10 @@ export default function Sidebar() {
             <Link href={'/dashboard/teachers'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/teachers' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
               <p>O`qituvchilar</p>
+            </Link>
+            <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarCheckCircleBroken className='w-6 h-6 mr-3' />
+              <p>Tasdiqlash</p>
             </Link>
             <Link href={'/dashboard/groups'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/groups' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUsersGroupTwoRoundedBroken className='w-6 h-6 mr-3' />

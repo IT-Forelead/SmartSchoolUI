@@ -13,6 +13,12 @@ const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
 };
 
+const getTeachersNotCheckedList = async () => {
+  return await axios.post<Teacher[]>("/teacher/fetch", {
+    notCheckedDocument: true
+  });
+};
+
 const getTeacherDegreesList = async () => {
   return await axios.get<TeacherDegree[]>("/teacher/degrees");
 };
@@ -96,6 +102,14 @@ export const useTeachersList = () => {
   })
 };
 
+export const useTeachersNotCheckedDocList = () => {
+  return useQuery({
+    queryKey: ['teachersDoc'],
+    queryFn: () => getTeachersNotCheckedList(),
+    onError: (err: AxiosError) => err
+  })
+};
+
 export const useTeacherProfile = (tId: string) => {
   return useQuery({
     queryKey: ['teacher'],
@@ -130,7 +144,6 @@ export const useWorkloadHistoryList = () => {
 
 /* Mutations */
 export const useEditTeacher = () => {
-  // return useMutation((data: TeacherUpdate) => editTeacher(data), {});
   return useMutation({
     mutationFn: (data: TeacherUpdate) => editTeacher(data),
     onError: (err: AxiosError) => err
@@ -138,7 +151,6 @@ export const useEditTeacher = () => {
 };
 
 export const useAddTeacherPosition = () => {
-  // return useMutation((data: TeacherPositionUpdate) => addTeacherPosition(data), {});
   return useMutation({
     mutationFn: (data: TeacherPositionUpdate) => addTeacherPosition(data),
     onError: (err: AxiosError) => err
@@ -146,7 +158,6 @@ export const useAddTeacherPosition = () => {
 };
 
 export const useChangeTeacherWorkload = () => {
-  // return useMutation((data: TeacherWorkloadChange) => changeTeacherWorkload(data), {});
   return useMutation({
     mutationFn: (data: TeacherWorkloadChange) => changeTeacherWorkload(data),
     onError: (err: AxiosError) => err
@@ -154,7 +165,6 @@ export const useChangeTeacherWorkload = () => {
 };
 
 export const useChangeTeacherLesson = () => {
-  // return useMutation((data: AbsentLessonBody) => changeTeacherLesson(data), {});
   return useMutation({
     mutationFn: (data: AbsentLessonBody) => changeTeacherLesson(data),
     onError: (err: AxiosError) => err
@@ -162,7 +172,6 @@ export const useChangeTeacherLesson = () => {
 };
 
 export const useUpdateTeacherPosition = () => {
-  // return useMutation((data: TeacherPositionUpdate) => updateTeacherPosition(data), {});
   return useMutation({
     mutationFn: (data: TeacherPositionUpdate) => updateTeacherPosition(data),
     onError: (err: AxiosError) => err

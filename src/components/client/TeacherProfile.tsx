@@ -277,14 +277,14 @@ export default function TeacherProfile() {
       </div>
       <div className='items-center justify-start md:space-x-3 md:flex md:flex-wrap'>
         {!teacherResponse.isLoading ?
-          teacher?.documents?.map(({ id, certificateId, approved }) => {
+          teacher?.documents?.map(({ id, certificateId, approved, rejected }) => {
             return (
               <div key={id} className='p-1 my-3 bg-white border shadow rounded-xl'>
                 <div className='my-3 w-96'>{getDegree(id)}</div>
                 <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-[350px] md:w-96 dark:bg-gray-800 dark:border-gray-700">
                   <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
                   {
-                    approved ? "" :
+                    approved || rejected ? "" :
                       <div className='absolute top-5 right-5 hover:cursor-pointer hover:scale-105'>
                         <EditCertificate degId={id} />
                       </div>
@@ -292,8 +292,9 @@ export default function TeacherProfile() {
                 </div>
                 {
                   approved ?
-                    <h1 className='text-green-500'>Tasdiqlangan</h1> :
-                    <h1 className='text-red-500'>Tasdiqlanmagan</h1>
+                    <h1 className='text-green-500'>Tasdiqlangan</h1> : rejected ?
+                      <h1 className='text-red-500'>Rad etilgan</h1> :
+                      <h1 className='text-orange-500'>Tasdiqlanmagan</h1>
                 }
               </div>
             )

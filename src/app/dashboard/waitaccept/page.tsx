@@ -12,8 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react"
-import * as React from "react"
+import { ArrowUpDown, ChevronDown, EyeIcon, Loader2, MoreHorizontal } from "lucide-react"
 
 import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
@@ -28,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -37,8 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useSubjectsList } from "@/hooks/useSubjects"
-import { addSubjectToTeacherFunc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList, useTeachersNotCheckedDocList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
 import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
@@ -48,8 +45,8 @@ import { notifyError, notifySuccess } from "@/lib/notify"
 import { Teacher, TeacherUpdate } from "@/models/common.interface"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { SubmitHandler, useForm } from "react-hook-form"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length
@@ -113,13 +110,6 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
     ),
   },
   {
-    accessorKey: "nationality",
-    header: 'Millati',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('nationality') ?? "-"}</div>
-    ),
-  },
-  {
     accessorKey: "workload",
     header: 'Dars soati',
     cell: ({ row }) => (
@@ -155,33 +145,11 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Amallar</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-gray-600"
-              onClick={() => navigator.clipboard.writeText(teacher.fullName)}
-            >
-              <CopyIcon className="w-4 h-4 mr-1" />
-              Nusxalash
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-indigo-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
-                <PlusCircleIcon className="w-4 h-4 mr-1" />
-                Fan biriktirish
-              </DialogTrigger>
-            </DropdownMenuItem>
             <DropdownMenuItem className="text-green-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
                 <EyeIcon className="w-4 h-4 mr-1" />
                 Sertifikatlar
               </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-blue-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('', teacher)}>
-                <PencilIcon className="w-4 h-4 mr-1" />
-                Tahrirlash
-              </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="w-4 h-4 mr-1" />
-              O`chirish
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -195,7 +163,6 @@ export default function TeachersPage() {
   const router = useRouter()
 
   function showCertificates(mode: string, teacher: Teacher) {
-    setSubjectIdsList([])
     setMode(mode)
     setTeacher(teacher)
   }
@@ -229,32 +196,12 @@ export default function TeachersPage() {
     })
   }
 
-  const [subjectIdsList, setSubjectIdsList] = useState<string[]>([])
-
-  function addSubjectToTeacher() {
-    setIsSaving(true)
-    addSubjectToTeacherFunc(
-      {
-        teacherId: teacher?.id ?? "",
-        subjectIds: subjectIdsList
-      }
-    ).then(() => {
-      notifySuccess("Fan muvaffaqiyatli qo`shildi")
-      refetch()
-      setIsSaving(false)
-    }).catch((err) => {
-      notifyError("Fanni qo`shishda muammo yuzaga keldi!")
-      setTimeout(() => {
-        setIsSaving(false)
-      }, 2000)
-    })
-  }
-
   useEffect(() => {
     if (!currentUser?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.role, router])
+
   const [teacher, setTeacher] = useState<Teacher | null>(null)
   const [mode, setMode] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false);
@@ -273,25 +220,7 @@ export default function TeachersPage() {
     return degrees?.find(deg => deg?.id === id)?.description
   }
 
-  useEffect(() => {
-    reset({ ...teacher })
-  }, [reset, teacher])
-
-  function getSelectData(order: number, sv: string) {
-    if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
-      setSubjectIdsList([...subjectIdsList, sv])
-    } else {
-      subjectIdsList[order] = sv
-      setSubjectIdsList(subjectIdsList)
-    }
-  }
-
-  const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
-
-  const subjectsResponse = useSubjectsList();
-  const subjects = subjectsResponse?.data?.data
-
-  const { data, isError, isLoading, refetch } = useTeachersList();
+  const { data, isError, isLoading, refetch } = useTeachersNotCheckedDocList();
 
   useEffect(() => {
     if (isSuccess) {
@@ -332,9 +261,8 @@ export default function TeachersPage() {
       <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
         <DialogHeader>
           {mode?.includes('show') ?
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('subject') ?
-              <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
-              <DialogTitle>O`qituvchi profili</DialogTitle>
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> :
+            <DialogTitle>O`qituvchi profili</DialogTitle>
           }
         </DialogHeader>
         {mode?.includes('show') ?
@@ -473,122 +401,7 @@ export default function TeachersPage() {
               }
             </div>
           </div >
-          : mode?.includes('subject') ? <div className="space-y-3">
-            <div className="flex items-center w-full space-x-2">
-              <div className="text-base text-gray-500">
-                F.I.SH:
-              </div>
-              <div className="w-full text-lg font-medium capitalize">
-                {teacher?.fullName}
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="text-base text-gray-500 whitespace-nowrap">
-                Birinchi fan:
-              </div>
-              <div className="w-full text-lg font-medium">
-                <Select onValueChange={(val) => getSelectData(0, val)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Fanlar..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup className="overflow-auto h-52">
-                      {subjects?.map(({ name, id }) => {
-                        return (
-                          <SelectItem key={id} value={id}>{name}</SelectItem>
-                        )
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="text-base text-gray-500 whitespace-nowrap">
-                Ikkinchi fan:
-              </div>
-              <div className="w-full text-lg font-medium">
-                <Select onValueChange={(val) => getSelectData(1, val)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Fanlar..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup className="overflow-auto h-52">
-                      {subjects?.map(({ name, id }) => {
-                        return (
-                          <SelectItem key={id} value={id}>{name}</SelectItem>
-                        )
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex items-center justify-end">
-              {isSaving ?
-                <Button disabled={true}>
-                  <Loader2 className='w-6 h-6 mr-2' />
-                  Saqlanmoqda...
-                </Button>
-                : <Button onClick={() => addSubjectToTeacher()}>
-                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
-                  Saqlash
-                </Button>
-              }
-            </div>
-          </div> : <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 bg-white rounded">
-              <div className="flex items-start space-x-4">
-                {
-                  image ?
-                    <div>
-                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                    </div> :
-                    <div>
-                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                    </div>
-                }
-                <div className="w-full space-y-3">
-                  <div className="flex items-center w-full space-x-2">
-                    <div className="text-base text-gray-500">
-                      F.I.SH:
-                    </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      <Input type="text" className="w-full" {...register("fullName", { required: false })} />
-                    </div>
-                  </div>
-                  <div className="flex items-center w-full space-x-2">
-                    <div className="text-base text-gray-500">
-                      Fan:
-                    </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      {teacher?.degree}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Telefon:
-                    </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      <Input className="w-full" {...register("phone", { required: false })} />
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Yaratilgan sana:
-                    </div>
-                    <div className="text-lg font-medium">
-                      {dateFormatter(teacher?.createdAt)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-end">
-              <Button autoFocus={true}>Saqlash</Button>
-            </div>
-          </form>
+          : ""
         }
       </DialogContent>
       <div className="w-full p-5">

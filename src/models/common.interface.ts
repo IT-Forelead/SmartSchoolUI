@@ -72,6 +72,7 @@ export type Teacher = {
       teacherId: string;
       certificateId: string;
       approved: string;
+      rejected: string
     }
   ];
 };

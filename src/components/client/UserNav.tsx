@@ -31,7 +31,7 @@ export function UserNav() {
         <Button variant="ghost" className="relative w-8 h-8 border rounded-full shadow">
           <Avatar className="w-8 h-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
-            <AvatarFallback className="uppercase">{currentUser?.role[0]}</AvatarFallback>
+            <AvatarFallback className="uppercase">{currentUser?.role[0] ?? ""}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -39,10 +39,10 @@ export function UserNav() {
         <DropdownMenuLabel className="flex items-center font-normal">
           <Avatar className="w-8 h-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
-            <AvatarFallback className="uppercase">{currentUser?.role[0]}</AvatarFallback>
+            <AvatarFallback className="uppercase">{currentUser?.role[0] ?? ""}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col ml-3 space-y-1">
-            <p className="text-sm font-medium leading-none capitalize">{currentUser?.role}</p>
+            <p className="text-sm font-medium leading-none capitalize">{currentUser?.role ?? ""}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {currentUser?.phone}
             </p>

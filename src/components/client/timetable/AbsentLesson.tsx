@@ -120,7 +120,7 @@ export default function AbsentLesson(props: {
 
   return (
     <Dialog>
-      {user?.id === subject?.teacherId ?
+      {user?.User?.id === subject?.teacherId ?
         <DialogTrigger className='w-full text-left'>
           <li className="p-1 text-white bg-green-500 border hover:cursor-pointer hover:bg-green-600" key={subject}>
             {subject?.moment}. {subject?.subjectName}

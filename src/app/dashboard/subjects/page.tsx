@@ -126,10 +126,10 @@ export default function SubjectsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
   useEffect(() => {
-    if (!currentUser?.role?.includes('admin')) {
+    if (!currentUser?.User?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
-  }, [currentUser?.role, router])
+  }, [currentUser?.User?.role, router])
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []

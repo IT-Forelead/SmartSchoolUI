@@ -77,7 +77,7 @@ export function ChangeWorkload() {
 
   useEffect(() => {
     setValue('to', toTeacher?.id || "")
-    setValue('userId', user?.id || "")
+    setValue('userId', user?.User?.id || "")
   }, [toTeacher, setValue, user])
 
   const teacherResponse = useTeachersList();

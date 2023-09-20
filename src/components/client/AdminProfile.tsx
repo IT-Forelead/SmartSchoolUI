@@ -25,7 +25,7 @@ export default function AdminProfile() {
                 Roli:
               </div>
               <div className="text-lg font-medium capitalize">
-                {currentUser?.role}
+                {currentUser?.User?.role}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -33,7 +33,7 @@ export default function AdminProfile() {
                 Telefon:
               </div>
               <div className="text-lg font-medium">
-                {currentUser?.phone}
+                {currentUser?.User?.phone}
               </div>
             </div>
           </div>

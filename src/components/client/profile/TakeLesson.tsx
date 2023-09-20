@@ -22,14 +22,14 @@ export default function TakeLesson() {
 
   const user = useUserInfo()
 
-  const teacherResponse = useTeacherProfile(user?.id)
+  const teacherResponse = useTeacherProfile(user?.User?.id)
 
   const [selectId, setSelectId] = useState("")
   const [img, setImg] = useState('')
   function getSelectDegreeData(dId: string) {
     setSelectId(dId)
     setValue("degreeId", dId)
-    setValue("teacherId", user?.id)
+    setValue("teacherId", user?.User?.id)
   }
 
   useEffect(() => {

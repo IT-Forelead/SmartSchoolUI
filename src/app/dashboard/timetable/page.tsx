@@ -48,7 +48,7 @@ export default function TimeTablePage() {
 
   return (
     <div className="p-2 px-5">
-      {currentUser?.role?.includes('admin') ?
+      {currentUser?.User?.role?.includes('admin') ?
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center justify-center my-3 space-x-5">
             <TimetableChangesHistory />

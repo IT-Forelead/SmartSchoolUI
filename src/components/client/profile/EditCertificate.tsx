@@ -18,7 +18,7 @@ export default function EditCertificate(prop: { degId: string }) {
 
   const user = useUserInfo()
 
-  const teacherResponse = useTeacherProfile(user?.id)
+  const teacherResponse = useTeacherProfile(user?.User?.id)
 
   useEffect(() => {
     if (isSuccess) {
@@ -34,7 +34,7 @@ export default function EditCertificate(prop: { degId: string }) {
       console.log(prop?.degId);
 
       setValue('degreeId', prop?.degId)
-      setValue('teacherId', user?.id)
+      setValue('teacherId', user?.User?.id)
       setValue('filename', e.target.files[0])
     } else {
       notifyWarn('Boshqa formatdagi file kiritdingiz!')

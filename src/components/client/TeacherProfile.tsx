@@ -23,7 +23,7 @@ export default function TeacherProfile() {
   const currentUser = useUserInfo()
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
-  const teacherResponse = useTeacherProfile(currentUser?.id)
+  const teacherResponse = useTeacherProfile(currentUser?.User?.id)
   const teacher = teacherResponse?.data?.data?.[0]
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data

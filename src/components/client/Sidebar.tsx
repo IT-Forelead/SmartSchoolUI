@@ -38,7 +38,7 @@ export default function Sidebar() {
             <p>Dars jadvali</p>
           </Link>
         </div>
-        {currentUser?.role?.includes('admin') ?
+        {currentUser?.User?.role?.includes('admin') ?
           <div className='font-medium space-y-7 mt-7'>
             <Link href={'/dashboard/teachers'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/teachers' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />

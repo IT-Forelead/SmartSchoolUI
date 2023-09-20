@@ -8,7 +8,7 @@ export default function ProfilePage() {
   const user = useUserInfo()
   return (
     <>
-      {user?.role?.includes('admin') ?
+      {user?.User?.role?.includes('admin') ?
         <AdminProfile /> :
         <TeacherProfile />
       }

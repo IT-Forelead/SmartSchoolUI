@@ -252,10 +252,10 @@ export default function TeachersPage() {
   }
 
   useEffect(() => {
-    if (!currentUser?.role?.includes('admin')) {
+    if (!currentUser?.User?.role?.includes('admin')) {
       router.push('/dashboard/denied')
     }
-  }, [currentUser?.role, router])
+  }, [currentUser?.User?.role, router])
   const [teacher, setTeacher] = useState<Teacher | null>(null)
   const [mode, setMode] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false);

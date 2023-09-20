@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
+import { MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
 
 import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useGroupsList } from "@/hooks/useGroups"
+import { useSubjectsList } from "@/hooks/useSubjects"
 import { useSubstitutionList, useTeachersList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
-import { translateEnToUzbWeekday, translateRoomType } from "@/lib/composables"
+import { translateEnToUzbWeekday } from "@/lib/composables"
 import { Substitution } from "@/models/common.interface"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useSubjectsList } from "@/hooks/useSubjects"
-import { useGroupsList } from "@/hooks/useGroups"
 
 export const columns = (
   getSubject: (sId: string) => any,

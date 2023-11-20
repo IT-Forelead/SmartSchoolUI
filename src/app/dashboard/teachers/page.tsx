@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, TrashIcon } from "lucide-react"
+import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, QrCodeIcon, TrashIcon } from "lucide-react"
 import * as React from "react"
 
 import Loader from "@/components/client/Loader"
@@ -166,6 +166,12 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
                 <PlusCircleIcon className="w-4 h-4 mr-1" />
                 Fan biriktirish
+              </DialogTrigger>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-indigo-600">
+              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('qrcode', teacher)}>
+                <QrCodeIcon className="w-4 h-4 mr-1" />
+                QR-kod biriktirish
               </DialogTrigger>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-green-600">
@@ -333,7 +339,8 @@ export default function TeachersPage() {
       <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
         <DialogHeader>
           {mode?.includes('show') ?
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('subject') ?
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('qrcode') ?
+            <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle> : mode?.includes('subject') ?
               <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
               <DialogTitle>O`qituvchi profili</DialogTitle>
           }
@@ -537,6 +544,39 @@ export default function TeachersPage() {
                 : <Button onClick={() => addSubjectToTeacher()}>
                   <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
                   Saqlash
+                </Button>
+              }
+            </div>
+            </div >
+          : mode?.includes('qrcode') ? <div className="space-y-3">
+            <div className="flex flex-col items-center w-full space-y-2">
+              {
+                image ?
+                  <div>
+                    <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                  </div> :
+                  <div>
+                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                  </div>
+              }
+              <div className="w-full text-lg font-medium text-center capitalize">
+                {teacher?.fullName}
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <QrCodeIcon className="w-8 h-8 text-gray-500" />
+              <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" disabled />
+            </div>
+            <div className="flex items-center justify-end">
+              {isSaving ?
+                <Button disabled={true}>
+                  <Loader2 className='w-6 h-6 mr-2' />
+                  QR kod biriktirilmoqda...
+                </Button>
+                : <Button onClick={() => addSubjectToTeacher()}>
+                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                  QR kod biriktirish
                 </Button>
               }
             </div>

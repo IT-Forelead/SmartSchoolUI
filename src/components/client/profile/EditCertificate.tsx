@@ -31,11 +31,10 @@ export default function EditCertificate(prop: { degId: string }) {
 
   function catchFile(e: any) {
     if (e.target.files[0].type.includes('image')) {
-      console.log(prop?.degId);
-
       setValue('degreeId', prop?.degId)
       setValue('teacherId', user?.User?.id)
-      setValue('filename', e.target.files[0])
+      setValue('filen
+      ame', e.target.files[0])
     } else {
       notifyWarn('Boshqa formatdagi file kiritdingiz!')
     }

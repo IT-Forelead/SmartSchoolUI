@@ -104,7 +104,7 @@ export default function TeachersPage() {
   const [visit, setVisit] = useState<Visit | null>(null)
 
   const [open, setOpen] = useState<boolean>(false);
-  const [isSaving, setIsSaving835933f0-d34a-4b5d-86b1-ebe353ad8d68] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -136,7 +136,7 @@ export default function TeachersPage() {
     return <Loader />
   }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChangesurojiddin={setOpen}>
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input

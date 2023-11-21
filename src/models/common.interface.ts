@@ -40,6 +40,15 @@ export type Subject = {
   needDivideStudents: boolean;
 };
 
+export type Visit = {
+  id: string;
+  createdAt: string;
+  personId: string;
+  visitType: string;
+  assetId: string;
+  fullName: string;
+};
+
 export type Teacher = {
   id: string;
   createdAt: string;

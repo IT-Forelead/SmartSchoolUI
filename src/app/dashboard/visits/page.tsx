@@ -136,7 +136,7 @@ export default function TeachersPage() {
     return <Loader />
   }
   return (
-    <Dialog open={open} onOpenChangesurojiddin={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input

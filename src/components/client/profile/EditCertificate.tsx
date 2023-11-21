@@ -33,8 +33,7 @@ export default function EditCertificate(prop: { degId: string }) {
     if (e.target.files[0].type.includes('image')) {
       setValue('degreeId', prop?.degId)
       setValue('teacherId', user?.User?.id)
-      setValue('filen
-      ame', e.target.files[0])
+      setValue('filename', e.target.files[0])
     } else {
       notifyWarn('Boshqa formatdagi file kiritdingiz!')
     }

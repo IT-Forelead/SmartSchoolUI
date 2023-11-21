@@ -114,6 +114,11 @@ export type TeacherUpdate = {
   phone: string;
 };
 
+export type AddQrCode = {
+  personId: string;
+  barcodeId: string;
+};
+
 export type Approve = {
   link: string;
   approved: boolean;

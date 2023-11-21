@@ -12,7 +12,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, CopyIcon, EyeIcon, Loader2, MoreHorizontal, PencilIcon, PlusCircleIcon, QrCodeIcon, TrashIcon } from "lucide-react"
+import {
+  ArrowUpDown,
+  ChevronDown,
+  CopyIcon,
+  EyeIcon,
+  Loader2,
+  MoreHorizontal,
+  PencilIcon,
+  PlusCircleIcon,
+  QrCodeIcon,
+  TrashIcon
+} from "lucide-react"
 import * as React from "react"
 
 import Loader from "@/components/client/Loader"
@@ -38,14 +49,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSubjectsList } from "@/hooks/useSubjects"
-import { addSubjectToTeacherFunc, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { addSubjectToTeacherFunc, addQrCodeToTeacher, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
 import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
 import { SolarUserBroken } from "@/icons/UserIcon"
 import { dateFormatter } from "@/lib/composables"
 import { notifyError, notifySuccess } from "@/lib/notify"
-import { Teacher, TeacherUpdate } from "@/models/common.interface"
+import { Teacher, TeacherUpdate, AddQrCode } from "@/models/common.interface"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -257,6 +268,25 @@ export default function TeachersPage() {
     })
   }
 
+  function addQrQodeToTeacher() {
+    setIsSaving(true)
+    addQrCodeToTeacher(
+      {
+        personId: teacher?.id ?? "",
+        barcodeId: ""
+      }
+    ).then(() => {
+      notifySuccess("QR kod muvaffaqiyatli qo`shildi")
+      refetch()
+      setIsSaving(false)
+    }).catch((err) => {
+      notifyError("QR kodni qo`shishda muammo yuzaga keldi!")
+      setTimeout(() => {
+        setIsSaving(false)
+      }, 2000)
+    })
+  }
+
   useEffect(() => {
     if (!currentUser?.User?.role?.includes('admin')) {
       router.push('/dashboard/denied')
@@ -272,6 +302,7 @@ export default function TeachersPage() {
   const [rowSelection, setRowSelection] = useState({})
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
+  const { register: qrCodeRegister , handleSubmit: qrCodeHandleSubmit, reset: qrCodeReset, setValue } = useForm<AddQrCode>();
 
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data
@@ -566,7 +597,7 @@ export default function TeachersPage() {
             </div>
             <div className="flex items-center space-x-2">
               <QrCodeIcon className="w-8 h-8 text-gray-500" />
-              <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" disabled />
+              <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: false })} />
             </div>
             <div className="flex items-center justify-end">
               {isSaving ?

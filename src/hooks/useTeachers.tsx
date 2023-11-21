@@ -1,4 +1,4 @@
-import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Substitution, Teacher, Visit, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory } from "@/models/common.interface";
+import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Substitution, Teacher, Visit, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory, AddQrCode } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -41,6 +41,10 @@ export const approveAbsentTeacherLesson = async (data: Approve) => {
 
 export const addSubjectToTeacherFunc = async (data: AddSubjects) => {
   return await axios.post<any>(`/teacher/add/subject`, data);
+};
+
+export const addQrCodeToTeacher = async (data: AddQrCode) => {
+  return await axios.get<any>(`/teacher/${data?.personId}/${data?.barcodeId}`);
 };
 
 export const approveTeacherDocAsAdmin = async (data: ApproveAsAdmin) => {

@@ -12,6 +12,7 @@ import { SolarClockSquareBroken } from '@/icons/TeacherHourIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarWindowFrameBroken } from '@/icons/TimeTable'
 import { SolarUserBroken } from '@/icons/UserIcon'
+import { SolarUserCheckBroken } from '@/icons/UserCheckIcon'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -43,6 +44,10 @@ export default function Sidebar() {
             <Link href={'/dashboard/teachers'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/teachers' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
               <p>O`qituvchilar</p>
+            </Link>
+            <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
+              <p>Tashriflar</p>
             </Link>
             <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarCheckCircleBroken className='w-6 h-6 mr-3' />

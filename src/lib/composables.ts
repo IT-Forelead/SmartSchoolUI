@@ -19,6 +19,15 @@ export function translateSMSStatus(status: string) {
   return "Noma`lum";
 }
 
+export function translateVisitType(type: string) {
+  if (type === "come_in") {
+    return "Keldi";
+  } else if (type === "go_out") {
+    return "Ketdi";
+  }
+  return "Noma`lum";
+}
+
 export function translateRoomType(rt: string) {
   if (rt.includes("class_room")) {
     return "sinfxona";

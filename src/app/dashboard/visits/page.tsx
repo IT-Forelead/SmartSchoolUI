@@ -38,6 +38,7 @@ import useUserInfo from "@/hooks/useUserInfo"
 import { Visit } from "@/models/common.interface"
 import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { dateFormatter, translateVisitType} from "@/lib/composables"
 
 export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCertificates: any): ColumnDef<Visit, any>[] => [
   {
@@ -67,14 +68,14 @@ export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCe
     accessorKey: "createdAt",
     header: 'Tashrif vaqti',
     cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('createdAt')}</div>
+      <div className="capitalize">{dateFormatter(row.getValue('createdAt'))}</div>
     ),
   },
   {
     accessorKey: "visitType",
     header: 'Tashrif turi',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('visitType')}</div>
+      <div className={`py-1 px-3 text-base inline-block text-white rounded-full ${row.getValue('visitType') === 'come_in' ? "bg-green-600" : 'bg-red-600'}`}>{translateVisitType(row.getValue('visitType'))}</div>
     ),
   },
   {

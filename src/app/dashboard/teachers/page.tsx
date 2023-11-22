@@ -303,7 +303,7 @@ export default function TeachersPage() {
     } else {
       subjectIdsList[order] = sv
       setSubjectIdsList(subjectIdsList)
-    }dae92f0c-a7c2-4188-8ec7-01829cb243ae
+    }
   }
 
   useEffect(() => {
@@ -598,18 +598,6 @@ export default function TeachersPage() {
                   <QrCodeIcon className="w-8 h-8 text-gray-500" />
                   <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
                 </div>
-                {/* <div className="flex items-center justify-end">
-                  {isSaving ?
-                    <Button disabled={true}>
-                      <Loader2 className='w-6 h-6 mr-2' />
-                      QR kod biriktirilmoqda...
-                    </Button>
-                    : <Button onClick={() => addSubjectToTeacher()}>
-                      <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
-                      QR kod biriktirish
-                    </Button>
-                  }
-                </div> */}
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>
                     <SolarCheckCircleBroken className='w-6 h-6 mr-2' />

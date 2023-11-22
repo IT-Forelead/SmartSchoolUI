@@ -44,7 +44,7 @@ export const addSubjectToTeacherFunc = async (data: AddSubjects) => {
 };
 
 export const addQrCodeToTeacher = async (data: AddQrCode) => {
-  return await axios.get<any>(`/teacher/${data?.personId}/${data?.barcodeId}`);
+  return await axios.get<any>(`/student/add-qrcode/${data.personId}/${data?.barcodeId}`);
 };
 
 export const approveTeacherDocAsAdmin = async (data: ApproveAsAdmin) => {
@@ -166,6 +166,12 @@ export const useWorkloadHistoryList = () => {
 export const useEditTeacher = () => {
   return useMutation({
     mutationFn: (data: TeacherUpdate) => editTeacher(data),
+    onError: (err: AxiosError) => err
+  })
+};
+export const useAddQrcodeToTeacher = () => {
+  return useMutation({
+    mutationFn: (data: AddQrCode) => addQrCodeToTeacher(data),
     onError: (err: AxiosError) => err
   })
 };

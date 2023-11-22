@@ -49,7 +49,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSubjectsList } from "@/hooks/useSubjects"
-import { addSubjectToTeacherFunc, addQrCodeToTeacher, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { addSubjectToTeacherFunc, useAddQrcodeToTeacher, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
 import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
@@ -268,25 +268,6 @@ export default function TeachersPage() {
     })
   }
 
-  function addQrQodeToTeacher() {
-    setIsSaving(true)
-    addQrCodeToTeacher(
-      {
-        personId: teacher?.id ?? "",
-        barcodeId: ""
-      }
-    ).then(() => {
-      notifySuccess("QR kod muvaffaqiyatli qo`shildi")
-      refetch()
-      setIsSaving(false)
-    }).catch((err) => {
-      notifyError("QR kodni qo`shishda muammo yuzaga keldi!")
-      setTimeout(() => {
-        setIsSaving(false)
-      }, 2000)
-    })
-  }
-
   useEffect(() => {
     if (!currentUser?.User?.role?.includes('admin')) {
       router.push('/dashboard/denied')
@@ -301,8 +282,9 @@ export default function TeachersPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
+  const { mutate: addQrCodeToTeacher, isSuccess: isSuccessAddQrcode, error: addCrcodeError } = useAddQrcodeToTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
-  const { register: qrCodeRegister , handleSubmit: qrCodeHandleSubmit, reset: qrCodeReset, setValue } = useForm<AddQrCode>();
+  const { register: qrCodeRegister, handleSubmit: qrCodeHandleSubmit, setValue, getValues } = useForm<AddQrCode>();
 
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data
@@ -321,10 +303,26 @@ export default function TeachersPage() {
     } else {
       subjectIdsList[order] = sv
       setSubjectIdsList(subjectIdsList)
-    }
+    }dae92f0c-a7c2-4188-8ec7-01829cb243ae
   }
 
+  useEffect(() => {
+    setValue("personId", teacher?.id ?? "")
+  }, [getValues("barcodeId")])
+
+  useEffect(() => {
+    if (isSuccessAddQrcode) {
+      notifySuccess("Qr kod qo'shildi!")
+      refetch()
+      setOpen(false)
+    } else if (addCrcodeError) {
+      notifyError("Qr kod qo'shishda xatolik yuz berdi!")
+    } else return;
+  }, [isSuccessAddQrcode, addCrcodeError]);
+
   const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
+
+  const onSubmitAddQrcode: SubmitHandler<AddQrCode> = (data) => addQrCodeToTeacher(data);
 
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data
@@ -371,9 +369,9 @@ export default function TeachersPage() {
         <DialogHeader>
           {mode?.includes('show') ?
             <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('qrcode') ?
-            <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle> : mode?.includes('subject') ?
-              <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
-              <DialogTitle>O`qituvchi profili</DialogTitle>
+              <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle> : mode?.includes('subject') ?
+                <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
+                <DialogTitle>O`qituvchi profili</DialogTitle>
           }
         </DialogHeader>
         {mode?.includes('show') ?
@@ -578,92 +576,100 @@ export default function TeachersPage() {
                 </Button>
               }
             </div>
-            </div >
-          : mode?.includes('qrcode') ? <div className="space-y-3">
-            <div className="flex flex-col items-center w-full space-y-2">
-              {
-                image ?
-                  <div>
-                    <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                  </div> :
-                  <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+          </div >
+            : mode?.includes('qrcode') ? <form onSubmit={qrCodeHandleSubmit(onSubmitAddQrcode)}>
+              <div className="space-y-3">
+                <div className="flex flex-col items-center w-full space-y-2">
+                  {
+                    image ?
+                      <div>
+                        <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                          className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                      </div> :
+                      <div>
+                        <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                      </div>
+                  }
+                  <div className="w-full text-lg font-medium text-center capitalize">
+                    {teacher?.fullName}
                   </div>
-              }
-              <div className="w-full text-lg font-medium text-center capitalize">
-                {teacher?.fullName}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
+                </div>
+                {/* <div className="flex items-center justify-end">
+                  {isSaving ?
+                    <Button disabled={true}>
+                      <Loader2 className='w-6 h-6 mr-2' />
+                      QR kod biriktirilmoqda...
+                    </Button>
+                    : <Button onClick={() => addSubjectToTeacher()}>
+                      <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                      QR kod biriktirish
+                    </Button>
+                  }
+                </div> */}
+                <div className="flex items-center justify-end">
+                  <Button autoFocus={true}>
+                    <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                    QR kod biriktirish
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <QrCodeIcon className="w-8 h-8 text-gray-500" />
-              <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: false })} />
-            </div>
-            <div className="flex items-center justify-end">
-              {isSaving ?
-                <Button disabled={true}>
-                  <Loader2 className='w-6 h-6 mr-2' />
-                  QR kod biriktirilmoqda...
-                </Button>
-                : <Button onClick={() => addSubjectToTeacher()}>
-                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
-                  QR kod biriktirish
-                </Button>
-              }
-            </div>
-          </div> : <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 bg-white rounded">
-              <div className="flex items-start space-x-4">
-                {
-                  image ?
-                    <div>
-                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                    </div> :
-                    <div>
-                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+            </form> : <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="w-full space-y-4 bg-white rounded">
+                <div className="flex items-start space-x-4">
+                  {
+                    image ?
+                      <div>
+                        <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                          className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
+                      </div> :
+                      <div>
+                        <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                      </div>
+                  }
+                  <div className="w-full space-y-3">
+                    <div className="flex items-center w-full space-x-2">
+                      <div className="text-base text-gray-500">
+                        F.I.SH:
+                      </div>
+                      <div className="w-full text-lg font-medium capitalize">
+                        <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                      </div>
                     </div>
-                }
-                <div className="w-full space-y-3">
-                  <div className="flex items-center w-full space-x-2">
-                    <div className="text-base text-gray-500">
-                      F.I.SH:
+                    <div className="flex items-center w-full space-x-2">
+                      <div className="text-base text-gray-500">
+                        Fan:
+                      </div>
+                      <div className="w-full text-lg font-medium capitalize">
+                        {teacher?.degree}
+                      </div>
                     </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      <Input type="text" className="w-full" {...register("fullName", { required: false })} />
+                    <div className="flex items-center space-x-2">
+                      <div className="text-base text-gray-500">
+                        Telefon:
+                      </div>
+                      <div className="w-full text-lg font-medium capitalize">
+                        <Input className="w-full" {...register("phone", { required: false })} />
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center w-full space-x-2">
-                    <div className="text-base text-gray-500">
-                      Fan:
-                    </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      {teacher?.degree}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Telefon:
-                    </div>
-                    <div className="w-full text-lg font-medium capitalize">
-                      <Input className="w-full" {...register("phone", { required: false })} />
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Yaratilgan sana:
-                    </div>
-                    <div className="text-lg font-medium">
-                      {dateFormatter(teacher?.createdAt)}
+                    <div className="flex items-center space-x-2">
+                      <div className="text-base text-gray-500">
+                        Yaratilgan sana:
+                      </div>
+                      <div className="text-lg font-medium">
+                        {dateFormatter(teacher?.createdAt)}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center justify-end">
-              <Button autoFocus={true}>Saqlash</Button>
-            </div>
-          </form>
+              <div className="flex items-center justify-end">
+                <Button autoFocus={true}>Saqlash</Button>
+              </div>
+            </form>
         }
       </DialogContent>
       <div className="w-full p-5">

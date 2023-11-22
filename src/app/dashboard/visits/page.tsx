@@ -87,7 +87,7 @@ export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCe
   },
 ]
 
-export default function TeachersPage() {
+export default function VisitsPage() {
   const currentUser = useUserInfo()
   const router = useRouter()
 

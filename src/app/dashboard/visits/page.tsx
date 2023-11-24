@@ -14,7 +14,7 @@ import {
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown } from "lucide-react"
 import * as React from "react"
-
+import ViewVisitorPicture from "@/components/client/visits/ViewVisitorPicture";
 import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
 import { Dialog } from "@/components/ui/dialog"
@@ -82,7 +82,9 @@ export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCe
     accessorKey: "assetId",
     header: 'Asset Id',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('assetId')}</div>
+        <div className="flex items-center">
+            <ViewVisitorPicture  assetId={row.getValue('assetId')}/>
+        </div>
     ),
   },
 ]

@@ -179,12 +179,14 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
                 Fan biriktirish
               </DialogTrigger>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-indigo-600">
+            {
+              teacher?.barcode ? '' : <DropdownMenuItem className="text-indigo-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('qrcode', teacher)}>
                 <QrCodeIcon className="w-4 h-4 mr-1" />
                 QR-kod biriktirish
               </DialogTrigger>
             </DropdownMenuItem>
+            }
             <DropdownMenuItem className="text-green-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
                 <EyeIcon className="w-4 h-4 mr-1" />

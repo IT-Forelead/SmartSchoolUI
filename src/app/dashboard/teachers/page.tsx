@@ -407,6 +407,14 @@ export default function TeachersPage() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="text-base text-gray-500">
+                      QR kod:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {teacher?.barcode ? teacher?.barcode : '-'}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
                       Jinsi:
                     </div>
                     <div className="text-lg font-medium">
@@ -596,7 +604,7 @@ export default function TeachersPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
+                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: false })} />
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

@@ -329,6 +329,8 @@ export default function TeachersPage() {
   useEffect(() => {
     if (isSuccessAddQrcode) {
       notifySuccess("Qr kod qo'shildi!")
+      setValue("personId", "")
+      setValue("barcodeId", "")
       refetch()
       setOpen(false)
     } else if (addCrcodeError) {

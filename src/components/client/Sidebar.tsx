@@ -15,7 +15,7 @@ import { SolarUserBroken } from '@/icons/UserIcon'
 import { SolarUserCheckBroken } from '@/icons/UserCheckIcon'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {SolarUserHandsBold, SolarUserHandsOutline} from "@/icons/StudentsIcon";
+import {SolarUserHandsOutline} from "@/icons/StudentsIcon";
 
 export default function Sidebar() {
   const currentUser = useUserInfo()
@@ -27,9 +27,14 @@ export default function Sidebar() {
       </div>
       <div className='max-h-[60vh] mt-20 overflow-auto'>
         <div className='font-medium space-y-7'>
-          <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
+          {/* <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarHome2Broken className='w-6 h-6 mr-3' />
             <p>Bosh sahifa</p>
+          </Link> */}
+
+          <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
+              <p>Tashriflar</p>
           </Link>
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />
@@ -46,6 +51,7 @@ export default function Sidebar() {
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
               <p>O`qituvchilar</p>
             </Link>
+
               <Link href={'/dashboard/students'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/students' ? "text-gray-900 font-semibold" : ''}`}>
                   <SolarUserHandsOutline className='w-6 h-6 mr-3' />
                   <p>O`quvchilar</p>

@@ -62,6 +62,7 @@ import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ImageFull from "@/components/client/timetable/ImageFull"
+import useWebSocket from "react-use-websocket";
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length
@@ -220,6 +221,13 @@ export default function TeachersPage() {
     setTeacher(teacher)
   }
 
+  const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onOpen: () => console.log("opened"),
+    // Will attempt to reconnect on all close events, such as server shutting down
+    shouldReconnect: (closeEvent) => true,
+  });
+
   const [isApproving, setIsApproving] = useState<boolean>(false)
   const [isRejecting, setIsRejecting] = useState<boolean>(false)
 
@@ -298,6 +306,12 @@ export default function TeachersPage() {
   useEffect(() => {
     reset({ ...teacher })
   }, [reset, teacher])
+
+  useEffect(() => {
+    if (mode === 'qrcode' && lastMessage) {
+      setValue("barcodeId", JSON.parse(lastMessage?.data)?.barcodeId ?? "")
+    }
+  }, [lastMessage])
 
   function getSelectData(order: number, sv: string) {
     if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
@@ -606,7 +620,7 @@ export default function TeachersPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: false })} />
+                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

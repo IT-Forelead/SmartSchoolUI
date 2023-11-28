@@ -112,24 +112,10 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
     ),
   },
   {
-    accessorKey: "dateOfBirth",
-    header: 'Tug`ilgan sanasi',
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('dateOfBirth')}</div>
-    ),
-  },
-  {
     accessorKey: "phone",
     header: 'Telefon raqami',
     cell: ({ row }) => (
       <div className="uppercase">{row.getValue('phone') ?? "-"}</div>
-    ),
-  },
-  {
-    accessorKey: "nationality",
-    header: 'Millati',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('nationality') ?? "-"}</div>
     ),
   },
   {
@@ -168,12 +154,6 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Amallar</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-gray-600"
-              onClick={() => navigator.clipboard.writeText(teacher.fullName)}
-            >
-              <CopyIcon className="w-4 h-4 mr-1" />
-              Nusxalash
-            </DropdownMenuItem>
             <DropdownMenuItem className="text-indigo-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
                 <PlusCircleIcon className="w-4 h-4 mr-1" />

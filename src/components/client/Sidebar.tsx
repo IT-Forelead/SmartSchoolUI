@@ -26,9 +26,14 @@ export default function Sidebar() {
       </div>
       <div className='max-h-[60vh] mt-20 overflow-auto'>
         <div className='font-medium space-y-7'>
-          <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
+          {/* <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarHome2Broken className='w-6 h-6 mr-3' />
             <p>Bosh sahifa</p>
+          </Link> */}
+
+          <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
+              <p>Tashriflar</p>
           </Link>
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />
@@ -45,10 +50,7 @@ export default function Sidebar() {
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
               <p>O`qituvchilar</p>
             </Link>
-            <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
-              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
-              <p>Tashriflar</p>
-            </Link>
+            
             <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarCheckCircleBroken className='w-6 h-6 mr-3' />
               <p>Tasdiqlash</p>

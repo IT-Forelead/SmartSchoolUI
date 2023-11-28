@@ -86,6 +86,40 @@ export type Teacher = {
   ];
 };
 
+export  type  Student = {
+  id: string;
+  dateOfBirth: string;
+  gender: "female" | "male";
+  fullName: string;
+  nationality: string;
+  citizenship: string;
+  documentType: string;
+  documentSeries: string;
+  documentNumber: string;
+  pinfl: string;
+  phone: string;
+  photo?: string;
+  groupId: string;
+  barcode: string;
+}
+
+export type StudentUpdate = {
+  id: string;
+  dateOfBirth: string;
+  gender: "female" | "male";
+  fullName: string;
+  nationality: string;
+  citizenship: string;
+  documentType: string;
+  documentSeries: string;
+  documentNumber: string;
+  pinfl: string;
+  phone: string;
+  photo?: string;
+  groupId: string;
+  barcode: string;
+};
+
 export type TeacherDegree = {
   id: string;
   description: string;

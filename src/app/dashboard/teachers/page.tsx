@@ -149,46 +149,44 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
             <Button variant="ghost" className="w-8 h-8 p-0">
               <span className="sr-only">Amallar</span>
               <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Amallar</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-indigo-600">
+              
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
-                <PlusCircleIcon className="w-4 h-4 mr-1" />
-                Fan biriktirish
+                <PlusCircleIcon className="text-indigo-600 w-4 h-4 mr-1" />
               </DialogTrigger>
-            </DropdownMenuItem>
-            {
-              teacher?.barcode ? '' : <DropdownMenuItem className="text-indigo-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('qrcode', teacher)}>
-                <QrCodeIcon className="w-4 h-4 mr-1" />
-                QR-kod biriktirish
-              </DialogTrigger>
-            </DropdownMenuItem>
-            }
-            <DropdownMenuItem className="text-green-600">
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
-                <EyeIcon className="w-4 h-4 mr-1" />
-                Sertifikatlar
+                <EyeIcon className="text-green-600 w-4 h-4 mr-1" />
               </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-blue-600">
+
               <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('', teacher)}>
-                <PencilIcon className="w-4 h-4 mr-1" />
-                Tahrirlash
+                <PencilIcon className="text-blue-600 w-4 h-4 mr-1" />
               </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="w-4 h-4 mr-1" />
-              O`chirish
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+              <DialogTrigger className="text-red-600">
+                <TrashIcon className="w-4 h-4 mr-1" />
+              </DialogTrigger>
+
+            
+          { teacher.barcode ? (
+        // Green icon if assigned
+        <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+          <QrCodeIcon className="w-4 h-4 mr-1 text-green-600" />
+        </DialogTrigger>
+      ) : (
+        // Red icon if not assigned
+        <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+          <QrCodeIcon className="flex m-auto justify-between w-4 h-4 mr-1 text-red-600" />
+        </DialogTrigger>
+      )
+    }
+        </Button>
+            
+            </DropdownMenuTrigger>    
+      </DropdownMenu>  
       )
     },
-  },
+
+  }
+
 ]
 
 export default function TeachersPage() {
@@ -601,8 +599,16 @@ export default function TeachersPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
+                  {teacher?.barcode ? (
+                    <>
+                      <QrCodeIcon className="w-8 h-8 text-gray-500" /><h1 className="flex w-full p-2 border-2">{teacher.barcode}</h1>
+                    </>
+                  ) : (
+                      <>
+                        <QrCodeIcon className="w-8 h-8 text-gray-500" /><h1>{teacher.barcode}</h1>
+                        <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

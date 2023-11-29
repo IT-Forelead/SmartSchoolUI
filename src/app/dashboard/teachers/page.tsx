@@ -144,44 +144,63 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
       const teacher = row.original
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
-              <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
-              
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('subject', teacher)}>
-                <PlusCircleIcon className="text-indigo-600 w-4 h-4 mr-1" />
-              </DialogTrigger>
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
-                <EyeIcon className="text-green-600 w-4 h-4 mr-1" />
-              </DialogTrigger>
-
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('', teacher)}>
-                <PencilIcon className="text-blue-600 w-4 h-4 mr-1" />
-              </DialogTrigger>
-
-              <DialogTrigger className="text-red-600">
-                <TrashIcon className="w-4 h-4 mr-1" />
-              </DialogTrigger>
-
-            
+        <div className="flex items-center">
+          <Button
+              variant="ghost"
+              className="text-indigo-600"
+          >
+            <DialogTrigger className="flex items-center" onClick={() => showCertificates('subject', teacher)}>
+              <PlusCircleIcon className="text-indigo-600 w-5 h-5" />
+            </DialogTrigger>
+          </Button>
+          <Button
+              variant="ghost"
+              className="text-indigo-600"
+          >
+            <DialogTrigger className="flex items-center" onClick={() => showCertificates('show', teacher)}>
+              <EyeIcon className="text-green-600 w-5 h-5" />
+            </DialogTrigger>
+          </Button>
+          <Button
+              variant="ghost"
+              className="text-indigo-600"
+          >
+            <DialogTrigger className="flex items-center" onClick={() => showCertificates('update', teacher)}>
+              <PencilIcon className="text-blue-600 w-5 h-5" />
+            </DialogTrigger>
+          </Button>
+          <Button
+              variant="ghost"
+              className="text-indigo-600"
+          >
+            <DialogTrigger className="text-red-600" onClick={() => showCertificates('delete', teacher)}>
+              <TrashIcon className="w-5 h-5" />
+            </DialogTrigger>
+          </Button>
           { teacher.barcode ? (
-        // Green icon if assigned
-        <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
-          <QrCodeIcon className="w-4 h-4 mr-1 text-green-600" />
-        </DialogTrigger>
-      ) : (
-        // Red icon if not assigned
-        <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
-          <QrCodeIcon className="flex m-auto justify-between w-4 h-4 mr-1 text-red-600" />
-        </DialogTrigger>
-      )
-    }
-        </Button>
-            
-            </DropdownMenuTrigger>    
-      </DropdownMenu>  
+              // Green icon if assigned
+                  <Button
+                      variant="ghost"
+                      className="text-indigo-600"
+                  >
+                    <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+                      <QrCodeIcon className="w-5 h-5 text-green-600" />
+                    </DialogTrigger>
+                  </Button>
+          ) : (
+              // Red icon if not assigned
+              <Button
+                  variant="ghost"
+                  className="text-indigo-600"
+              >
+                <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+                  <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
+                </DialogTrigger>
+              </Button>
+
+          )
+          }
+        </div>
       )
     },
 

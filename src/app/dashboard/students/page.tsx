@@ -53,6 +53,15 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+// Function to get group name and level
+const getGroupNameAndLevel = (group: { name: any; level: any }) => {
+  if (group && group.name && group.level) {
+    return `${group.level} - ${group.name}`;
+  } else {
+    return "Sinfi yo'q";
+  }
+};
+
 
 export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, showCertificates: any): ColumnDef<Student, any>[] => [
   {
@@ -79,10 +88,10 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
     ),
   },
   {
-    accessorKey: "groupId",
+    accessorKey: "group",
     header: 'Sinfi',
     cell: ({ row }) => (
-        <div className="uppercase">{row.getValue('groupId')}</div>
+        <div className="uppercase">{getGroupNameAndLevel(row.getValue('group'))}</div>
     ),
   },
   {

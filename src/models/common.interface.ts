@@ -99,7 +99,13 @@ export  type  Student = {
   pinfl: string;
   phone: string;
   photo?: string;
-  groupId: string;
+  group: [
+    {
+      id: string;
+      level: string;
+      name: string
+    }
+  ];
   barcode: string;
 }
 
@@ -116,7 +122,13 @@ export type StudentUpdate = {
   pinfl: string;
   phone: string;
   photo?: string;
-  groupId: string;
+  group: [
+    {
+      id: string;
+      level: string;
+      name: string
+    }
+  ];
   barcode: string;
 };
 

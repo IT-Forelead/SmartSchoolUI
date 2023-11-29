@@ -104,6 +104,17 @@ export default function VisitsPage() {
       router.push('/dashboard/denied')
     }
   }, [currentUser?.User?.role, router])
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch()
+    }, 2000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+    
   const [visit, setVisit] = useState<Visit | null>(null)
 
   const [open, setOpen] = useState<boolean>(false);
@@ -113,8 +124,7 @@ export default function VisitsPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const { data, isError, isLoading, refetch } = useVisitsList();
-
+  let { data, isError, isLoading, refetch } = useVisitsList();
   let visits = data?.data ?? []
   const table = useReactTable({
     data: visits,

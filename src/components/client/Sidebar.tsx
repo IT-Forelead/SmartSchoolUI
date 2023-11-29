@@ -15,6 +15,7 @@ import { SolarUserBroken } from '@/icons/UserIcon'
 import { SolarUserCheckBroken } from '@/icons/UserCheckIcon'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import {SolarUserHandsOutline} from "@/icons/StudentsIcon";
 
 export default function Sidebar() {
   const currentUser = useUserInfo()
@@ -50,7 +51,15 @@ export default function Sidebar() {
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
               <p>O`qituvchilar</p>
             </Link>
-            
+
+              <Link href={'/dashboard/students'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/students' ? "text-gray-900 font-semibold" : ''}`}>
+                  <SolarUserHandsOutline className='w-6 h-6 mr-3' />
+                  <p>O`quvchilar</p>
+              </Link>
+            <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
+              <p>Tashriflar</p>
+            </Link>
             <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarCheckCircleBroken className='w-6 h-6 mr-3' />
               <p>Tasdiqlash</p>

@@ -15,11 +15,8 @@ import {
 import {
   ArrowUpDown,
   ChevronDown,
-  CopyIcon,
   EyeIcon,
-  MoreHorizontal,
   PencilIcon,
-  PlusCircleIcon,
   QrCodeIcon,
   TrashIcon
 } from "lucide-react"
@@ -32,9 +29,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -59,7 +53,6 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { useGroupsList } from "@/hooks/useGroups"
 
 export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, showCertificates: any): ColumnDef<Student, any>[] => [
   {
@@ -86,38 +79,17 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
     ),
   },
   {
-    accessorKey: "group",
+    accessorKey: "groupId",
     header: 'Sinfi',
     cell: ({ row }) => (
-        <div className="uppercase">{row.getValue('level')}</div>
+        <div className="uppercase">{row.getValue('groupId')}</div>
     ),
   },
   {
-    accessorKey: "gender",
-    header: 'Jinsi',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('gender') === 'male' ? "Erkak" : "Ayol"} </div>
-    ),
-  },
-  {
-    accessorKey: "dateOfBirth",
-    header: 'Tug`ilgan sanasi',
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('dateOfBirth')}</div>
-    ),
-  },
-  {
-    accessorKey: "phone",
+    accessorKey: "parentPhone",
     header: 'Ota onasining raqami',
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('phone') ?? "-"}</div>
-    ),
-  },
-  {
-    accessorKey: "nationality",
-    header: 'Millati',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('nationality') ?? "-"}</div>
+      <div className="uppercase">{row.getValue('parentPhone') ?? "-"}</div>
     ),
   },
   {
@@ -126,49 +98,44 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
     enableHiding: false,
     cell: ({ row }) => {
       const student = row.original
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
-              <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Amallar</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-gray-600"
-              onClick={() => navigator.clipboard.writeText(student.fullName)}
+          <div className="flex items-center">
+            {student?.barcode ? '' : (
+                <Button
+                    variant="ghost"
+                    className="text-indigo-600"
+                    onClick={() => showCertificates('qrcode', student)}
+                >
+                  <QrCodeIcon className="w-5 h-5" />
+                  {/*QR-kod biriktirish*/}
+                </Button>
+            )}
+            <Button
+                variant="ghost"
+                className="text-green-600"
+                onClick={() => showCertificates('show', student)}
             >
-              <CopyIcon className="w-4 h-4 mr-1" />
-              Nusxalash
-            </DropdownMenuItem>
-            {/*{*/}
-            {/*  student?.barcode ? '' : <DropdownMenuItem className="text-indigo-600">*/}
-            {/*  <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('qrcode', student)}>*/}
-            {/*    <QrCodeIcon className="w-4 h-4 mr-1" />*/}
-            {/*    QR-kod biriktirish*/}
-            {/*  </DialogTrigger>*/}
-            {/*</DropdownMenuItem>*/}
-            {/*}*/}
-            <DropdownMenuItem className="text-green-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', student)}>
-                <EyeIcon className="w-4 h-4 mr-1" />
-                Sertifikatlar
-              </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-blue-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('', student)}>
-                <PencilIcon className="w-4 h-4 mr-1" />
-                Tahrirlash
-              </DialogTrigger>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="w-4 h-4 mr-1" />
-              O`chirish
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <EyeIcon className="w-5 h-5" />
+              {/*Batafsil*/}
+            </Button>
+            <Button
+                variant="ghost"
+                className="text-blue-600"
+                onClick={() => showCertificates('', student)}
+            >
+              <PencilIcon className="w-5 h-5" />
+              {/*Tahrirlash*/}
+            </Button>
+            <Button
+                variant="ghost"
+                className="text-red-600"
+                onClick={() => console.log('Delete clicked')} // Replace with your delete logic
+            >
+              <TrashIcon className="w-5 h-5" />
+              {/*O`chirish*/}
+            </Button>
+          </div>
       )
     },
   },

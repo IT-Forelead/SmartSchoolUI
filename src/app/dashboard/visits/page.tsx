@@ -108,7 +108,7 @@ export default function VisitsPage() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       refetch()
-    }, 2000);
+    }, 100000);
 
     return () => {
       clearInterval(intervalId);

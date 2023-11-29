@@ -201,7 +201,7 @@ export default function TeachersPage() {
     setTeacher(teacher)
   }
 
-  const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
+  const [socketUrl, setSocketUrl] = useState<string>("ws://localhost:8000/ws")
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onOpen: () => console.log("opened"),
     // Will attempt to reconnect on all close events, such as server shutting down
@@ -288,8 +288,8 @@ export default function TeachersPage() {
   }, [reset, teacher])
 
   useEffect(() => {
-    if (mode === 'qrcode' && lastMessage) {
-      setValue("barcodeId", JSON.parse(lastMessage?.data)?.barcodeId ?? "")
+    if (mode === 'qrcode' && lastMessage?.data.includes("qr_code_assign")) {
+      setValue("barcodeId", JSON.parse(lastMessage?.data)?.data ?? "")
     }
   }, [lastMessage])
 

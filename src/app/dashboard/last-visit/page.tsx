@@ -140,45 +140,34 @@ export default function VisitsPage() {
           <div className="rounded-lg overflow-hidden w-full h-auto mb-2">
             <Webcam audio={false} mirrored={true} disablePictureInPicture={true}/>
           </div>
-
           {messageHistory.map((message, idx) => (
+            message?.data.includes("visit") ? 
             <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
-              <div className="bg-yellow-300 rounded-md h-20 w-20"></div>
+              <img
+                src={`http://localhost:8000/asset/view/${JSON.parse(message?.data)?.data?.assetId}`}
+                alt="Visitor picture"
+                className="rounded-md h-20 w-20"
+              />
               <div className="space-y-1">
-                <div className="text-lg font-medium">
-                  {message}
+                <div className="text-lg font-medium">{message ? JSON.parse(message?.data)?.data?.assetId : ""}</div>
+                <div className="text-base">
+                {dateFormatter(JSON.parse(message?.data)?.data?.createdAt)}
                 </div>
-                <div className="text-base">29/11/2023 11:55</div>
-                <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">keldi</div>
+                <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">
+                {translateVisitType(JSON.parse(message?.data)?.data?.visitType)}
+                </div>
               </div>
-            </div>
+            </div> : ""        
           ))}
-          <div className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
+
+          {/* <div className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
             <div className="bg-yellow-300 rounded-md h-20 w-20"></div>
             <div className="space-y-1">
               <div className="text-lg font-medium">Jumaniyozov Surojiddin</div>
               <div className="text-base">29/11/2023 11:55</div>
               <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">keldi</div>
             </div>
-          </div>
-        
-          <div className="flex items-center w-full p-4 space-x-4 border rounded-md">
-            <div className="bg-yellow-300 rounded-md h-20 w-20"></div>
-            <div className="space-y-1">
-              <div className="text-lg font-medium">Jumaniyozov Surojiddin</div>
-              <div className="text-base">29/11/2023 11:55</div>
-              <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-red-300 text-center">ketdi</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center w-full p-4 space-x-4 border rounded-md">
-            <div className="bg-yellow-300 rounded-md h-20 w-20"></div>
-            <div className="space-y-1">
-              <div className="text-lg font-medium">Jumaniyozov Surojiddin</div>
-              <div className="text-base">29/11/2023 11:55</div>
-              <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">keldi</div>
-            </div>
-          </div>
+          </div> */}
           
         </div>
         <div className="w-full col-span-2 p-5">

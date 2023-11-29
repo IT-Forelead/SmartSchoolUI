@@ -31,10 +31,13 @@ export default function Sidebar() {
             <SolarHome2Broken className='w-6 h-6 mr-3' />
             <p>Bosh sahifa</p>
           </Link> */}
-
           <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUserCheckBroken className='w-6 h-6 mr-3' />
               <p>Tashriflar</p>
+          </Link>
+          <Link href={'/dashboard/last-visit'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserCheckBroken className='w-6 h-6 mr-3' />
+              <p>So'ngi tashriflar</p>
           </Link>
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />

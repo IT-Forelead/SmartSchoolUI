@@ -31,6 +31,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { dateFormatter, translateVisitType } from "@/lib/composables";
 import Webcam from "react-webcam";
 import useWebSocket from "react-use-websocket";
+import { SolarQrCodeBroken } from '@/icons/QrCodeIcon'
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
@@ -82,18 +83,14 @@ export default function VisitsPage() {
   }
 
   const [socketUrl, setSocketUrl] = useState<string>("ws://localhost:8000/ws")
-  const [messageHistory, setMessageHistory] = useState([])
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onOpen: () => console.log("opened"),
-    // Will attempt to reconnect on all close events, such as server shutting down
-    shouldReconnect: (closeEvent) => true,
-  })
+  const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([])
+  const { lastJsonMessage } = useWebSocket(socketUrl)
 
   useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
+    if (lastJsonMessage !== null) {
+      setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
     }
-  }, [lastMessage, setMessageHistory]);
+  }, [lastJsonMessage, setVisitHistoryInWebSocket]);
 
   useEffect(() => {
     if (!currentUser?.User?.role?.includes("admin")) {
@@ -140,35 +137,30 @@ export default function VisitsPage() {
           <div className="rounded-lg overflow-hidden w-full h-auto mb-2">
             <Webcam audio={false} mirrored={true} disablePictureInPicture={true}/>
           </div>
-          {messageHistory.map((message, idx) => (
-            message?.data.includes("visit") ? 
+          {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
+            message?.kind === "visit" ? 
             <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
               <img
-                src={`http://localhost:8000/asset/view/${JSON.parse(message?.data)?.data?.assetId}`}
+                src={`http://localhost:8000/asset/view/${message?.data?.assetId}`}
                 alt="Visitor picture"
                 className="rounded-md h-20 w-20"
               />
               <div className="space-y-1">
-                <div className="text-lg font-medium">{message ? JSON.parse(message?.data)?.data?.assetId : ""}</div>
+                <div className="text-lg font-medium">{message?.data?.assetId}</div>
                 <div className="text-base">
-                {dateFormatter(JSON.parse(message?.data)?.data?.createdAt)}
+                  {dateFormatter(message?.data?.createdAt)}
                 </div>
                 <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">
-                {translateVisitType(JSON.parse(message?.data)?.data?.visitType)}
+                  {translateVisitType(message?.data?.visitType)}
                 </div>
               </div>
-            </div> : ""        
-          ))}
-
-          {/* <div className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
-            <div className="bg-yellow-300 rounded-md h-20 w-20"></div>
-            <div className="space-y-1">
-              <div className="text-lg font-medium">Jumaniyozov Surojiddin</div>
-              <div className="text-base">29/11/2023 11:55</div>
-              <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">keldi</div>
+            </div> : <div className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md">
+              <div className="flex items-center justify-center bg-gray-200 rounded-md p-2">
+                <SolarQrCodeBroken className="w-8 h-8" />
+              </div>
+              <div className="text-lg font-medium">Ushbu Qr kodga foydalanuvchi biriktirlmagan!</div>
             </div>
-          </div> */}
-          
+          ))}
         </div>
         <div className="w-full col-span-2 p-5">
           <div className="border rounded-md">

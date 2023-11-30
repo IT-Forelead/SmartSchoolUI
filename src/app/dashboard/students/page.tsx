@@ -172,13 +172,10 @@ export default function StudentsPage() {
         setMode(mode)
         setStudent(student)
     }
-
+    //Url web-socket -  ws://25-school.uz/school/api/v1/ws
+    //ws://localhost:8000/ws
     const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
-    const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
-        onOpen: () => console.log("opened"),
-        // Will attempt to reconnect on all close events, such as server shutting down
-        shouldReconnect: (closeEvent) => true,
-    });
+    const { lastJsonMessage } = useWebSocket(socketUrl);
 
     useEffect(() => {
         if (!currentUser?.User?.role?.includes('admin')) {
@@ -203,10 +200,10 @@ export default function StudentsPage() {
     }, [reset, student])
 
     useEffect(() => {
-        if (mode === 'qrcode' && lastMessage) {
-            setValue("barcodeId", JSON.parse(lastMessage?.data)?.barcodeId ?? "")
+        if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
+            setValue("barcodeId", lastJsonMessage?.data ?? "")
         }
-    }, [lastMessage])
+    }, [lastJsonMessage])
 
     useEffect(() => {
         setValue("personId", student?.id ?? "")
@@ -389,9 +386,8 @@ export default function StudentsPage() {
                                     </>
                                 ) : (
                                     <>
-                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/><h1>{student?.barcode}</h1>
-                                        <Input className="w-full text-lg font-medium uppercase"
-                                               placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", {required: true})} />
+                                            <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                                            <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", { required: true })}  disabled />
                                     </>
                                 )}
                             </div>

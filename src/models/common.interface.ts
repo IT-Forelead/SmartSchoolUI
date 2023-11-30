@@ -97,7 +97,7 @@ export  type  Student = {
   documentSeries: string;
   documentNumber: string;
   pinfl: string;
-  phone: string;
+  parentPhone: string;
   photo?: string;
   group: [
     {
@@ -120,7 +120,7 @@ export type StudentUpdate = {
   documentSeries: string;
   documentNumber: string;
   pinfl: string;
-  phone: string;
+  parentPhone: string;
   photo?: string;
   group: [
     {

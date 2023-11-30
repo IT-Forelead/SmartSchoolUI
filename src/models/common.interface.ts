@@ -49,6 +49,11 @@ export type Visit = {
   fullName: string;
 };
 
+export type UpdateVisit = {
+  id: string;
+  filename: null;
+};
+
 export type Teacher = {
   id: string;
   createdAt: string;

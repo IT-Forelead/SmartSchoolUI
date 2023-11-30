@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useVisitsList } from "@/hooks/useVisits";
+import { updateVisit, useVisitsList } from "@/hooks/useVisits";
 import useUserInfo from "@/hooks/useUserInfo";
 import { Visit } from "@/models/common.interface";
 import { useRouter } from "next/navigation";
@@ -82,6 +82,7 @@ export default function VisitsPage() {
     setVisit(visit);
   }
 
+  const webcamRef = React.useRef(null)
   const [socketUrl, setSocketUrl] = useState<string>("ws://localhost:8000/ws")
   const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([])
   const { lastJsonMessage } = useWebSocket(socketUrl)
@@ -89,6 +90,13 @@ export default function VisitsPage() {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
+      if (lastJsonMessage?.kind === "visit") {
+        const imageSrc = webcamRef.current.getScreenshot()
+        updateVisit({
+          id: lastJsonMessage?.data?.id ?? "",
+          filename: imageSrc ?? ""
+        })
+      }
     }
   }, [lastJsonMessage, setVisitHistoryInWebSocket]);
 
@@ -135,7 +143,15 @@ export default function VisitsPage() {
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col items-center p-5 space-y-2">
           <div className="rounded-lg overflow-hidden w-full h-auto mb-2">
-            <Webcam audio={false} mirrored={true} disablePictureInPicture={true}/>
+            <Webcam 
+              audio={false} 
+              mirrored={true} 
+              disablePictureInPicture={true}
+              height={720}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              width={1280}
+            />
           </div>
           {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
             message?.kind === "visit" ? 

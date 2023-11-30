@@ -31,11 +31,20 @@ export default function Sidebar() {
             <SolarHome2Broken className='w-6 h-6 mr-3' />
             <p>Bosh sahifa</p>
           </Link> */}
-
+{currentUser?.User?.role?.includes('admin') ?
+          <div className='font-medium space-y-7 mt-7'>
           <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUserCheckBroken className='w-6 h-6 mr-3' />
               <p>Tashriflar</p>
-          </Link>
+              </Link> </div> :
+            <div className='font-medium mt-7 space-y-7'>
+            <Link href={'/dashboard/profile'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/profile' ? "text-gray-900 font-semibold" : ''}`}>
+              <SolarUserBroken className='w-6 h-6 mr-3' />
+              <p>Profil</p>
+            </Link>
+          </div>
+            
+          }
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />
             <p>Dars soatlari</p>
@@ -56,10 +65,10 @@ export default function Sidebar() {
                   <SolarUserHandsOutline className='w-6 h-6 mr-3' />
                   <p>O`quvchilar</p>
               </Link>
-            <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
+            {/* <Link href={'/dashboard/visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/visits' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUserCheckBroken className='w-6 h-6 mr-3' />
               <p>Tashriflar</p>
-            </Link>
+            </Link> */}
             <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarCheckCircleBroken className='w-6 h-6 mr-3' />
               <p>Tasdiqlash</p>
@@ -89,12 +98,7 @@ export default function Sidebar() {
               <p>Dars almashtirishlar</p>
             </Link>
           </div> :
-          <div className='font-medium mt-7 space-y-7'>
-            <Link href={'/dashboard/profile'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/profile' ? "text-gray-900 font-semibold" : ''}`}>
-              <SolarUserBroken className='w-6 h-6 mr-3' />
-              <p>Profil</p>
-            </Link>
-          </div>
+          <></>
         }
       </div>
       <div className='absolute text-sm text-center text-gray-500 -translate-x-1/2 left-1/2 bottom-5 whitespace-nowrap'>

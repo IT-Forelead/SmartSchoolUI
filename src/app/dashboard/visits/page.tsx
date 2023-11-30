@@ -101,7 +101,7 @@ export default function VisitsPage() {
 
   useEffect(() => {
     if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+      router.push('/dashboard/profile')
     }
   }, [currentUser?.User?.role, router])
   

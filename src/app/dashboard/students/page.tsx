@@ -105,7 +105,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
         enableHiding: false,
         cell: ({row}) => {
             const student = row.original
-
             return (
                 <div className="flex items-center">
                     <Button
@@ -115,7 +114,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                         <DialogTrigger className="flex items-center" onClick={() => showStudents('show', student)}>
                             <EyeIcon className="text-green-600 w-5 h-5"/>
                         </DialogTrigger>
-                        {/*Batafsil*/}
                     </Button>
                     <Button
                         variant="ghost"
@@ -124,7 +122,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                         <DialogTrigger className="flex items-center" onClick={() => showStudents('update', student)}>
                             <PencilIcon className="text-blue-600 w-5 h-5"/>
                         </DialogTrigger>
-                        {/*Tahrirlash*/}
                     </Button>
                     <Button
                         variant="ghost"
@@ -133,10 +130,8 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                         <DialogTrigger className="text-red-600" onClick={() => showStudents('delete', student)}>
                             <TrashIcon className="w-5 h-5"/>
                         </DialogTrigger>
-                        {/*O`chirish*/}
                     </Button>
                     { student.barcode ? (
-                        // Green icon if assigned
                         <Button
                             variant="ghost"
                             className="text-indigo-600"
@@ -146,7 +141,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                             </DialogTrigger>
                         </Button>
                     ) : (
-                        // Red icon if not assigned
                         <Button
                             variant="ghost"
                             className="text-indigo-600"
@@ -155,7 +149,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                                 <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
                             </DialogTrigger>
                         </Button>
-
                     )
                     }
                 </div>
@@ -167,7 +160,6 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
 export default function StudentsPage() {
     const currentUser = useUserInfo()
     const router = useRouter()
-
     function showStudents(mode: string, student: Student) {
         setMode(mode)
         setStudent(student)
@@ -222,9 +214,7 @@ export default function StudentsPage() {
     }, [isSuccessAddQrcode, addCrcodeError]);
 
     const onSubmit: SubmitHandler<StudentUpdate> = (data) => editStudent(data);
-
     const onSubmitAddQrcode: SubmitHandler<AddQrCode> = (data) => addQrCodeToStudent(data);
-
     const {data, isError, isLoading, refetch} = useStudentsList();
 
     useEffect(() => {

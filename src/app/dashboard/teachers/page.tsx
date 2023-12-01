@@ -366,7 +366,7 @@ export default function TeachersPage() {
       rowSelection,
     },
   })
-
+  table.getState().pagination.pageSize = 40
   if (isLoading) {
     return <Loader />
   }

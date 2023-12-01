@@ -134,7 +134,7 @@ export default function VisitsPage() {
       rowSelection,
     },
   });
-  table.getState().pagination.pageSize = 20
+  table.getState().pagination.pageSize = 15
   if (isLoading) {
     return <Loader />;
   }

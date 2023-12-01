@@ -155,7 +155,7 @@ export default function VisitsPage() {
           </div>
           {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
             message?.kind === "visit" ? 
-            <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
+            <div className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
               <img
                 src={`http://localhost:8000/asset/view/${message?.data?.assetId}`}
                 alt="Visitor picture"

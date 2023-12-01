@@ -29,7 +29,7 @@ export default function Sidebar() {
         <div className='font-medium space-y-7'>
           <Link href={'/dashboard/last-visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/last-visits' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarUserCheckBroken className='w-6 h-6 mr-3' />
-            <p>So'ngi tashriflar</p>
+            <p>So`ngi tashriflar</p>
           </Link>
           <Link href={'/dashboard/studyhours'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/studyhours' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarAlarmBroken className='w-6 h-6 mr-3' />
@@ -48,11 +48,11 @@ export default function Sidebar() {
             </Link>
             <Link href={'/dashboard/teachers'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/teachers' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUsersGroupRoundedBroken className='w-6 h-6 mr-3' />
-              <p>O'qituvchilar</p>
+              <p>O`qituvchilar</p>
             </Link>
             <Link href={'/dashboard/students'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/students' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarUserHandsOutline className='w-6 h-6 mr-3' />
-              <p>O'quvchilar</p>
+              <p>O`quvchilar</p>
             </Link>
             <Link href={'/dashboard/waitaccept'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/waitaccept' ? "text-gray-900 font-semibold" : ''}`}>
               <SolarCheckCircleBroken className='w-6 h-6 mr-3' />

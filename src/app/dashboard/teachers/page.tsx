@@ -15,7 +15,6 @@ import {
 import {
   ArrowUpDown,
   ChevronDown,
-  CopyIcon,
   EyeIcon,
   Loader2,
   MoreHorizontal,
@@ -203,9 +202,7 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
         </div>
       )
     },
-
   }
-
 ]
 
 export default function TeachersPage() {
@@ -219,11 +216,7 @@ export default function TeachersPage() {
   }
 
   const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onOpen: () => console.log("opened"),
-    // Will attempt to reconnect on all close events, such as server shutting down
-    shouldReconnect: (closeEvent) => true,
-  });
+  const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false)
   const [isRejecting, setIsRejecting] = useState<boolean>(false)
@@ -305,10 +298,10 @@ export default function TeachersPage() {
   }, [reset, teacher])
 
   useEffect(() => {
-    if (mode === 'qrcode' && lastMessage) {
-      setValue("barcodeId", JSON.parse(lastMessage?.data)?.barcodeId ?? "")
+    if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
+      setValue("barcodeId", lastJsonMessage?.data ?? "")
     }
-  }, [lastMessage])
+  }, [lastJsonMessage])
 
   function getSelectData(order: number, sv: string) {
     if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
@@ -618,16 +611,8 @@ export default function TeachersPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  {teacher?.barcode ? (
-                    <>
-                      <QrCodeIcon className="w-8 h-8 text-gray-500" /><h1 className="flex w-full p-2 border-2">{teacher.barcode}</h1>
-                    </>
-                  ) : (
-                      <>
-                        <QrCodeIcon className="w-8 h-8 text-gray-500" /><h1>{teacher.barcode}</h1>
-                        <Input className="w-full text-lg font-medium uppercase" placeholder="Qr kod mavjud emas" {...qrCodeRegister("barcodeId", { required: true })} />
-                    </>
-                  )}
+                  <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", { required: true })}  disabled />
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

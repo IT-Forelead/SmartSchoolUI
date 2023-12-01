@@ -149,7 +149,7 @@ export default function VisitsPage() {
     return !currentUser?.User?.role?.includes('admin') ? '' : <Loader />
   }
   return (
-    !currentUser?.User?.role?.includes('admin') ? '' : 
+    !currentUser?.User?.role?.includes('admin') ? '' :
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full p-5">
         <div className="flex items-center py-4">

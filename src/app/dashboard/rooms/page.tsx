@@ -147,7 +147,7 @@ export default function RoomsPage() {
       rowSelection,
     },
   })
-
+  table.getState().pagination.pageSize = 40
   if (isLoading) {
     return <Loader />
   }

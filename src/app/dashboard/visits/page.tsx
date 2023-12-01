@@ -144,7 +144,7 @@ export default function VisitsPage() {
       rowSelection,
     },
   })
-
+  table.getState().pagination.pageSize = 40
   if (isLoading) {
     return !currentUser?.User?.role?.includes('admin') ? '' : <Loader />
   }

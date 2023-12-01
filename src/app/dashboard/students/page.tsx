@@ -131,13 +131,13 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                             <TrashIcon className="w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    { student.barcode ? (
+                    {student.barcode ? (
                         <Button
                             variant="ghost"
                             className="text-indigo-600"
                         >
                             <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="w-5 h-5 text-green-600" />
+                                <QrCodeIcon className="w-5 h-5 text-green-600"/>
                             </DialogTrigger>
                         </Button>
                     ) : (
@@ -146,7 +146,7 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
                             className="text-indigo-600"
                         >
                             <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
+                                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600"/>
                             </DialogTrigger>
                         </Button>
                     )
@@ -160,14 +160,16 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
 export default function StudentsPage() {
     const currentUser = useUserInfo()
     const router = useRouter()
+
     function showStudents(mode: string, student: Student) {
         setMode(mode)
         setStudent(student)
     }
+
     //Url web-socket -  ws://25-school.uz/school/api/v1/ws
     //ws://localhost:8000/ws
     const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
-    const { lastJsonMessage } = useWebSocket(socketUrl);
+    const {lastJsonMessage} = useWebSocket(socketUrl);
 
     useEffect(() => {
         if (!currentUser?.User?.role?.includes('admin')) {
@@ -182,6 +184,7 @@ export default function StudentsPage() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+    const [pagination, setPageSize] = useState<number>(40)
     const {mutate: editStudent, isSuccess, error} = useEditStudent();
     const {mutate: addQrCodeToStudent, isSuccess: isSuccessAddQrcode, error: addCrcodeError} = useAddQrcodeToStudent();
     const {register, handleSubmit, reset} = useForm<StudentUpdate>();
@@ -246,7 +249,7 @@ export default function StudentsPage() {
             rowSelection,
         },
     })
-
+    table.getState().pagination.pageSize = 40
     if (isLoading) {
         return <Loader/>
     }
@@ -376,8 +379,10 @@ export default function StudentsPage() {
                                     </>
                                 ) : (
                                     <>
-                                            <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                                            <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", { required: true })}  disabled />
+                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/>
+                                        <Input
+                                            className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case"
+                                            placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", {required: true})} disabled/>
                                     </>
                                 )}
                             </div>
@@ -468,7 +473,7 @@ export default function StudentsPage() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
+                                <TableRow key={headerGroup.id} >
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead key={header.id}>

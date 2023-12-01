@@ -155,7 +155,7 @@ export default function VisitsPage() {
           </div>
           {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
             message?.kind === "visit" ? 
-            <div className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
+            <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
               <img
                 src={`http://localhost:8000/asset/view/${message?.data?.assetId}`}
                 alt="Visitor picture"
@@ -170,7 +170,7 @@ export default function VisitsPage() {
                   {translateVisitType(message?.data?.visitType)}
                 </div>
               </div>
-            </div> : <div className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md">
+            </div> : <div key={idx} className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md">
               <div className="flex items-center justify-center bg-gray-200 rounded-md p-2">
                 <SolarQrCodeBroken className="w-8 h-8" />
               </div>

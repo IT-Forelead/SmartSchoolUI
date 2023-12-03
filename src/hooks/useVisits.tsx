@@ -9,7 +9,7 @@ const getVisitsList = async () => {
 };
 
 export const updateVisit = async (data: UpdateVisit) => {
-  return await axios.post<any>(`/qr-code/visit/update/${data.id}`, data.filename, {
+  return await axios.post<any>(`/qr-code/visit/update/${data.id}`, data.filename?.data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

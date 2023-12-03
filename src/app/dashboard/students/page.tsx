@@ -196,7 +196,7 @@ export default function StudentsPage() {
 
     useEffect(() => {
         if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
-            setValue("barcodeId", lastJsonMessage?.data?.barcodeId ?? "")
+            setValue("barcodeId", lastJsonMessage?.barcodeId ?? "")
         }
     }, [lastJsonMessage])
 

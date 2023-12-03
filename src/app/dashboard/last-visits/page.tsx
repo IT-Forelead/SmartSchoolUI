@@ -90,10 +90,10 @@ export default function VisitsPage() {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
-      if (lastJsonMessage?.kind === "visit") {
+      if (lastJsonMessage?.personId !== "") {
         const imageSrc = webcamRef.current.getScreenshot()
         updateVisit({
-          id: lastJsonMessage?.data?.id ?? "",
+          id: lastJsonMessage?.personId ?? "",
           filename: imageSrc ?? ""
         })
       }

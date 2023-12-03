@@ -168,7 +168,7 @@ export default function StudentsPage() {
 
     //Url web-socket -  ws://25-school.uz/school/api/v1/ws
     //ws://localhost:8000/ws
-    const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
+    const [socketUrl, setSocketUrl] = useState<string>("wss://25-school.uz/school/api/v1/ws")
     const {lastJsonMessage} = useWebSocket(socketUrl);
 
     useEffect(() => {

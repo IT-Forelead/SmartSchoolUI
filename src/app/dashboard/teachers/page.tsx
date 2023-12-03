@@ -215,7 +215,7 @@ export default function TeachersPage() {
     setTeacher(teacher)
   }
 
-  const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
+  const [socketUrl, setSocketUrl] = useState<string>("wss://25-school.uz/school/api/v1/ws")
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false)

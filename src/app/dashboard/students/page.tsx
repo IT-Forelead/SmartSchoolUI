@@ -166,9 +166,9 @@ export default function StudentsPage() {
         setStudent(student)
     }
 
-    //Url web-socket -  ws://25-school.uz/school/api/v1/ws
-    //ws://localhost:8000/ws
-    const [socketUrl, setSocketUrl] = useState<string>("wss://25-school.uz/school/api/v1/ws")
+    const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
+    const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
+    const [socketUrl, setSocketUrl] = useState<string>(`${protocol}//${hostname}/ws`)
     const {lastJsonMessage} = useWebSocket(socketUrl);
 
     useEffect(() => {
@@ -195,9 +195,9 @@ export default function StudentsPage() {
     }, [reset, student])
 
     useEffect(() => {
-        if (mode === 'qrcode') {
-            setValue("barcodeId", lastJsonMessage?.barcodeId ?? "")
-        }
+      if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
+        setValue("barcodeId", lastJsonMessage?.data ?? "")
+      }
     }, [lastJsonMessage])
 
     useEffect(() => {

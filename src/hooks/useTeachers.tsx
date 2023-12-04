@@ -44,7 +44,7 @@ export const addSubjectToTeacherFunc = async (data: AddSubjects) => {
 };
 
 export const addQrCodeToTeacher = async (data: AddQrCode) => {
-  return await axios.get<any>(`/student/add-qrcode/${data.personId}`);
+  return await axios.post<any>('/student/add-qrcode', data);
 };
 
 export const approveTeacherDocAsAdmin = async (data: ApproveAsAdmin) => {

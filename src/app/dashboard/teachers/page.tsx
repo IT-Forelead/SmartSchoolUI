@@ -298,8 +298,8 @@ export default function TeachersPage() {
   }, [reset, teacher])
 
   useEffect(() => {
-    if (mode === 'qrcode') {
-      setValue("barcodeId", lastJsonMessage?.barcodeId ?? "")
+    if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
+      setValue("barcodeId", lastJsonMessage?.data ?? "")
     }
   }, [lastJsonMessage])
 

@@ -12,7 +12,7 @@ const getStudentsList = async () => {
 };
 
 export const addQrCodeToStudent = async (data: AddQrCode) => {
-    return await axios.get<any>(`/student/add-qrcode/${data.personId}`);
+    return await axios.post<any>('/student/add-qrcode', data);
 };
 
 const editStudent = async (data: StudentUpdate) => {

@@ -83,7 +83,7 @@ export default function VisitsPage() {
   }
 
   const webcamRef = React.useRef(null)
-  const [socketUrl, setSocketUrl] = useState<string>("ws://25-school.uz/school/api/v1/ws")
+  const [socketUrl, setSocketUrl] = useState<string>("wss://25-school.uz/school/api/v1/ws")
   const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([])
   const { lastJsonMessage } = useWebSocket(socketUrl)
 

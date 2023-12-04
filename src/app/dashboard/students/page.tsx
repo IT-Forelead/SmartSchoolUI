@@ -166,10 +166,10 @@ export default function StudentsPage() {
         setStudent(student)
     }
 
-    const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
-    const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-    const [socketUrl, setSocketUrl] = useState<string>(`${protocol}//${hostname}/ws`)
-    const {lastJsonMessage} = useWebSocket(socketUrl);
+    // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
+    // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
+    const [socketUrl, setSocketUrl] = useState<string>("wss//25-school.uz/school/api/v1/ws")
+    const {lastJsonMessage} = useWebSocket(socketUrl)
 
     useEffect(() => {
         if (!currentUser?.User?.role?.includes('admin')) {

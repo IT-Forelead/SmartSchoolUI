@@ -215,9 +215,9 @@ export default function TeachersPage() {
     setTeacher(teacher)
   }
 
-  const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
-  const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(`${protocol}//${hostname}/ws`)
+  // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
+  // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
+  const [socketUrl, setSocketUrl] = useState<string>("wss//25-school.uz/school/api/v1/ws")
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false)

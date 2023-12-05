@@ -15,6 +15,7 @@ import {
 import * as React from "react";
 import Loader from "@/components/client/Loader";
 import { Dialog } from "@/components/ui/dialog";
+import { SolarUserBroken } from "@/icons/UserIcon"
 import {
   Table,
   TableBody,
@@ -90,10 +91,10 @@ export default function VisitsPage() {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
-      if (lastJsonMessage?.personId !== "") {
+      if (lastJsonMessage?.kind === "visit") {
         const imageSrc = webcamRef.current.getScreenshot()
         updateVisit({
-          id: lastJsonMessage?.personId ?? "",
+          id: lastJsonMessage?.data?.id ?? "",
           filename: imageSrc ?? ""
         })
       }
@@ -156,13 +157,11 @@ export default function VisitsPage() {
           {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
             message?.kind === "visit" ? 
             <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
-              <img
-                src={`http://localhost:8000/asset/view/${message?.data?.assetId}`}
-                alt="Visitor picture"
-                className="rounded-md h-20 w-20"
-              />
+              <div className="rounded-lg border p-1.5">
+                <SolarUserBroken className="w-20 h-20 text-gray-500" />
+              </div>
               <div className="space-y-1">
-                <div className="text-lg font-medium">{message?.data?.assetId}</div>
+                <div className="text-lg font-medium">{message?.data?.fullName}</div>
                 <div className="text-base">
                   {dateFormatter(message?.data?.createdAt)}
                 </div>

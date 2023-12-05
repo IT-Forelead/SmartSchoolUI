@@ -107,50 +107,27 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
             const student = row.original
             return (
                 <div className="flex items-center">
-                    <Button
-                        variant="ghost"
-                        className="text-green-600"
-                    >
-                        <DialogTrigger className="flex items-center" onClick={() => showStudents('show', student)}>
+                    { student.barcode ?
+                        <Button variant="ghost">
+                            <DialogTrigger onClick={() => showStudents('qrcode', student)}>
+                                <QrCodeIcon className="w-5 h-5 text-blue-600"/>
+                            </DialogTrigger>
+                        </Button> : <Button variant="ghost">
+                            <DialogTrigger onClick={() => showStudents('qrcode', student)}>
+                                <QrCodeIcon className="w-5 h-5 text-red-600"/>
+                            </DialogTrigger>
+                        </Button>
+                    }
+                    <Button variant="ghost">
+                        <DialogTrigger onClick={() => showStudents('show', student)}>
                             <EyeIcon className="text-green-600 w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    <Button
-                        variant="ghost"
-                        className="text-blue-600"
-                    >
-                        <DialogTrigger className="flex items-center" onClick={() => showStudents('update', student)}>
+                    <Button variant="ghost">
+                        <DialogTrigger onClick={() => showStudents('update', student)}>
                             <PencilIcon className="text-blue-600 w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    <Button
-                        variant="ghost"
-                        className="text-red-600"
-                    >
-                        <DialogTrigger className="text-red-600" onClick={() => showStudents('delete', student)}>
-                            <TrashIcon className="w-5 h-5"/>
-                        </DialogTrigger>
-                    </Button>
-                    {student.barcode ? (
-                        <Button
-                            variant="ghost"
-                            className="text-indigo-600"
-                        >
-                            <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="w-5 h-5 text-green-600"/>
-                            </DialogTrigger>
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="ghost"
-                            className="text-indigo-600"
-                        >
-                            <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600"/>
-                            </DialogTrigger>
-                        </Button>
-                    )
-                    }
                 </div>
             )
         },
@@ -178,13 +155,11 @@ export default function StudentsPage() {
     }, [currentUser?.User?.role, router])
     const [student, setStudent] = useState<Student | null>(null)
     const [mode, setMode] = useState<string>('')
-    const [open, setOpen] = useState<boolean>(false);
-    const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false)
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
-    const [pagination, setPageSize] = useState<number>(40)
     const {mutate: editStudent, isSuccess, error} = useEditStudent();
     const {mutate: addQrCodeToStudent, isSuccess: isSuccessAddQrcode, error: addCrcodeError} = useAddQrcodeToStudent();
     const {register, handleSubmit, reset} = useForm<StudentUpdate>();
@@ -258,10 +233,10 @@ export default function StudentsPage() {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
                 <DialogHeader>
-                    {mode?.includes('show') ?
-                        <DialogTitle>O`quvchi ma`lumotlari</DialogTitle> : mode?.includes('qrcode') ?
-                            <DialogTitle>O`quvchiga QR kod biriktirish</DialogTitle> : mode?.includes('update') ?
-                                <DialogTitle>O`quvchini tahrirlash</DialogTitle> : mode?.includes('delete')
+                    { mode?.includes('show') ? <DialogTitle>O`quvchi ma`lumotlari</DialogTitle> : 
+                        mode?.includes('qrcode') ? <DialogTitle>O`quvchiga QR kod biriktirish</DialogTitle> : 
+                        mode?.includes('update') ? <DialogTitle>O`quvchini tahrirlash</DialogTitle> : 
+                        ""
                     }
                 </DialogHeader>
                 {mode?.includes('show') ?
@@ -375,7 +350,8 @@ export default function StudentsPage() {
                             <div className="flex items-center space-x-2">
                                 {student?.barcode ? (
                                     <>
-                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/><h1 className="flex w-full p-2 border-2">{student.barcode}</h1>
+                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/>
+                                        <h1 className="flex w-full p-2 border-2">{student.barcode}</h1>
                                     </>
                                 ) : (
                                     <>
@@ -406,6 +382,7 @@ export default function StudentsPage() {
                                             <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5"/>
                                         </div>
                                 }
+                                
                                 <div className="w-full space-y-3">
                                     <div className="flex items-center w-full space-x-2">
                                         <div className="text-base text-gray-500">

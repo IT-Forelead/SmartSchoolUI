@@ -176,8 +176,10 @@ export default function StudentsPage() {
     }, [lastJsonMessage])
 
     useEffect(() => {
-        setValue("personId", student?.id ?? "")
-    }, [getValues("barcodeId")])
+        if (mode === 'qrcode') {
+            setValue("personId", student?.id ?? "")
+            }
+    }, [mode])
 
     useEffect(() => {
         if (isSuccessAddQrcode) {

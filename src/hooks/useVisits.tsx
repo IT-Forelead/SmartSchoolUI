@@ -6,15 +6,15 @@ import { AxiosError } from "axios";
 /* APIs */
 const getVisitsList = async () => {
   return await axios.get<Visit[]>("/visit/history");
-};
+}
 
-export const updateVisit = async (data: UpdateVisit) => {
-  return await axios.post<any>(`/qr-code/visit/update/${data.id}`, data.filename, {
+export const updateVisit = async (id: string, data: FormData) => {
+  return await axios.post<any>(`/visit/update/${id}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
-    },
-  });
-};
+    }
+  })
+}
 
 /* Hooks */
 export const useVisitsList = () => {
@@ -23,4 +23,4 @@ export const useVisitsList = () => {
     queryFn: () => getVisitsList(),
     onError: (err: AxiosError) => err
   })
-};
+}

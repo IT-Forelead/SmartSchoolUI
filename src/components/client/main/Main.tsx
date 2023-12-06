@@ -39,9 +39,9 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
                   <div className="space-y-1">
-                    <div className="text-xl font-medium">Barcha o'qituvchilar</div>
+                    <div className="text-xl font-medium">Barcha o`qituvchilar</div>
                     <div className="text-2xl font-bold">37</div>
-                    <div className="text-sm text-gray-500">Barcha o'qituvchilar soni</div>
+                    <div className="text-sm text-gray-500">Barcha o`qituvchilar soni</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-green-100 flex items-center justify-center">
@@ -53,7 +53,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">QR kod briktirilgan</div>
                     <div className="text-2xl font-bold">35</div>
-                    <div className="text-sm text-gray-500">QR kod biriktirilgan o'qituvchilar soni</div>
+                    <div className="text-sm text-gray-500">QR kod biriktirilgan o`qituvchilar soni</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-blue-100 flex items-center justify-center">
@@ -65,7 +65,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">Hozirda maktabda</div>
                     <div className="text-2xl font-bold">23</div>
-                    <div className="text-sm text-gray-500">Hozirda maktabda bo'lgan o'qituvchilar</div>
+                    <div className="text-sm text-gray-500">Hozirda maktabda bo`lgan o`qituvchilar</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-orange-100 flex items-center justify-center">
@@ -77,7 +77,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">Bugun kelmaganlari</div>
                     <div className="text-2xl font-bold">1</div>
-                    <div className="text-sm text-gray-500">Bugun maktabga kelmagan o'qituvchilar</div>
+                    <div className="text-sm text-gray-500">Bugun maktabga kelmagan o`qituvchilar</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-red-100 flex items-center justify-center">
@@ -88,9 +88,9 @@ export default function DashboardPage() {
 
               <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
                   <div className="space-y-1">
-                    <div className="text-xl font-medium">Barcha o'quvchilar</div>
+                    <div className="text-xl font-medium">Barcha o`quvchilar</div>
                     <div className="text-2xl font-bold">37</div>
-                    <div className="text-sm text-gray-500">Barcha o'quvchilar soni</div>
+                    <div className="text-sm text-gray-500">Barcha o`quvchilar soni</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-green-100 flex items-center justify-center">
@@ -102,7 +102,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">QR kod briktirilgan</div>
                     <div className="text-2xl font-bold">35</div>
-                    <div className="text-sm text-gray-500">QR kod biriktirilgan o'quvchilar soni</div>
+                    <div className="text-sm text-gray-500">QR kod biriktirilgan o`quvchilar soni</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-blue-100 flex items-center justify-center">
@@ -114,7 +114,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">Hozirda maktabda</div>
                     <div className="text-2xl font-bold">23</div>
-                    <div className="text-sm text-gray-500">Hozirda maktabda bo'lgan o'quvchilar</div>
+                    <div className="text-sm text-gray-500">Hozirda maktabda bo`lgan o`quvchilar</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-orange-100 flex items-center justify-center">
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                   <div className="space-y-1">
                     <div className="text-xl font-medium">Bugun kelmaganlari</div>
                     <div className="text-2xl font-bold">1</div>
-                    <div className="text-sm text-gray-500">Bugun maktabga kelmagan o'quvchilar</div>
+                    <div className="text-sm text-gray-500">Bugun maktabga kelmagan o`quvchilar</div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="rounded-xl p-3 bg-red-100 flex items-center justify-center">

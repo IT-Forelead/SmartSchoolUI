@@ -5,7 +5,7 @@ export function RecentSales() {
     <div className="space-y-8">
       <div className="flex items-center">
         <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Barcha o'qituvchilar</p>
+          <p className="text-sm font-medium leading-none">Barcha o`qituvchilar</p>
           <p className="text-sm text-muted-foreground">
             olivia.martin@email.com
           </p>

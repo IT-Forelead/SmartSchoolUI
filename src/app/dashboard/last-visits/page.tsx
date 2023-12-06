@@ -53,9 +53,7 @@ export const columns = (
     accessorKey: "createdAt",
     header: "Tashrif vaqti",
     cell: ({ row }) => (
-      <div className="capitalize">
-        {dateFormatter(row.getValue("createdAt"))}
-      </div>
+      <div>{ dateFormatter(row.getValue("createdAt")) }</div>
     ),
   },
   {
@@ -88,15 +86,29 @@ export default function VisitsPage() {
   const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([])
   const { lastJsonMessage } = useWebSocket(socketUrl)
 
+  function makeBlob(base64String: string) {
+    const [contentType, dataPart] = base64String.split(';base64,');
+    // Convert base64 to binary
+    const binaryString = atob(dataPart);
+
+    // Create a Uint8Array from the binary string
+    const dataArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        dataArray[i] = binaryString.charCodeAt(i);
+    }
+
+    // Create a Blob with the data and specify the MIME type (e.g., image/png)
+    return new Blob([dataArray], { type: contentType.replace(/^data:/, '')});
+  }
+
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
       if (lastJsonMessage?.kind === "visit") {
         const imageSrc = webcamRef.current.getScreenshot()
-        updateVisit({
-          id: lastJsonMessage?.data?.id ?? "",
-          filename: imageSrc ?? ""
-        })
+        const form = new FormData();
+        form.append('file', makeBlob(imageSrc));
+        updateVisit(lastJsonMessage?.data?.id, form)
       }
     }
   }, [lastJsonMessage, setVisitHistoryInWebSocket]);
@@ -151,6 +163,8 @@ export default function VisitsPage() {
               height={720}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
+              screenshotQuality={1}
+              forceScreenshotSourceSize={true}
               width={1280}
             />
           </div>

@@ -10,6 +10,7 @@ import { SolarSquareTransferHorizontalBroken } from '@/icons/SwitchIcon'
 import { SolarClockSquareBroken } from '@/icons/TeacherHourIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarWindowFrameBroken } from '@/icons/TimeTable'
+import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { SolarUserCheckBroken } from '@/icons/UserCheckIcon'
 import Link from 'next/link'
@@ -27,6 +28,10 @@ export default function Sidebar() {
       </h1>
       <div className='max-h-[80vh] mt-10 overflow-auto'>
         <div className='font-medium space-y-7'>
+          <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
+            <SolarHome2Broken className='w-6 h-6 mr-3' />
+            <p>Bosh sahifa</p>
+          </Link>
           <Link href={'/dashboard/last-visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/last-visits' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarUserCheckBroken className='w-6 h-6 mr-3' />
             <p>So`ngi tashriflar</p>

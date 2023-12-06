@@ -302,8 +302,10 @@ export default function TeachersPage() {
   }
 
   useEffect(() => {
-    setValue("personId", teacher?.id ?? "")
-  }, [getValues("barcodeId")])
+    if (mode === 'qrcode') {
+      setValue("personId", teacher?.id ?? "")
+    }
+  }, [mode])
 
   useEffect(() => {
     if (isSuccessAddQrcode) {

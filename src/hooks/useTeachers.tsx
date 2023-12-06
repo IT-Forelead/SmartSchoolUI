@@ -1,4 +1,18 @@
-import { AbsentLessonBody, Approve, ApproveAsAdmin, Subject, Substitution, Teacher, Visit, TeacherDegree, TeacherPositionUpdate, TeacherUpdate, TeacherWorkloadChange, WorkloadFormula, WorkloadHistory, AddQrCode } from "@/models/common.interface";
+import { 
+  AbsentLessonBody, 
+  Approve, 
+  ApproveAsAdmin, 
+  Subject, 
+  Substitution, 
+  Teacher, 
+  TeacherDegree, 
+  TeacherPositionUpdate, 
+  TeacherUpdate, 
+  TeacherWorkloadChange, 
+  WorkloadFormula, 
+  WorkloadHistory, 
+  AddQrCode 
+} from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -169,6 +183,7 @@ export const useEditTeacher = () => {
     onError: (err: AxiosError) => err
   })
 };
+
 export const useAddQrcodeToTeacher = () => {
   return useMutation({
     mutationFn: (data: AddQrCode) => addQrCodeToTeacher(data),

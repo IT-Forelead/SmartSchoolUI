@@ -7,6 +7,7 @@ import { SolarUserHandUpBroken } from '@/icons/UserHandUpBrokenIcon'
 import { SolarUserHandsBroken } from '@/icons/UserHandsBrokenIcon'
 import { SolarChatRoundLineBroken } from '@/icons/ChatIcon'
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'
+import ReactApexChart from 'react-apexcharts';
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -14,6 +15,90 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage() {
+
+  const chartData = {
+    options: {
+      chart: {
+        id: 'basic-bar',
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      },
+    },
+    series: [
+      {
+        name: 'series-1',
+        data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 100, 80, 60],
+      },
+    ],
+  };
+
+  const series = [{
+    name: 'Net Profit',
+    data: [44, 55, 57, 56, 61, 58, 63]
+  }, {
+    name: 'Revenue',
+    data: [76, 85, 101, 98, 87, 105, 91]
+  }]
+
+  const options = {
+    chart: {
+      type: 'bar',
+      height: 350
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        dataLabels: {
+          position: 'top', // top, center, bottom
+        },
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val: any) {
+        return val;
+      },
+      offsetY: -20,
+      style: {
+        fontSize: '12px',
+        colors: ["#304758"]
+      }
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent']
+    },
+    xaxis: {
+      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+    },
+    yaxis: {
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false,
+      },
+      labels: {
+        show: false,
+        formatter: function (val: any) {
+          return val + "%";
+        }
+      }
+    },
+    fill: {
+      opacity: 1
+    },
+    tooltip: {
+      y: {
+        formatter: function (val: any) {
+          return "$ " + val + " thousands"
+        }
+      }
+    }
+  }
+
   return (
     <div className="flex-col hidden md:flex">
       <div className="flex-1 p-8 pt-6 space-y-4">
@@ -143,140 +228,35 @@ export default function DashboardPage() {
             <div className="bg-white rounded-lg w-full p-5 border space-y-4"></div>
           </div>
 
-
-          {/* <div className="grid gap-x-4 gap-y-2 md:grid-cols-2 lg:grid-cols-4">
-            <div className="col-span-full">
-              <h2 className="text-xl font-bold tracking-tight">O`qituvchilar statistikasi</h2>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Barcha o`qituvchilar</div>
-                  <div className="text-2xl font-bold">37</div>
-                  <div className="text-sm text-gray-500">Barcha o`qituvchilar soni</div>
+          <div className="grid gap-4 grid-cols-2">
+            <div className="bg-white rounded-lg border">
+              <div className="flex items-center justify-between p-5">
+                <div>
+                  <div className="text-lg font-bold">Tashriflar statistikasi</div>
+                  <div className="text-sm">Bir haftalik tashriflar statistikasi</div>
                 </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-green-100 flex items-center justify-center">
-                    <SolarUsersGroupRoundedBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">QR kod briktirilgan</div>
-                  <div className="text-2xl font-bold">35</div>
-                  <div className="text-sm text-gray-500">QR kod biriktirilgan o`qituvchilar soni</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-blue-100 flex items-center justify-center">
-                    <SolarQrCodeBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Hozirda maktabda</div>
-                  <div className="text-2xl font-bold">23</div>
-                  <div className="text-sm text-gray-500">Hozirda maktabda bo`lgan o`qituvchilar</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-orange-100 flex items-center justify-center">
-                    <SolarUserCheckBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Bugun kelmaganlari</div>
-                  <div className="text-2xl font-bold">1</div>
-                  <div className="text-sm text-gray-500">Bugun maktabga kelmagan o`qituvchilar</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-red-100 flex items-center justify-center">
-                    <SolarUserBlockBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-
-            <div className="col-span-full mt-2">
-              <h2 className="text-xl font-bold tracking-tight">O`quvchilar statistikasi</h2>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Barcha o`quvchilar</div>
-                  <div className="text-2xl font-bold">37</div>
-                  <div className="text-sm text-gray-500">Barcha o`quvchilar soni</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-green-100 flex items-center justify-center">
-                    <SolarUserHandsBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">QR kod briktirilgan</div>
-                  <div className="text-2xl font-bold">35</div>
-                  <div className="text-sm text-gray-500">QR kod biriktirilgan o`quvchilar soni</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-blue-100 flex items-center justify-center">
-                    <SolarQrCodeBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Hozirda maktabda</div>
-                  <div className="text-2xl font-bold">23</div>
-                  <div className="text-sm text-gray-500">Hozirda maktabda bo`lgan o`quvchilar</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-orange-100 flex items-center justify-center">
-                    <SolarUserHandUpBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-            <div className="flex justify-between bg-white rounded-lg w-full p-5 border">
-                <div className="space-y-1">
-                  <div className="text-xl font-medium">Bugun kelmaganlari</div>
-                  <div className="text-2xl font-bold">1</div>
-                  <div className="text-sm text-gray-500">Bugun maktabga kelmagan o`quvchilar</div>
-                </div>
-                <div className="flex items-start justify-end">
-                  <div className="rounded-xl p-3 bg-red-100 flex items-center justify-center">
-                    <SolarUserBlockBroken className="w-8 h-8 text-gray-900" />
-                  </div>
-                </div>
-            </div>
-          </div> */}
-            <div className="grid gap-4 grid-cols-2">
-              <div className="bg-white rounded-lg border">
-                <div className="flex items-center justify-between p-5">
-                  <div>
-                    <div className="text-lg font-bold">Tashriflar statistikasi</div>
-                    <div className="text-sm">Bir haftalik tashriflar statistikasi</div>
-                  </div>
-                  <div className="rounded-xl p-3 bg-whiteflex items-center justify-center">
-                    <SolarUserCheckBroken className="w-7 h-7 text-gray-900" />
-                  </div>
-                </div>
-                <div className="px-1 h-56">
+                <div className="rounded-xl p-3 bg-whiteflex items-center justify-center">
+                  <SolarUserCheckBroken className="w-7 h-7 text-gray-900" />
                 </div>
               </div>
-              <div className="bg-white rounded-lg border">
-                <div className="flex items-center justify-between p-5">
-                  <div>
-                    <div className="text-lg font-bold">SMS xabarlar statistikasi</div>
-                    <div className="text-sm">Bir haftalik SMS xabarlar statistikasi</div>
-                  </div>
-                  <div className="rounded-xl p-3 bg-whiteflex items-center justify-center">
-                    <SolarChatRoundLineBroken className="w-7 h-7 text-gray-900" />
-                  </div>
-                </div>
-                <div className="px-1 h-56">
-                </div>
+              <div className="px-1">
+                <ReactApexChart options={options} series={series} type="bar" height={350} />
               </div>
             </div>
+            <div className="bg-white rounded-lg border">
+              <div className="flex items-center justify-between p-5">
+                <div>
+                  <div className="text-lg font-bold">SMS xabarlar statistikasi</div>
+                  <div className="text-sm">Bir haftalik SMS xabarlar statistikasi</div>
+                </div>
+                <div className="rounded-xl p-3 bg-whiteflex items-center justify-center">
+                  <SolarChatRoundLineBroken className="w-7 h-7 text-gray-900" />
+                </div>
+              </div>
+              <div className="px-1 h-56">
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   )

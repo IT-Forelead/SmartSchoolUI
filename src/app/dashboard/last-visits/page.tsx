@@ -63,10 +63,10 @@ export const columns = (
     header: "Tashrif turi",
     cell: ({ row }) => (
       <div
-        className={`py-1 px-3 text-sm uppercase inline-block text-black rounded-full ${
+        className={`py-1 px-3 text-sm capitalize inline-block text-black rounded-full ${
           row.getValue("visitType") === "come_in"
-            ? "bg-green-300"
-            : "bg-red-300"
+            ? "bg-green-600 text-white"
+            : "bg-red-600 text-white"
         }`}
       >
         {translateVisitType(row.getValue("visitType"))}
@@ -160,14 +160,29 @@ export default function VisitsPage() {
               <div className="rounded-lg border p-1.5">
                 <SolarUserBroken className="w-20 h-20 text-gray-500" />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1 space-x-1">
                 <div className="text-lg font-medium">{message?.data?.fullName}</div>
                 <div className="text-base">
                   {dateFormatter(message?.data?.createdAt)}
                 </div>
-                <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">
+                <div className={`inline-block px-4 py-0.5 text-sm capitalize rounded-full ${
+                    message?.data?.label === "teacher" ? "bg-blue-600 text-white" :
+                        message?.data?.label === "student" ? "bg-yellow-600 text-white" :
+                            "bg-gray-600 text-white"
+                } text-center`}>
+                  {message?.data?.label === "teacher"
+                      ? "O'qituvchi"
+                      : message?.data?.label === "student"
+                          ? "O'quvchi"
+                          : "Hodim"}
+                </div>
+                <div className={`inline-block px-8 py-0.5 text-sm capitalize rounded-full ${
+                    message?.data?.visitType === "come_in" ? "bg-green-600 text-white" :
+                        "bg-red-600 text-white"
+                } text-center`}>
                   {translateVisitType(message?.data?.visitType)}
                 </div>
+
               </div>
             </div> : <div key={idx} className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md">
               <div className="flex items-center justify-center bg-gray-200 rounded-md p-2">

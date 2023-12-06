@@ -104,11 +104,13 @@ export default function VisitsPage() {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
-      if (lastJsonMessage?.kind === "visit") {
+      if (lastJsonMessage?.kind === "visit" && webcamRef.current && webcamRef.current.stream) {
         const imageSrc = webcamRef.current.getScreenshot()
         const form = new FormData();
         form.append('file', makeBlob(imageSrc));
         updateVisit(lastJsonMessage?.data?.id, form)
+      } else {
+        console.log("webcam is not working...");
       }
     }
   }, [lastJsonMessage, setVisitHistoryInWebSocket]);

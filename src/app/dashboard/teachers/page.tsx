@@ -62,7 +62,8 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ImageFull from "@/components/client/timetable/ImageFull"
 import useWebSocket from "react-use-websocket";
-
+import CreateTeacher from "@/components/client/teachers/CreateTeacher"
+  
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length
 }
@@ -688,6 +689,7 @@ export default function TeachersPage() {
               return table.getColumn("fullName")?.setFilterValue(event.target.value)
             }}
           />
+          <CreateTeacher />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

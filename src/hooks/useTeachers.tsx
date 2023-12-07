@@ -9,6 +9,10 @@ export type AddSubjects = {
 }
 
 /* APIs */
+const createTeacher = async (data: Teacher) => {
+  return await axios.post<Teacher[]>(`/teacher`, data);
+};
+
 const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
 };
@@ -201,5 +205,12 @@ export const useUpdateTeacherPosition = () => {
   return useMutation({
     mutationFn: (data: TeacherPositionUpdate) => updateTeacherPosition(data),
     onError: (err: AxiosError) => err
+  })
+};
+
+export const useCreateTeacher = () => {
+  return useMutation({
+      mutationFn: (data: Teacher) => createTeacher(data),
+      onError: (err: AxiosError) => err
   })
 };

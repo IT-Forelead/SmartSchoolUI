@@ -1,8 +1,10 @@
+"use client";
+
 import ReactApexChart from 'react-apexcharts';
 import moment from "moment";
 import {SolarChatRoundLineBroken} from "@/icons/ChatIcon";
 
-export default function StudentVisitsChart() {
+export default function SmsMessagesChart() {
 
     const series = [{
         name: 'Yuborilgan SMS xabarlar',

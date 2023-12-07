@@ -1,3 +1,5 @@
+"use client";
+
 import ReactApexChart from 'react-apexcharts';
 import moment from "moment";
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
@@ -119,8 +121,8 @@ export default function TeacherVisitsChart() {
         <div className="col-span-3 bg-white rounded-lg border">
             <div className="flex items-center justify-between p-5">
                 <div>
-                    <div className="text-lg font-bold">O'qituvchilar tashriflari statistikasi</div>
-                    <div className="text-sm">Bir haftalik o'qituvchilar tashriflari statistikasi</div>
+                    <div className="text-lg font-bold">O`qituvchilar tashriflari statistikasi</div>
+                    <div className="text-sm">Bir haftalik o`qituvchilar tashriflari statistikasi</div>
                 </div>
                 <div className="rounded-xl p-3 bg-green-500 flex items-center justify-center">
                     <SolarUsersGroupRoundedBroken className="w-8 h-8 text-white"/>

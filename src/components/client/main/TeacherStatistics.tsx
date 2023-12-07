@@ -1,3 +1,5 @@
+"use client";
+
 import {SolarUsersGroupRoundedBroken} from "@/icons/TeacherIcon";
 import {SolarQrCodeBroken} from "@/icons/QrCodeIcon";
 import {SolarUserCheckBroken} from "@/icons/UserCheckIcon";

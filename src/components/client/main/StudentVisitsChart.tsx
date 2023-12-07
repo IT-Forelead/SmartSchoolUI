@@ -1,3 +1,5 @@
+"use client";
+
 import ReactApexChart from 'react-apexcharts';
 import moment from "moment";
 import { SolarUsersGroupTwoRoundedBroken } from '@/icons/GroupIcon'

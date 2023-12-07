@@ -3,6 +3,10 @@
 import ReactApexChart from 'react-apexcharts';
 import moment from "moment";
 import {SolarChatRoundLineBroken} from "@/icons/ChatIcon";
+import dynamic from "next/dynamic";
+
+
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function SmsMessagesChart() {
 
@@ -95,7 +99,7 @@ export default function SmsMessagesChart() {
                     <SolarChatRoundLineBroken className="w-8 h-8 text-white"/>
                 </div>
             </div>
-            <ReactApexChart options={options} series={series} type="bar" height={250} />
+            <ApexChart options={options} series={series} type="bar" height={250} />
         </div>
     )
 }

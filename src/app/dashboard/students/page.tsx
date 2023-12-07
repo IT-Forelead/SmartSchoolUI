@@ -168,7 +168,7 @@ export default function StudentsPage() {
     const {mutate: addQrCodeToStudent, isSuccess: isSuccessAddQrcode, error: addCrcodeError} = useAddQrcodeToStudent();
     const {register, handleSubmit, reset} = useForm<StudentUpdate>();
     const {register: qrCodeRegister, handleSubmit: qrCodeHandleSubmit, setValue, getValues} = useForm<AddQrCode>();
-    const {mutate: deleteBarcode,isSuccess: isSuccessDeleteBarcode,error: deleteBarcodeError} = useDeleteBarCodeStudent();
+    const {mutate: deleteBarcode, isSuccess: isSuccessDeleteBarcode, error: deleteBarcodeError} = useDeleteBarCodeStudent();
 
     useEffect(() => {
         if (isSuccessDeleteBarcode) {
@@ -399,7 +399,8 @@ export default function StudentsPage() {
                             <p>Haqiqatdan ham QR-kodni o‘chirib tashlamoqchimisiz?</p>
                             <div className="flex items-center justify-end mt-4 space-x-4">
                                 <Button onClick={() => setOpen(false)} variant="outline">Cancel</Button>
-                                <Button onClick={() => deleteStudentBarCode(student?.barcode)} className="bg-red-600 text-white hover:bg-red-700">Delete</Button>
+                                <Button onClick={() => deleteStudentBarCode(student?.barcode)}
+                                        className="bg-red-600 text-white hover:bg-red-700">Delete</Button>
                             </div>
                         </div>
                         : <form onSubmit={handleSubmit(onSubmit)}>

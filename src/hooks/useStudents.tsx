@@ -5,6 +5,7 @@ import {
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import exp from "constants";
 
 /* APIs */
 const getStudentsList = async () => {
@@ -17,6 +18,9 @@ export const addQrCodeToStudent = async (data: AddQrCode) => {
 
 const editStudent = async (data: StudentUpdate) => {
     return await axios.post<any>("/student/update", data);
+};
+const deleteStudentBarcode = async (data: Student) => {
+    return await axios.delete<any>(`/qrcode/delete/${data}`);
 };
 
 export const useStudentsList = () => {
@@ -36,6 +40,12 @@ export const useEditStudent = () => {
 export const useAddQrcodeToStudent = () => {
     return useMutation({
         mutationFn: (data: AddQrCode) => addQrCodeToStudent(data),
+        onError: (err: AxiosError) => err
+    })
+};
+export const useDeleteBarCodeStudent = () => {
+    return useMutation({
+        mutationFn: (data: Student) => deleteStudentBarcode(data),
         onError: (err: AxiosError) => err
     })
 };

@@ -288,7 +288,7 @@ export default function TeachersPage() {
 
   useEffect(() => {
     if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("barcodeId", lastJsonMessage?.data ?? "")
+      setValue("qrcodeId", lastJsonMessage?.data ?? "")
     }
   }, [lastJsonMessage])
 
@@ -311,7 +311,7 @@ export default function TeachersPage() {
     if (isSuccessAddQrcode) {
       notifySuccess("Qr kod qo'shildi!")
       setValue("personId", "")
-      setValue("barcodeId", "")
+      setValue("qrcodeId", "")
       refetch()
       setOpen(false)
     } else if (addCrcodeError) {
@@ -603,7 +603,7 @@ export default function TeachersPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", { required: true })}  disabled />
+                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("qrcodeId", { required: true })}  disabled />
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

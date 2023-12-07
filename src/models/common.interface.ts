@@ -167,7 +167,7 @@ export type TeacherUpdate = {
 
 export type AddQrCode = {
   personId: string;
-  barcodeId: string;
+  qrcodeId: string;
 };
 
 export type Approve = {

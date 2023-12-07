@@ -72,6 +72,17 @@ export default function TargetLesson() {
         }
     };
 
+    const [subjectIdsList, setSubjectIdsList] = useState<string[]>([])
+
+    function getSelectData(order: number, sv: string) {
+        if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
+          setSubjectIdsList([...subjectIdsList, sv])
+        } else {
+          subjectIdsList[order] = sv
+          setSubjectIdsList(subjectIdsList)
+        }
+      }
+
     useEffect(() => {
         if (isSuccess) {
             notifySuccess("O`qituvchi qo`shildi");

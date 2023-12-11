@@ -1,17 +1,18 @@
-import { 
-  AbsentLessonBody, 
-  Approve, 
-  ApproveAsAdmin, 
-  Subject, 
-  Substitution, 
-  Teacher, 
-  TeacherDegree, 
-  TeacherPositionUpdate, 
-  TeacherUpdate, 
-  TeacherWorkloadChange, 
-  WorkloadFormula, 
-  WorkloadHistory, 
-  AddQrCode 
+import {
+  AbsentLessonBody,
+  Approve,
+  ApproveAsAdmin,
+  Subject,
+  Substitution,
+  Teacher,
+  TeacherDegree,
+  TeacherPositionUpdate,
+  TeacherUpdate,
+  TeacherWorkloadChange,
+  WorkloadFormula,
+  WorkloadHistory,
+  AddQrCode,
+  Stats
 } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -25,6 +26,10 @@ export type AddSubjects = {
 /* APIs */
 const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
+};
+
+const getTeacherStats = async () => {
+  return await axios.get<Stats>("/teacher/stats");
 };
 
 const getTeachersSubstitutionList = async () => {
@@ -135,6 +140,14 @@ export const useTeachersList = () => {
     onError: (err: AxiosError) => err
   })
 };
+
+export const useTeacherStats = () => {
+  return useQuery({
+    queryKey: ['teacherStats'],
+    queryFn: () => getTeacherStats(),
+    onError: (err: AxiosError) => err
+  })
+}
 
 export const useTeachersNotCheckedDocList = () => {
   return useQuery({

@@ -5,8 +5,12 @@ import {SolarUserHandsBroken} from "@/icons/UserHandsBrokenIcon";
 import {SolarQrCodeBroken} from "@/icons/QrCodeIcon";
 import {SolarUserHandUpBroken} from "@/icons/UserHandUpBrokenIcon";
 import {SolarUserBlockBroken} from "@/icons/UserBlockIcon";
+import {useStudentStats} from "@/hooks/useStudents";
 
 export default function StudentStatistics() {
+
+    const { data, isError, isLoading } = useStudentStats();
+
     return (
         <div className="col-span-2 bg-white rounded-lg w-full p-5 border space-y-4">
             <div className="flex items-center justify-between">
@@ -29,7 +33,9 @@ export default function StudentStatistics() {
                             <div className="text-sm text-gray-600">Barcha o`quvchilar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">428</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.total ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -41,7 +47,9 @@ export default function StudentStatistics() {
                             <div className="text-sm text-gray-600">QR kod biriktirilganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">379</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.qrCodeAssigned ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -53,7 +61,9 @@ export default function StudentStatistics() {
                             <div className="text-sm text-gray-600">Hozirda maktabda bo`lganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">346</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.inSchool ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -65,7 +75,9 @@ export default function StudentStatistics() {
                             <div className="text-sm text-gray-600">Bugun maktabga kelmaganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">21</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.didNotCome ?? 0 }
+                    </div>
                 </div>
             </div>
         </div>

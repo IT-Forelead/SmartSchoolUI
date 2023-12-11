@@ -238,3 +238,10 @@ export type Substitution = {
   weekday: string;
   moment: number;
 };
+
+export type Stats = {
+  total: number;
+  qrCodeAssigned: number;
+  inSchool: number;
+  didNotCome: number;
+};

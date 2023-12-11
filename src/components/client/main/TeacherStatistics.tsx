@@ -4,8 +4,12 @@ import {SolarUsersGroupRoundedBroken} from "@/icons/TeacherIcon";
 import {SolarQrCodeBroken} from "@/icons/QrCodeIcon";
 import {SolarUserCheckBroken} from "@/icons/UserCheckIcon";
 import {SolarUserBlockBroken} from "@/icons/UserBlockIcon";
+import {useTeacherStats} from "@/hooks/useTeachers";
 
 export default function TeacherStatistics() {
+
+    const { data, isError, isLoading } = useTeacherStats();
+
     return (
         <div className="col-span-2 bg-white rounded-lg w-full p-5 border space-y-4">
             <div className="flex items-center justify-between">
@@ -28,7 +32,9 @@ export default function TeacherStatistics() {
                             <div className="text-sm text-gray-600">Barcha o`qituvchilar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">37</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.total ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -40,7 +46,9 @@ export default function TeacherStatistics() {
                             <div className="text-sm text-gray-600">QR kod biriktirilganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">35</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.qrCodeAssigned ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -52,7 +60,9 @@ export default function TeacherStatistics() {
                             <div className="text-sm text-gray-600">Hozirda maktabda bo`lganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">29</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.inSchool ?? 0 }
+                    </div>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
                     <div className="flex items-center space-x-2">
@@ -64,7 +74,9 @@ export default function TeacherStatistics() {
                             <div className="text-sm text-gray-600">Bugun maktabga kelmaganlar soni</div>
                         </div>
                     </div>
-                    <div className="text-2xl font-bold">1</div>
+                    <div className="text-2xl font-bold">
+                        { data?.data?.didNotCome ?? 0 }
+                    </div>
                 </div>
             </div>
         </div>

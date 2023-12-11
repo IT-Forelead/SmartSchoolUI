@@ -98,6 +98,7 @@ export default function TargetLesson() {
         } else return;
     }, [isSuccess, error]);
     const image = null;
+
     return (
         <Dialog>
             <DialogTrigger>
@@ -133,9 +134,10 @@ export default function TargetLesson() {
                                 </div>
                             )}
 
+
                             <div className="w-full grid space-y-3 mb-3">
                                 <div className="flex items-center w-full space-x-2">
-                                    <div className="text-base font-semibold text-gray-500">
+                                    <div className="w-16 text-base font-semibold text-gray-500">
                                         F.I.SH:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">
@@ -148,8 +150,8 @@ export default function TargetLesson() {
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <div className="text-base text-gray-500 whitespace-nowrap">
-                                        Birinchi fan:
+                                    <div className="w-16 text-base text-gray-500 whitespace-nowrap">
+                                        Fani:
                                     </div>
                                     <div className="w-full text-lg font-medium">
                                         <Select
@@ -179,12 +181,12 @@ export default function TargetLesson() {
                                         </Select>
                                     </div>
                                 </div>
-                                <div className="flex space-x-5">
-                                    <p className="text-base font-semibold text-gray-500">
+                                <div className="flex items-center space-x-5">
+                                    <div className="w-16 text-base font-semibold text-gray-500">
                                         Jinsi:
-                                    </p>
+                                    </div>
                                     <div className="flex items-center space-x-4">
-                                        <label className="py-2 border rounded flex items-center px-12">
+                                        <label className="py-2 rounded flex items-center px-12">
                                             <input
                                                 className="mr-2 w-5 h-5"
                                                 type="radio"
@@ -196,7 +198,7 @@ export default function TargetLesson() {
                                             />
                                             Erkak
                                         </label>
-                                        <label className="py-2 border rounded flex items-center px-12">
+                                        <label className="py-2 rounded flex items-center px-12">
                                             <input
                                                 className="mr-2 w-5 h-5"
                                                 type="radio"
@@ -212,7 +214,7 @@ export default function TargetLesson() {
                                 </div>
 
                                 <div className="flex items-center w-full space-x-2">
-                                    <div className="text-base font-semibold text-gray-500">
+                                    <div className="w-16 text-base font-semibold text-gray-500">
                                         Telefon:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">

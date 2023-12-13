@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     Command,
     CommandEmpty,
@@ -28,82 +28,80 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useGroupsList } from "@/hooks/useGroups";
-import { notifyError, notifySuccess } from "@/lib/notify";
-import { cn } from "@/lib/utils";
-import { Group, Teacher } from "@/models/common.interface";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { SolarAddCircleBroken } from "@/icons/PlusIcon";
+import {useGroupsList} from "@/hooks/useGroups";
+import {notifyError, notifySuccess} from "@/lib/notify";
+import {cn} from "@/lib/utils";
+import {CreateTeacher, Group, Teacher} from "@/models/common.interface";
+import {Check, ChevronsUpDown, Loader2} from "lucide-react";
+import {useEffect, useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {SolarAddCircleBroken} from "@/icons/PlusIcon";
 import Image from "next/image";
-import { SolarUserBroken } from "@/icons/UserIcon";
-import { Input } from "@/components/ui/input";
+import {SolarUserBroken} from "@/icons/UserIcon";
+import {Input} from "@/components/ui/input";
 import * as React from "react";
-import { useCreateTeacher } from "@/hooks/useTeachers";
-import { useSubjectsList } from "@/hooks/useSubjects";
+import {useCreateTeacher, useTeachersList} from "@/hooks/useTeachers";
+import {useSubjectsList} from "@/hooks/useSubjects";
 
 export default function TargetLesson() {
+    const image = null;
     const subjectsResponse = useSubjectsList();
     const subjects = subjectsResponse?.data?.data;
-
-    const groupResponse = useGroupsList();
-    const groups = groupResponse?.data?.data || [];
-    const [openGroup, setOpenGroup] = useState(false);
-    const [selectedGroup, setSelectedGroup] = useState<Group>();
-    const { register, handleSubmit, reset } = useForm<Teacher>();
-    const {
-        mutate: createTeacher,
-        isSuccess,
-        error,
-        isLoading,
-    } = useCreateTeacher();
+    const [openModal, setOpenModal] = useState(false)
+    const {register, handleSubmit, reset} = useForm<CreateTeacher>();
+    const {refetch} = useTeachersList();
+    const {mutate: createTeacher, isSuccess, error, isLoading,} = useCreateTeacher();
     const [gender, setGender] = useState<string>("");
-
-    const onSubmit: SubmitHandler<Teacher> = (data) => {
+    const onSubmit: SubmitHandler<CreateTeacher> = (data) => {
         // @ts-ignore
         data.gender = gender;
         data.citizenship = "uzbekistan";
         data.nationality = "uzbek";
+        data.subjectName = subjectIdsList.map(id => getSubjectNameById(id)).join('');
         if (!data.fullName) {
             notifyError("Iltimos o`qituvchini ism familiyasini kiriting!");
         } else {
             createTeacher(data);
+            reset()
+            setOpenModal(false);
         }
     };
-
+    const getSubjectNameById = (id: string) => {
+        const selectedSubject = subjects?.find(subject => subject.id === id);
+        return selectedSubject?.name || '';
+    };
     const [subjectIdsList, setSubjectIdsList] = useState<string[]>([])
 
     function getSelectData(order: number, sv: string) {
         if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
-          setSubjectIdsList([...subjectIdsList, sv])
+            setSubjectIdsList([...subjectIdsList, sv]);
         } else {
-          subjectIdsList[order] = sv
-          setSubjectIdsList(subjectIdsList)
+            subjectIdsList[order] = sv;
+            setSubjectIdsList(subjectIdsList);
         }
-      }
+    }
 
     useEffect(() => {
+        refetch()
         if (isSuccess) {
             notifySuccess("O`qituvchi qo`shildi");
         } else if (error) {
             if (error?.response?.data) {
                 notifyError(
                     (error?.response?.data as string) ||
-                        "O`qituvchi qo'shishda muammo yuzaga keldi"
+                    "O`qituvchi qo'shishda muammo yuzaga keldi"
                 );
             } else {
                 notifyError("O`qituvchi qo'shishda muammo yuzaga keldi");
             }
         } else return;
     }, [isSuccess, error]);
-    const image = null;
 
     return (
-        <Dialog>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger>
                 <Button className="bg-blue-700 hover:bg-blue-900 mx-2">
-                    <SolarAddCircleBroken className="w-6 h-6 mr-2" />
+                    <SolarAddCircleBroken className="w-6 h-6 mr-2"/>
                     O`qituvchi qo'shish
                 </Button>
             </DialogTrigger>
@@ -130,7 +128,7 @@ export default function TargetLesson() {
                                 </div>
                             ) : (
                                 <div>
-                                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5"/>
                                 </div>
                             )}
 
@@ -160,12 +158,12 @@ export default function TargetLesson() {
                                             }
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Fanlar..." />
+                                                <SelectValue placeholder="Fanlar..."/>
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup className="overflow-auto h-52">
                                                     {subjects?.map(
-                                                        ({ name, id }) => {
+                                                        ({name, id}) => {
                                                             return (
                                                                 <SelectItem
                                                                     key={id}

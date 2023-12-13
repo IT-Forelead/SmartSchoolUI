@@ -12,7 +12,7 @@ import {
   WorkloadFormula,
   WorkloadHistory,
   AddQrCode,
-  Stats
+  Stats, CreateTeacher
 } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ export type AddSubjects = {
 }
 
 /* APIs */
-const createTeacher = async (data: Teacher) => {
+const createTeacher = async (data: CreateTeacher) => {
   return await axios.post<Teacher[]>(`/teacher`, data);
 };
 
@@ -238,7 +238,7 @@ export const useUpdateTeacherPosition = () => {
 
 export const useCreateTeacher = () => {
   return useMutation({
-      mutationFn: (data: Teacher) => createTeacher(data),
+      mutationFn: (data: CreateTeacher) => createTeacher(data),
       onError: (err: AxiosError) => err
   })
 };

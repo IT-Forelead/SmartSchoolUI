@@ -76,7 +76,15 @@ export const columns = (
 export default function VisitsPage() {
   const currentUser = useUserInfo();
   const router = useRouter();
-
+  const hasAdminOrVisitMonitoringRole =
+      currentUser?.User?.role?.includes("admin") ||
+      currentUser?.User?.role?.includes("visit_monitoring");
+  useEffect(() => {
+    // If the user doesn't have admin or visit-monitoring role, redirect to denied page
+    if (!hasAdminOrVisitMonitoringRole) {
+      router.push("/dashboard/denied");
+    }
+  }, [hasAdminOrVisitMonitoringRole, router]);
   function showCertificates(mode: string, visit: Visit) {
     setVisit(visit);
   }
@@ -115,11 +123,6 @@ export default function VisitsPage() {
     }
   }, [lastJsonMessage, setVisitHistoryInWebSocket]);
 
-  useEffect(() => {
-    if (!currentUser?.User?.role?.includes("admin")) {
-      router.push("/dashboard/denied");
-    }
-  }, [currentUser?.User?.role, router]);
   const [visit, setVisit] = useState<Visit | null>(null);
 
   const [open, setOpen] = useState<boolean>(false);

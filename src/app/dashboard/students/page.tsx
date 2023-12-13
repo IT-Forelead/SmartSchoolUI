@@ -50,6 +50,7 @@ import {useRouter} from "next/navigation"
 import {SubmitHandler, useForm} from "react-hook-form"
 import {Dispatch, SetStateAction, useEffect, useState} from "react"
 import useWebSocket from "react-use-websocket";
+import CreateStudent from "@/components/client/students/CreateStudent";
 
 const getGroupNameAndLevel = (group: { name: any; level: any }) => {
     if (group && group.name && group.level) {
@@ -454,6 +455,7 @@ export default function StudentsPage() {
                             return table.getColumn("fullName")?.setFilterValue(event.target.value)
                         }}
                     />
+                    <CreateStudent/>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">

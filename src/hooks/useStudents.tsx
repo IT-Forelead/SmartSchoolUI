@@ -13,6 +13,10 @@ const getStudentsList = async () => {
     return await axios.get<Student[]>("/student", {});
 };
 
+const createStudent = async (data: Student) => {
+    return await axios.post<Student[]>(`/student`, data);
+};
+
 const getStudentStats = async () => {
     return await axios.get<Stats>("/student/stats", {});
 };
@@ -34,6 +38,13 @@ export const useStudentsList = () => {
     return useQuery({
         queryKey: ['students'],
         queryFn: () => getStudentsList(),
+        onError: (err: AxiosError) => err
+    })
+};
+
+export const useCreateStudent = () => {
+    return useMutation({
+        mutationFn: (data: Student) => createStudent(data),
         onError: (err: AxiosError) => err
     })
 };

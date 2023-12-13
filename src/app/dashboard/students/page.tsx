@@ -17,8 +17,7 @@ import {
     ChevronDown,
     EyeIcon,
     PencilIcon,
-    QrCodeIcon,
-    TrashIcon
+    QrCodeIcon
 } from "lucide-react"
 import * as React from "react"
 import Loader from "@/components/client/Loader"
@@ -39,7 +38,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {useAddQrcodeToStudent, useEditStudent, useStudentsList} from "@/hooks/useStudents"
+import {useAddQrcodeToStudent, useDeleteBarCodeStudent, useEditStudent, useStudentsList} from "@/hooks/useStudents"
 import useUserInfo from "@/hooks/useUserInfo"
 import {SolarCheckCircleBroken} from "@/icons/ApproveIcon"
 import {SolarUserBroken} from "@/icons/UserIcon"
@@ -107,50 +106,32 @@ export const columns = (setStudent: Dispatch<SetStateAction<Student | null>>, sh
             const student = row.original
             return (
                 <div className="flex items-center">
-                    <Button
-                        variant="ghost"
-                        className="text-green-600"
-                    >
-                        <DialogTrigger className="flex items-center" onClick={() => showStudents('show', student)}>
+                    {student.barcode ?
+                        <Button variant="ghost">
+                            <DialogTrigger onClick={() => showStudents('qrcode', student)}>
+                                <QrCodeIcon className="w-5 h-5 text-blue-600"/>
+                            </DialogTrigger>
+                        </Button> : <Button variant="ghost">
+                            <DialogTrigger onClick={() => showStudents('qrcode', student)}>
+                                <QrCodeIcon className="w-5 h-5 text-red-600"/>
+                            </DialogTrigger>
+                        </Button>
+                    }
+                    <Button variant="ghost">
+                        <DialogTrigger onClick={() => showStudents('show', student)}>
                             <EyeIcon className="text-green-600 w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    <Button
-                        variant="ghost"
-                        className="text-blue-600"
-                    >
-                        <DialogTrigger className="flex items-center" onClick={() => showStudents('update', student)}>
+                    <Button variant="ghost">
+                        <DialogTrigger onClick={() => showStudents('update', student)}>
                             <PencilIcon className="text-blue-600 w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    <Button
-                        variant="ghost"
-                        className="text-red-600"
-                    >
-                        <DialogTrigger className="text-red-600" onClick={() => showStudents('delete', student)}>
-                            <TrashIcon className="w-5 h-5"/>
+                    <Button variant="ghost">
+                        <DialogTrigger onClick={() => showStudents('qr-delete', student)}>
+                            <QrCodeIcon className="text-red-900 w-5 h-5"/>
                         </DialogTrigger>
                     </Button>
-                    {student.barcode ? (
-                        <Button
-                            variant="ghost"
-                            className="text-indigo-600"
-                        >
-                            <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="w-5 h-5 text-green-600"/>
-                            </DialogTrigger>
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="ghost"
-                            className="text-indigo-600"
-                        >
-                            <DialogTrigger className="flex items-center" onClick={() => showStudents('qrcode', student)}>
-                                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600"/>
-                            </DialogTrigger>
-                        </Button>
-                    )
-                    }
                 </div>
             )
         },
@@ -178,37 +159,48 @@ export default function StudentsPage() {
     }, [currentUser?.User?.role, router])
     const [student, setStudent] = useState<Student | null>(null)
     const [mode, setMode] = useState<string>('')
-    const [open, setOpen] = useState<boolean>(false);
-    const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false)
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
-    const [pagination, setPageSize] = useState<number>(40)
     const {mutate: editStudent, isSuccess, error} = useEditStudent();
     const {mutate: addQrCodeToStudent, isSuccess: isSuccessAddQrcode, error: addCrcodeError} = useAddQrcodeToStudent();
     const {register, handleSubmit, reset} = useForm<StudentUpdate>();
     const {register: qrCodeRegister, handleSubmit: qrCodeHandleSubmit, setValue, getValues} = useForm<AddQrCode>();
+    const {mutate: deleteBarcode, isSuccess: isSuccessDeleteBarcode, error: deleteBarcodeError} = useDeleteBarCodeStudent();
+
+    useEffect(() => {
+        if (isSuccessDeleteBarcode) {
+            notifySuccess("O`quvchining QR-kodi o'chirildi")
+            refetch()
+            setOpen(false)
+        } else if (deleteBarcodeError) {
+            notifyError("QR-kodni o`chirishda muammo yuzaga keldi")
+        } else return;
+    }, [isSuccessDeleteBarcode, deleteBarcodeError]);
 
     useEffect(() => {
         reset({...student})
     }, [reset, student])
 
     useEffect(() => {
-      if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
-        setValue("barcodeId", lastJsonMessage?.data ?? "")
-      }
+        if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
+            setValue("qrcodeId", lastJsonMessage?.data ?? "")
+        }
     }, [lastJsonMessage])
 
     useEffect(() => {
-        setValue("personId", student?.id ?? "")
-    }, [getValues("barcodeId")])
+        if (mode === 'qrcode') {
+            setValue("personId", student?.id ?? "")
+        }
+    }, [mode])
 
     useEffect(() => {
         if (isSuccessAddQrcode) {
             notifySuccess("Qr kod qo'shildi!")
             setValue("personId", "")
-            setValue("barcodeId", "")
+            setValue("qrcodeId", "")
             refetch()
             setOpen(false)
         } else if (addCrcodeError) {
@@ -254,14 +246,21 @@ export default function StudentsPage() {
         return <Loader/>
     }
     const image = null
+    const deleteStudentBarCode = async (data: string | undefined) => {
+        // @ts-ignore
+        deleteBarcode(data)
+        console.log(data)
+        setOpen(false)
+    };
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
                 <DialogHeader>
-                    {mode?.includes('show') ?
-                        <DialogTitle>O`quvchi ma`lumotlari</DialogTitle> : mode?.includes('qrcode') ?
-                            <DialogTitle>O`quvchiga QR kod biriktirish</DialogTitle> : mode?.includes('update') ?
-                                <DialogTitle>O`quvchini tahrirlash</DialogTitle> : mode?.includes('delete')
+                    {mode?.includes('show') ? <DialogTitle>O`quvchi ma`lumotlari</DialogTitle> :
+                        mode?.includes('qrcode') ? <DialogTitle>O`quvchiga QR kod biriktirish</DialogTitle> :
+                            mode?.includes('qr-delete') ? <DialogTitle>O`quvchi QR kodini o`chirish</DialogTitle> :
+                                mode?.includes('update') ? <DialogTitle>O`quvchini tahrirlash</DialogTitle> :
+                                    ""
                     }
                 </DialogHeader>
                 {mode?.includes('show') ?
@@ -375,14 +374,16 @@ export default function StudentsPage() {
                             <div className="flex items-center space-x-2">
                                 {student?.barcode ? (
                                     <>
-                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/><h1 className="flex w-full p-2 border-2">{student.barcode}</h1>
+                                        <QrCodeIcon className="w-8 h-8 text-gray-500"/>
+                                        <h1 className="flex w-full p-2 border-2">{student.barcode}</h1>
                                     </>
                                 ) : (
                                     <>
                                         <QrCodeIcon className="w-8 h-8 text-gray-500"/>
                                         <Input
                                             className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case"
-                                            placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", {required: true})} disabled/>
+                                            placeholder="QR kodni skanerlang..." {...qrCodeRegister("qrcodeId", {required: true})}
+                                            disabled/>
                                     </>
                                 )}
                             </div>
@@ -393,43 +394,54 @@ export default function StudentsPage() {
                                 </Button>
                             </div>
                         </div>
-                    </form> : <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="w-full space-y-4 bg-white rounded">
-                            <div className="flex items-start space-x-4">
-                                {
-                                    image ?
-                                        <div>
-                                            <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                                                   className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"/>
-                                        </div> :
-                                        <div>
-                                            <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5"/>
+                    </form> : mode?.includes('qr-delete') ?
+                        <div className="px-4 py-2">
+                            <p>Haqiqatdan ham QR-kodni o‘chirib tashlamoqchimisiz?</p>
+                            <div className="flex items-center justify-end mt-4 space-x-4">
+                                <Button onClick={() => setOpen(false)} variant="outline">Cancel</Button>
+                                <Button onClick={() => deleteStudentBarCode(student?.barcode)}
+                                        className="bg-red-600 text-white hover:bg-red-700">Delete</Button>
+                            </div>
+                        </div>
+                        : <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="w-full space-y-4 bg-white rounded">
+                                <div className="flex items-start space-x-4">
+                                    {
+                                        image ?
+                                            <div>
+                                                <Image src="/public/test.png" alt="teacher image" width={100} height={100}
+                                                       className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"/>
+                                            </div> :
+                                            <div>
+                                                <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5"/>
+                                            </div>
+                                    }
+
+                                    <div className="w-full space-y-3">
+                                        <div className="flex items-center w-full space-x-2">
+                                            <div className="text-base text-gray-500">
+                                                F.I.SH:
+                                            </div>
+                                            <div className="w-full text-lg font-medium capitalize">
+                                                <Input type="text"
+                                                       className="w-full" {...register("fullName", {required: false})} />
+                                            </div>
                                         </div>
-                                }
-                                <div className="w-full space-y-3">
-                                    <div className="flex items-center w-full space-x-2">
-                                        <div className="text-base text-gray-500">
-                                            F.I.SH:
-                                        </div>
-                                        <div className="w-full text-lg font-medium capitalize">
-                                            <Input type="text" className="w-full" {...register("fullName", {required: false})} />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <div className="text-base text-gray-500">
-                                            Telefon:
-                                        </div>
-                                        <div className="w-full text-lg font-medium capitalize">
-                                            <Input className="w-full" {...register("parentPhone", {required: false})} />
+                                        <div className="flex items-center space-x-2">
+                                            <div className="text-base text-gray-500">
+                                                Telefon:
+                                            </div>
+                                            <div className="w-full text-lg font-medium capitalize">
+                                                <Input className="w-full" {...register("parentPhone", {required: false})} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex items-center justify-end">
-                            <Button autoFocus={true}>Saqlash</Button>
-                        </div>
-                    </form>
+                            <div className="flex items-center justify-end">
+                                <Button autoFocus={true}>Saqlash</Button>
+                            </div>
+                        </form>
                 }
             </DialogContent>
             <div className="w-full p-5">
@@ -473,7 +485,7 @@ export default function StudentsPage() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} >
+                                <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead key={header.id}>

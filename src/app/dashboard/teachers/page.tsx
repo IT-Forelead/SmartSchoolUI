@@ -17,14 +17,12 @@ import {
   ChevronDown,
   EyeIcon,
   Loader2,
-  MoreHorizontal,
   PencilIcon,
   PlusCircleIcon,
   QrCodeIcon,
   TrashIcon
 } from "lucide-react"
 import * as React from "react"
-
 import Loader from "@/components/client/Loader"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -32,13 +30,17 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { 
+  Select, 
+  SelectContent, 
+  SelectGroup, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -48,7 +50,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSubjectsList } from "@/hooks/useSubjects"
-import { addSubjectToTeacherFunc, useAddQrcodeToTeacher, approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList } from "@/hooks/useTeachers"
+import { 
+  addSubjectToTeacherFunc, 
+  useAddQrcodeToTeacher, 
+  approveTeacherDocAsAdmin, 
+  useDegreesList, 
+  useEditTeacher, 
+  useTeachersList 
+} from "@/hooks/useTeachers"
 import useUserInfo from "@/hooks/useUserInfo"
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
 import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
@@ -142,62 +151,40 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
     enableHiding: false,
     cell: ({ row }) => {
       const teacher = row.original
-
       return (
         <div className="flex items-center">
-          <Button
-              variant="ghost"
-              className="text-indigo-600"
-          >
+          <Button variant="ghost">
             <DialogTrigger className="flex items-center" onClick={() => showCertificates('subject', teacher)}>
               <PlusCircleIcon className="text-indigo-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
-          <Button
-              variant="ghost"
-              className="text-indigo-600"
-          >
+          <Button variant="ghost">
             <DialogTrigger className="flex items-center" onClick={() => showCertificates('show', teacher)}>
               <EyeIcon className="text-green-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
-          <Button
-              variant="ghost"
-              className="text-indigo-600"
-          >
+          <Button variant="ghost">
             <DialogTrigger className="flex items-center" onClick={() => showCertificates('update', teacher)}>
               <PencilIcon className="text-blue-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
-          <Button
-              variant="ghost"
-              className="text-indigo-600"
-          >
+          <Button variant="ghost">
             <DialogTrigger className="text-red-600" onClick={() => showCertificates('delete', teacher)}>
               <TrashIcon className="w-5 h-5" />
             </DialogTrigger>
           </Button>
           { teacher.barcode ? (
-              // Green icon if assigned
-                  <Button
-                      variant="ghost"
-                      className="text-indigo-600"
-                  >
-                    <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
-                      <QrCodeIcon className="w-5 h-5 text-green-600" />
-                    </DialogTrigger>
-                  </Button>
+            <Button variant="ghost">
+              <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+                <QrCodeIcon className="w-5 h-5 text-blue-600" />
+              </DialogTrigger>
+            </Button>
           ) : (
-              // Red icon if not assigned
-              <Button
-                  variant="ghost"
-                  className="text-indigo-600"
-              >
-                <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
-                  <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
-                </DialogTrigger>
-              </Button>
-
+            <Button variant="ghost">
+              <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
+              </DialogTrigger>
+            </Button>
           )
           }
         </div>
@@ -302,7 +289,7 @@ export default function TeachersPage() {
 
   useEffect(() => {
     if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("barcodeId", lastJsonMessage?.data ?? "")
+      setValue("qrcodeId", lastJsonMessage?.data ?? "")
     }
   }, [lastJsonMessage])
 
@@ -316,14 +303,16 @@ export default function TeachersPage() {
   }
 
   useEffect(() => {
-    setValue("personId", teacher?.id ?? "")
-  }, [getValues("barcodeId")])
+    if (mode === 'qrcode') {
+      setValue("personId", teacher?.id ?? "")
+    }
+  }, [mode])
 
   useEffect(() => {
     if (isSuccessAddQrcode) {
       notifySuccess("Qr kod qo'shildi!")
       setValue("personId", "")
-      setValue("barcodeId", "")
+      setValue("qrcodeId", "")
       refetch()
       setOpen(false)
     } else if (addCrcodeError) {
@@ -615,7 +604,7 @@ export default function TeachersPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("barcodeId", { required: true })}  disabled />
+                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("qrcodeId", { required: true })}  disabled />
                 </div>
                 <div className="flex items-center justify-end">
                   <Button autoFocus={true}>

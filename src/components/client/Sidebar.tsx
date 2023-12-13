@@ -10,6 +10,7 @@ import { SolarSquareTransferHorizontalBroken } from '@/icons/SwitchIcon'
 import { SolarClockSquareBroken } from '@/icons/TeacherHourIcon'
 import { SolarUsersGroupRoundedBroken } from '@/icons/TeacherIcon'
 import { SolarWindowFrameBroken } from '@/icons/TimeTable'
+import { SolarHome2Broken } from '@/icons/HomeIcon'
 import { SolarUserBroken } from '@/icons/UserIcon'
 import { SolarUserCheckBroken } from '@/icons/UserCheckIcon'
 import Link from 'next/link'
@@ -27,6 +28,10 @@ export default function Sidebar() {
       </h1>
       <div className='max-h-[80vh] mt-10 overflow-auto'>
         <div className='font-medium space-y-7'>
+          <Link href={'/dashboard'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard' ? "text-gray-900 font-semibold" : ''}`}>
+            <SolarHome2Broken className='w-6 h-6 mr-3' />
+            <p>Bosh sahifa</p>
+          </Link>
           <Link href={'/dashboard/last-visits'} className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${path === '/dashboard/last-visits' ? "text-gray-900 font-semibold" : ''}`}>
             <SolarUserCheckBroken className='w-6 h-6 mr-3' />
             <p>So`ngi tashriflar</p>
@@ -86,8 +91,8 @@ export default function Sidebar() {
         }
       </div>
       <div className='absolute text-sm text-center text-gray-500 -translate-x-1/2 left-1/2 bottom-5 whitespace-nowrap'>
-        Developed by <a href="http://it-forelead.uz" target='_blank' className="font-semibold hover:underline hover:text-blue-600">IT-Forelead</a>
-        <p className='text-xs'>2022-{new Date().getFullYear()}</p>
+        &copy; <a href="http://it-forelead.uz" target='_blank' className="font-semibold hover:underline hover:text-blue-600">IT-Forelead</a>  2021-{new Date().getFullYear()}
+        <p className='text-xs'>All Rights Reserved.</p>
       </div>
     </div>
   )

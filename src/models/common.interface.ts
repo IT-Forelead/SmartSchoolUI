@@ -167,7 +167,7 @@ export type TeacherUpdate = {
 
 export type AddQrCode = {
   personId: string;
-  barcodeId: string;
+  qrcodeId: string;
 };
 
 export type Approve = {
@@ -237,4 +237,11 @@ export type Substitution = {
   groupId: string;
   weekday: string;
   moment: number;
+};
+
+export type Stats = {
+  total: number;
+  qrCodeAssigned: number;
+  inSchool: number;
+  didNotCome: number;
 };

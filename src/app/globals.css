@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* Scrollbar Style */
-::-webkit-scrollbar {
-  width: 7px;
-}
+/*::-webkit-scrollbar {*/
+/*  width: 7px;*/
+/*}*/
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
@@ -13,11 +13,11 @@
   -webkit-border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #000;
-  -webkit-border-radius: 10px;
-}
+/*::-webkit-scrollbar-thumb {*/
+/*  border-radius: 10px;*/
+/*  background: #000;*/
+/*  -webkit-border-radius: 10px;*/
+/*}*/
 
 .swiper-pagination-bullet {
     width: 100px !important;

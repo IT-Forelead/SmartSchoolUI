@@ -15,6 +15,7 @@ import {
 import * as React from "react";
 import Loader from "@/components/client/Loader";
 import { Dialog } from "@/components/ui/dialog";
+import { SolarUserBroken } from "@/icons/UserIcon"
 import {
   Table,
   TableBody,
@@ -52,9 +53,7 @@ export const columns = (
     accessorKey: "createdAt",
     header: "Tashrif vaqti",
     cell: ({ row }) => (
-      <div className="capitalize">
-        {dateFormatter(row.getValue("createdAt"))}
-      </div>
+      <div>{ dateFormatter(row.getValue("createdAt")) }</div>
     ),
   },
   {
@@ -62,10 +61,10 @@ export const columns = (
     header: "Tashrif turi",
     cell: ({ row }) => (
       <div
-        className={`py-1 px-3 text-sm uppercase inline-block text-black rounded-full ${
+        className={`py-1 px-3 text-sm capitalize inline-block text-black rounded-full ${
           row.getValue("visitType") === "come_in"
-            ? "bg-green-300"
-            : "bg-red-300"
+            ? "bg-green-600 text-white"
+            : "bg-red-600 text-white"
         }`}
       >
         {translateVisitType(row.getValue("visitType"))}
@@ -77,7 +76,15 @@ export const columns = (
 export default function VisitsPage() {
   const currentUser = useUserInfo();
   const router = useRouter();
-
+  const hasAdminOrVisitMonitoringRole =
+      currentUser?.User?.role?.includes("admin") ||
+      currentUser?.User?.role?.includes("visit_monitoring");
+  useEffect(() => {
+    // If the user doesn't have admin or visit-monitoring role, redirect to denied page
+    if (!hasAdminOrVisitMonitoringRole) {
+      router.push("/dashboard/denied");
+    }
+  }, [hasAdminOrVisitMonitoringRole, router]);
   function showCertificates(mode: string, visit: Visit) {
     setVisit(visit);
   }
@@ -87,24 +94,35 @@ export default function VisitsPage() {
   const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([])
   const { lastJsonMessage } = useWebSocket(socketUrl)
 
+  function makeBlob(base64String: string) {
+    const [contentType, dataPart] = base64String.split(';base64,');
+    // Convert base64 to binary
+    const binaryString = atob(dataPart);
+
+    // Create a Uint8Array from the binary string
+    const dataArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        dataArray[i] = binaryString.charCodeAt(i);
+    }
+
+    // Create a Blob with the data and specify the MIME type (e.g., image/png)
+    return new Blob([dataArray], { type: contentType.replace(/^data:/, '')});
+  }
+
   useEffect(() => {
     if (lastJsonMessage !== null) {
       setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
-      if (lastJsonMessage?.personId !== "") {
+      if (lastJsonMessage?.kind === "visit" && webcamRef.current && webcamRef.current.stream) {
         const imageSrc = webcamRef.current.getScreenshot()
-        updateVisit({
-          id: lastJsonMessage?.personId ?? "",
-          filename: imageSrc ?? ""
-        })
+        const form = new FormData();
+        form.append('file', makeBlob(imageSrc));
+        updateVisit(lastJsonMessage?.data?.id, form)
+      } else {
+        console.log("webcam is not working...");
       }
     }
   }, [lastJsonMessage, setVisitHistoryInWebSocket]);
 
-  useEffect(() => {
-    if (!currentUser?.User?.role?.includes("admin")) {
-      router.push("/dashboard/denied");
-    }
-  }, [currentUser?.User?.role, router]);
   const [visit, setVisit] = useState<Visit | null>(null);
 
   const [open, setOpen] = useState<boolean>(false);
@@ -150,25 +168,40 @@ export default function VisitsPage() {
               height={720}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
+              screenshotQuality={1}
+              forceScreenshotSourceSize={true}
               width={1280}
             />
           </div>
           {visitHistoryInWebSocket.slice(-3).map((message, idx) => (
             message?.kind === "visit" ? 
             <div key={idx} className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md">
-              <img
-                src={`http://localhost:8000/asset/view/${message?.data?.assetId}`}
-                alt="Visitor picture"
-                className="rounded-md h-20 w-20"
-              />
-              <div className="space-y-1">
-                <div className="text-lg font-medium">{message?.data?.assetId}</div>
+              <div className="rounded-lg border p-1.5">
+                <SolarUserBroken className="w-20 h-20 text-gray-500" />
+              </div>
+              <div className="space-y-1 space-x-1">
+                <div className="text-lg font-medium">{message?.data?.fullName}</div>
                 <div className="text-base">
                   {dateFormatter(message?.data?.createdAt)}
                 </div>
-                <div className="inline-block px-8 py-0.5 text-sm uppercase rounded-full bg-green-300 text-center">
+                <div className={`inline-block px-4 py-0.5 text-sm capitalize rounded-full ${
+                    message?.data?.label === "teacher" ? "bg-blue-600 text-white" :
+                        message?.data?.label === "student" ? "bg-yellow-600 text-white" :
+                            "bg-gray-600 text-white"
+                } text-center`}>
+                  {message?.data?.label === "teacher"
+                      ? "O'qituvchi"
+                      : message?.data?.label === "student"
+                          ? "O'quvchi"
+                          : "Hodim"}
+                </div>
+                <div className={`inline-block px-8 py-0.5 text-sm capitalize rounded-full ${
+                    message?.data?.visitType === "come_in" ? "bg-green-600 text-white" :
+                        "bg-red-600 text-white"
+                } text-center`}>
                   {translateVisitType(message?.data?.visitType)}
                 </div>
+
               </div>
             </div> : <div key={idx} className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md">
               <div className="flex items-center justify-center bg-gray-200 rounded-md p-2">

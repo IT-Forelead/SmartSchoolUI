@@ -82,9 +82,16 @@ export default function TargetLesson() {
     }
 
     useEffect(() => {
+      if (!openModal) {
+        reset()
+      }
+    })
+
+    useEffect(() => {
         refetch()
         if (isSuccess) {
             notifySuccess("O`qituvchi qo`shildi");
+            setOpenModal(false)
         } else if (error) {
             if (error?.response?.data) {
                 notifyError(

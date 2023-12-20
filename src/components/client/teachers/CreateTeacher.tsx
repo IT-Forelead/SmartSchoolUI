@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Command,
     CommandEmpty,
@@ -42,6 +42,7 @@ import {Input} from "@/components/ui/input";
 import * as React from "react";
 import {useCreateTeacher, useTeachersList} from "@/hooks/useTeachers";
 import {useSubjectsList} from "@/hooks/useSubjects";
+import { log } from "console";
 
 export default function TargetLesson() {
     const image = null;
@@ -60,7 +61,9 @@ export default function TargetLesson() {
         data.subjectName = subjectIdsList.map(id => getSubjectNameById(id)).join('');
         if (!data.fullName) {
             notifyError("Iltimos o`qituvchini ism familiyasini kiriting!");
-        } else {
+        } else if (!data.gender) {
+            notifyError("Iltimos o`qituvchini jinsini kiriting!");
+        } else {            
             createTeacher(data);
             reset()
             setOpenModal(false);
@@ -142,7 +145,7 @@ export default function TargetLesson() {
 
                             <div className="w-full grid space-y-3 mb-3">
                                 <div className="flex items-center w-full space-x-2">
-                                    <div className="w-16 text-base font-semibold text-gray-500">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
                                         F.I.SH:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">
@@ -154,8 +157,20 @@ export default function TargetLesson() {
                                         />
                                     </div>
                                 </div>
+                                {/* <div className="flex items-center w-full space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
+                                        Date of birth:
+                                    </div>
+                                    <div className="w-full text-lg font-medium capitalize">
+                                        <Input
+                                            type="date"
+                                            className="w-full"
+                                            {...register("dateOfBirth")}
+                                        />
+                                    </div>
+                                </div> */}
                                 <div className="flex items-center space-x-2">
-                                    <div className="w-16 text-base text-gray-500 whitespace-nowrap">
+                                    <div className="w-24 text-base text-gray-500 whitespace-nowrap">
                                         Fani:
                                     </div>
                                     <div className="w-full text-lg font-medium">
@@ -186,12 +201,12 @@ export default function TargetLesson() {
                                         </Select>
                                     </div>
                                 </div>
-                                <div className="flex items-center space-x-5">
-                                    <div className="w-16 text-base font-semibold text-gray-500">
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
                                         Jinsi:
                                     </div>
-                                    <div className="flex items-center space-x-4">
-                                        <label className="py-2 rounded flex items-center px-12">
+                                    <div className="flex space-x-4">
+                                        <label className="py-2 rounded flex items-center">
                                             <input
                                                 className="mr-2 w-5 h-5"
                                                 type="radio"
@@ -217,9 +232,57 @@ export default function TargetLesson() {
                                         </label>
                                     </div>
                                 </div>
-
+                                {/* <div className="flex items-center w-full space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
+                                        Document Type:
+                                    </div>
+                                    <div className="w-full text-lg font-medium capitalize">
+                                        <Input
+                                            type="text"
+                                            className="w-full"
+                                            {...register("documentType")}
+                                        />
+                                    </div>
+                                </div>
                                 <div className="flex items-center w-full space-x-2">
-                                    <div className="w-16 text-base font-semibold text-gray-500">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
+                                        Document Series:
+                                    </div>
+                                    <div className="w-full text-lg font-medium capitalize">
+                                        <Input
+                                            type="text"
+                                            className="w-full"
+                                            {...register("documentSeries")}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex items-center w-full space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
+                                        Document Number:
+                                    </div>
+                                    <div className="w-full text-lg font-medium capitalize">
+                                        <Input
+                                            type="text"
+                                            className="w-full"
+                                            {...register("documentNumber")}
+                                        />
+                                    </div>
+                                </div> */}
+
+                                {/* <div className="flex items-center w-full space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
+                                        Pnfl:
+                                    </div>
+                                    <div className="w-full text-lg font-medium capitalize">
+                                        <Input
+                                            type="text"
+                                            className="w-full"
+                                            {...register("pnfl")}
+                                        />
+                                    </div>
+                                </div> */}
+                                <div className="flex items-center w-full space-x-2">
+                                    <div className="w-24 text-base font-semibold text-gray-500">
                                         Telefon:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">

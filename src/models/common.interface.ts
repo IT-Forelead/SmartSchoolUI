@@ -55,6 +55,11 @@ export type UpdateVisit = {
 };
 
 export type CreateTeacher = {
+    // documentType: string,
+    // documentSeries: string,
+    // documentNumber: string,
+    // pnfl: string,
+    // dateOfBirth: string,
     gender: string,
     fullName: string,
     nationality: string,

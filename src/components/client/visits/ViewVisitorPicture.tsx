@@ -28,7 +28,7 @@ export default function ViewVisitorPicture({ assetId }: ViewVisitorPictureProps)
             <DialogTitle>Tashrif buyuruvchi rasmi</DialogTitle>
           </DialogHeader>
           <img
-              src={`http://25-school.uz/school/api/v1/asset/view/${assetId}`}
+              src={`https://25-school.uz/school/api/v1/asset/view/${assetId}`}
               alt="Visitor picture"
               className="w-full h-[500px] rounded"
           />

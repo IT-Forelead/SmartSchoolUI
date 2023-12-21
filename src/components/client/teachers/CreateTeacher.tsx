@@ -1,5 +1,5 @@
 "use client";
-
+import moment from "moment";
 import { Button } from "@/components/ui/button";
 import {
     Command,
@@ -44,6 +44,7 @@ import {useCreateTeacher, useTeachersList} from "@/hooks/useTeachers";
 import {useSubjectsList} from "@/hooks/useSubjects";
 import { log } from "console";
 
+
 export default function TargetLesson() {
     const image = null;
     const subjectsResponse = useSubjectsList();
@@ -58,6 +59,8 @@ export default function TargetLesson() {
         data.gender = gender;
         data.citizenship = "uzbekistan";
         data.nationality = "uzbek";
+        data.documentType = "passport";
+        data.dateOfBirth = moment(data.dateOfBirth, 'yyyy-MM-DD').format("DD.MM.yyyy");
         data.subjectName = subjectIdsList.map(id => getSubjectNameById(id)).join('');
         if (!data.fullName) {
             notifyError("Iltimos o`qituvchini ism familiyasini kiriting!");
@@ -65,8 +68,9 @@ export default function TargetLesson() {
             notifyError("Iltimos o`qituvchini jinsini kiriting!");
         } else {            
             createTeacher(data);
-            reset()
             setOpenModal(false);
+            setSubjectIdsList([])
+            reset()
         }
     };
     const getSubjectNameById = (id: string) => {
@@ -85,14 +89,14 @@ export default function TargetLesson() {
     }
 
     useEffect(() => {
-      if (!openModal) {
-        reset()
-      }
-    })
+        if (!openModal) {
+          reset(); // Reset the form fields
+        }
+      }, [openModal, reset]);
 
     useEffect(() => {
-        refetch()
         if (isSuccess) {
+            refetch()
             notifySuccess("O`qituvchi qo`shildi");
             setOpenModal(false)
         } else if (error) {
@@ -157,7 +161,7 @@ export default function TargetLesson() {
                                         />
                                     </div>
                                 </div>
-                                {/* <div className="flex items-center w-full space-x-2">
+                                <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
                                         Date of birth:
                                     </div>
@@ -167,8 +171,9 @@ export default function TargetLesson() {
                                             className="w-full"
                                             {...register("dateOfBirth")}
                                         />
+                                        
                                     </div>
-                                </div> */}
+                                </div>
                                 <div className="flex items-center space-x-2">
                                     <div className="w-24 text-base text-gray-500 whitespace-nowrap">
                                         Fani:
@@ -232,18 +237,7 @@ export default function TargetLesson() {
                                         </label>
                                     </div>
                                 </div>
-                                {/* <div className="flex items-center w-full space-x-2">
-                                    <div className="w-24 text-base font-semibold text-gray-500">
-                                        Document Type:
-                                    </div>
-                                    <div className="w-full text-lg font-medium capitalize">
-                                        <Input
-                                            type="text"
-                                            className="w-full"
-                                            {...register("documentType")}
-                                        />
-                                    </div>
-                                </div>
+
                                 <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
                                         Document Series:
@@ -267,20 +261,20 @@ export default function TargetLesson() {
                                             {...register("documentNumber")}
                                         />
                                     </div>
-                                </div> */}
+                                </div>
 
-                                {/* <div className="flex items-center w-full space-x-2">
+                                <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
-                                        Pnfl:
+                                        Pinfl:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">
                                         <Input
                                             type="text"
                                             className="w-full"
-                                            {...register("pnfl")}
+                                            {...register("pinfl")}
                                         />
                                     </div>
-                                </div> */}
+                                </div>
                                 <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
                                         Telefon:

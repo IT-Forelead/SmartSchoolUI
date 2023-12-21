@@ -175,7 +175,7 @@ export default function TargetLesson() {
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <div className="w-24 text-base text-gray-500 whitespace-nowrap">
+                                    <div className="w-24 text-base font-semibold text-gray-500 whitespace-nowrap">
                                         Fani:
                                     </div>
                                     <div className="w-full text-lg font-medium">
@@ -240,7 +240,7 @@ export default function TargetLesson() {
 
                                 <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
-                                        Document Series:
+                                        Hujjat Seriyasi:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">
                                         <Input
@@ -252,7 +252,7 @@ export default function TargetLesson() {
                                 </div>
                                 <div className="flex items-center w-full space-x-2">
                                     <div className="w-24 text-base font-semibold text-gray-500">
-                                        Document Number:
+                                    Hujjat Raqami:
                                     </div>
                                     <div className="w-full text-lg font-medium capitalize">
                                         <Input

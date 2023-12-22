@@ -39,6 +39,7 @@ import { Visit } from "@/models/common.interface"
 import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { dateFormatter, translateVisitType} from "@/lib/composables"
+import { downloadCsv } from "@/lib/csv";
 
 export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCertificates: any): ColumnDef<Visit, any>[] => [
   {
@@ -87,6 +88,15 @@ export const columns = (setVisit: Dispatch<SetStateAction<Visit | null>>, showCe
         </div>
     ),
   },
+  {
+    accessorKey: "group",
+    header: 'Group',
+    cell: ({ row }) => {
+      const level = row.original.groupLevel;
+      const name = row.original.groupName;
+      return (<div>{level ? `${level}-${name}` : 'Teacher'}</div>)
+    }
+  }
 ]
 
 export default function VisitsPage() {
@@ -145,9 +155,11 @@ export default function VisitsPage() {
     },
   })
   table.getState().pagination.pageSize = 40
+
   if (isLoading) {
     return !currentUser?.User?.role?.includes('admin') ? '' : <Loader />
   }
+
   return (
     !currentUser?.User?.role?.includes('admin') ? '' :
     <Dialog open={open} onOpenChange={setOpen}>
@@ -187,6 +199,7 @@ export default function VisitsPage() {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button className="ml-3" onClick={() => downloadCsv(table)}>Export</Button>
         </div>
         <div className="border rounded-md">
           <Table>

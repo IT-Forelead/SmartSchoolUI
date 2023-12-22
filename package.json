@@ -32,6 +32,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "cookies-next": "^2.1.2",
+    "csv-stringify": "^6.4.5",
     "daisyui": "3.1.6",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",

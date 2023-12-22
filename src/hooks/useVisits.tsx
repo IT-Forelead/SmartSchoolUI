@@ -1,11 +1,11 @@
-import { UpdateVisit, Visit } from "@/models/common.interface";
+import { Visit, VisitFilter } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 /* APIs */
-const getVisitsList = async () => {
-  return await axios.get<Visit[]>("/visit/history");
+const getVisitsList = async (filters: VisitFilter) => {
+  return await axios.post<Visit[]>("/visit/history", filters);
 }
 
 export const updateVisit = async (id: string, data: FormData) => {
@@ -20,7 +20,7 @@ export const updateVisit = async (id: string, data: FormData) => {
 export const useVisitsList = () => {
   return useQuery({
     queryKey: ['visits'],
-    queryFn: () => getVisitsList(),
+    queryFn: () => getVisitsList({}),
     onError: (err: AxiosError) => err
   })
 }

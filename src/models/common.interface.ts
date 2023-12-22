@@ -47,12 +47,23 @@ export type Visit = {
   visitType: string;
   assetId: string;
   fullName: string;
+  group: string;
+  groupLevel: number;
+  groupName: string;
+  teacherWorkload: number;
 };
 
 export type UpdateVisit = {
   id: string;
   filename: null;
 };
+
+export type VisitFilter = {
+  personId?: string;
+  groupLevel?: number;
+  groupName?: string;
+  type?: "teachers" | "students";
+}
 
 export type Teacher = {
   id: string;

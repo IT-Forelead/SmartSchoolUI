@@ -131,7 +131,7 @@ export default function VisitsPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { data, isError, isLoading, refetch } = useVisitsList();
+  const { data, isError, isLoading, refetch } = useVisitsList({});
 
   let visits = data?.data ?? [];
   const table = useReactTable({

@@ -59,10 +59,15 @@ export type UpdateVisit = {
 };
 
 export type VisitFilter = {
+  fullName?: string;
   personId?: string;
   groupLevel?: number;
   groupName?: string;
   type?: "teachers" | "students";
+  from?: Date,
+  to?: Date,
+  perPage?: number,
+  page?: number,
 }
 
 export type Teacher = {

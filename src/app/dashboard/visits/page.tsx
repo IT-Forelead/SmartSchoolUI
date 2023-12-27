@@ -63,6 +63,7 @@ import { cn } from "@/lib/utils";
 import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
 import { SolarUserHandsOutline } from "@/icons/StudentsIcon";
 import { paginate } from "@/lib/pagination"
+import moment from "moment";
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
@@ -138,52 +139,11 @@ export default function VisitsPage() {
   const router = useRouter();
 
   function showCertificates(mode: string, visit: Visit) {
-    // setSubjectIdsList([])
-    // setMode(mode)
     setVisit(visit);
   }
 
-  // const [groupLevel, setLevelValue] = useState();
-
-  // const handleLevelChange = (event: any) => {
-  //   setLevelValue(event.target.value);
-  // };
-
-  // const [groupName, setGroupValue] = useState("");
-
-  // const handleGroupChange = (event: any) => {
-  //   setGroupValue(event.target.value);
-  // };
   const [from, setStartDate] = useState<Date | any>();
   const [to, setEndDate] = useState<Date | any>();
-
-  // const onChange = (dates: any) => {
-  //   const [start, end] = dates;
-  //   setStartDate(start);
-  //   setEndDate(end);
-  // };
-
-  // const levelOptions = [
-  //   { value: "", label: "Sinf", disabled: true },
-  //   { label: "1", value: 1 },
-  //   { label: "2", value: 2 },
-  //   { label: "3", value: 3 },
-  //   { label: "4", value: 4 },
-  //   { label: "5", value: 5 },
-  //   { label: "6", value: 6 },
-  //   { label: "7", value: 7 },
-  //   { label: "8", value: 8 },
-  //   { label: "9", value: 9 },
-  //   { label: "10", value: 10 },
-  //   { label: "11", value: 11 },
-  // ];
-
-  // const groupOptions = [
-  //   { value: "", label: "Guruh", disabled: true },
-  //   { label: "A", value: "A" },
-  //   { label: "B", value: "B" },
-  //   { label: "C", value: "C" },
-  // ];
 
   useEffect(() => {
     if (!currentUser?.User?.role?.includes("admin")) {
@@ -205,8 +165,8 @@ export default function VisitsPage() {
     setVisitFilter({
       groupName: selectedGroup?.name,
       groupLevel: selectedGroup?.level,
-      from: from,
-      to: to,
+      from: from ? moment(from).format('yyyy-MM-DD') : undefined,
+      to: to ? moment(to).format('yyyy-MM-DD') : undefined,
     });
     setCurrentPage(1);
     // refetch()

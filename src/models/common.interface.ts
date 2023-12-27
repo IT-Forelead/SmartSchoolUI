@@ -64,8 +64,8 @@ export type VisitFilter = {
   groupLevel?: number;
   groupName?: string;
   type?: "teachers" | "students";
-  from?: Date,
-  to?: Date,
+  from?: string,
+  to?: string,
   perPage?: number,
   page?: number,
 }

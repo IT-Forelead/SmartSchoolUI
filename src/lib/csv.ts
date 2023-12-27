@@ -10,6 +10,7 @@ export const downloadCsv = async (filter: VisitFilter) => {
     "/visit/history",
     {
       ...filter,
+      page: 1,
       perPage: maxVisits
     }
   )).data

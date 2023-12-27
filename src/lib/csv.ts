@@ -1,15 +1,26 @@
-import { Table, Row } from '@tanstack/react-table';
 import { stringify as csvStringify } from "csv-stringify/sync"
-import { Visit } from '@/models/common.interface';
+import { Visit, VisitFilter, VisitResponse } from '@/models/common.interface';
+import axios from "@/services/axios"
 
-export const downloadCsv = (table: Table<Visit>) => {
-  const visits = table.getFilteredRowModel().rows.map((row: Row<Visit>) => {
+export const downloadCsv = async (filter: VisitFilter) => {
+  const response = (await axios.post<VisitResponse>("/visit/history", filter)).data;
+  const maxVisits = response.perPage * response.totalPages
+
+  const allVisitsResponse = (await axios.post<VisitResponse>(
+    "/visit/history",
+    {
+      ...filter,
+      perPage: maxVisits
+    }
+  )).data
+
+  const visits = allVisitsResponse.visits.map((visit: Visit) => {
     return {
-      'Full Name': row.getValue('fullName'),
-      'Group': row.original.groupLevel ? `${row.original.groupLevel}-${row.original.groupName}` : 'Teacher',
-      'Visit Time': row.getValue('createdAt'),
-      'Visit Type': row.getValue('visitType'),
-      'Picture Link': row.original.assetId ? 'https://25-school.uz/asset/view/' + row.original.assetId : '',
+      'Full Name': visit.fullName,
+      'Group': visit.groupLevel ? `${visit.groupLevel}-${visit.groupName}` : 'Teacher',
+      'Visit Time': visit.createdAt,
+      'Visit Type': visit.visitType,
+      'Picture Link': visit.assetId ? 'https://25-school.uz/asset/view/' + visit.assetId : '',
     }
   });
   const csvFile = new Blob([csvStringify(visits, {header: true})], {type: 'text/csv'});

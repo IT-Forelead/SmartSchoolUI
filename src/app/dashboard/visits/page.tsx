@@ -217,7 +217,7 @@ export default function VisitsPage() {
   const { data, isError, isLoading, refetch } = useVisitsList(visitFilter);
   const visits = data?.data?.visits ?? [];
 
-  
+
   const table = useReactTable({
     data: visits,
     columns: columns(setVisit, showCertificates),
@@ -382,10 +382,10 @@ export default function VisitsPage() {
             <Button className="ml-auto" onClick={handleSubmit}>Qidirish </Button>
           </div>
           <div className="flex space-x-3 justify-end">
-            <Button className="ml-3" onClick={() => downloadCsv(table)}>
+            <Button className="ml-3" onClick={() => downloadCsv({...visitFilter, type: "teachers"})}>
               Export Teachers
             </Button>
-            <Button className="ml-3" onClick={() => downloadCsv(table)}>
+            <Button className="ml-3" onClick={() => downloadCsv({...visitFilter, type: "students"})}>
               Export Students
             </Button>
           </div>

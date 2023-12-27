@@ -47,10 +47,10 @@ export type Visit = {
   visitType: string;
   assetId: string;
   fullName: string;
-  group: string;
-  groupLevel: number;
-  groupName: string;
-  teacherWorkload: number;
+  group?: string;
+  groupLevel?: number;
+  groupName?: string;
+  teacherWorkload?: number;
 };
 
 export type UpdateVisit = {
@@ -68,6 +68,13 @@ export type VisitFilter = {
   to?: Date,
   perPage?: number,
   page?: number,
+}
+
+export type VisitResponse = {
+  visits: Visit[];
+  page: number;
+  perPage: number;
+  totalPages: number;
 }
 
 export type Teacher = {

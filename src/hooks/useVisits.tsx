@@ -19,7 +19,7 @@ export const updateVisit = async (id: string, data: FormData) => {
 /* Hooks */
 export const useVisitsList = (filters: VisitFilter) => {
   return useQuery({
-    queryKey: ['visits'],
+    queryKey: ['visits', filters],
     queryFn: () => getVisitsList(filters),
     onError: (err: AxiosError) => err
   })

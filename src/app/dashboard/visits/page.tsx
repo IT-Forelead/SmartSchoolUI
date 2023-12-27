@@ -12,16 +12,24 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Check, ChevronDown, ChevronsUpDown, Command } from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, ChevronsUpDown, Download } from "lucide-react";
 import * as React from "react";
 import ViewVisitorPicture from "@/components/client/visits/ViewVisitorPicture";
 import Loader from "@/components/client/Loader";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -35,19 +43,27 @@ import {
 } from "@/components/ui/table";
 import { useVisitsList } from "@/hooks/useVisits";
 import useUserInfo from "@/hooks/useUserInfo";
-import { Group, Visit, VisitFilter} from "@/models/common.interface";
+import { Group, Visit, VisitFilter } from "@/models/common.interface";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { dateFormatter, translateVisitType } from "@/lib/composables";
 import { downloadCsv } from "@/lib/csv";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { log } from "console";
 import { useGroupsList } from "@/hooks/useGroups";
-import { Popover, PopoverContent } from "@radix-ui/react-popover";
-import { PopoverTrigger } from "@/components/ui/popover";
-import { CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
+import { SolarUserHandsOutline } from "@/icons/StudentsIcon";
+import { paginate } from "@/lib/pagination"
+
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
   showCertificates: any
@@ -186,55 +202,25 @@ export default function VisitsPage() {
   // }, []);
 
   const handleSubmit = () => {
-    setVisitFilter(
-      {
-        groupName: selectedGroup?.name,
-        groupLevel: selectedGroup?.level,
-        from: from,
-        to: to,
-      }
-    );
-    setCurrentPage(0)
+    setVisitFilter({
+      groupName: selectedGroup?.name,
+      groupLevel: selectedGroup?.level,
+      from: from,
+      to: to,
+    });
+    setCurrentPage(1);
+    // refetch()
   };
-
-  const previousPage = () => {
-    setVisitFilter(
-      {
-        groupName: selectedGroup?.name,
-        groupLevel: selectedGroup?.level,
-        from: from,
-        to: to,
-        page: currentPage - 1
-      }
-    );
-    setCurrentPage(currentPage - 1)
-  };
-
-  const nextPage = () => {
-    setVisitFilter(
-      {
-        groupName: selectedGroup?.name,
-        groupLevel: selectedGroup?.level,
-        from: from,
-        to: to,
-        page: currentPage + 1
-      }
-    );
-    setCurrentPage(currentPage + 1)
-  };
-
 
   const groupResponse = useGroupsList();
-  const groups = groupResponse?.data?.data || []
+  const groups = groupResponse?.data?.data || [];
 
-  const [selectedGroup, setSelectedGroup] = useState<Group>()
-  const [openGroup, setOpenGroup] = useState(false)
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
+  const [openGroup, setOpenGroup] = useState(false);
   const [visit, setVisit] = useState<Visit | null>(null);
   const [visitFilter, setVisitFilter] = useState<VisitFilter>({});
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [pagesCount, setPagesCount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const [open, setOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -243,8 +229,24 @@ export default function VisitsPage() {
 
   const { data, isError, isLoading, refetch } = useVisitsList(visitFilter);
   const visits = data?.data?.visits ?? [];
-  setPagesCount(data?.data.totalPages ?? 0)
+  const [pagesCount, setPagesCount] = useState<number>(
+    data?.data.totalPages ?? 1
+  );
 
+  useEffect(() => {
+    if (currentPage <= 0)
+      setCurrentPage(1);
+    else if (currentPage > pagesCount)
+      setCurrentPage(pagesCount)
+    else
+      setVisitFilter({...visitFilter, page: currentPage})
+  }, [currentPage])
+
+  if (data?.data.totalPages != pagesCount) {
+    if (typeof data?.data.totalPages == "number") {
+      setPagesCount(data?.data.totalPages ?? 1);
+    }
+  }
 
   const table = useReactTable({
     data: visits,
@@ -273,10 +275,10 @@ export default function VisitsPage() {
   return !currentUser?.User?.role?.includes("admin") ? (
     ""
   ) : (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <div className="w-full p-5">
-        <div>
-          <div className="flex space-x-1 w-full justify-between items-center py-4">
+    <div className="w-full p-5">
+      <div>
+        <div className="flex space-x-1 w-full justify-between items-center py-4">
+          <div className="flex w-full justify-start space-x-5 items-center py-4">
             <Input
               placeholder="F.I.SH bo`yicha izlash..."
               value={
@@ -341,7 +343,9 @@ export default function VisitsPage() {
                           <CommandItem
                             key={group?.id}
                             onSelect={() => {
-                              setSelectedGroup(group);
+                              selectedGroup == group
+                                ? setSelectedGroup(undefined)
+                                : setSelectedGroup(group)
                               setOpenGroup(false);
                             }}
                           >
@@ -361,142 +365,125 @@ export default function VisitsPage() {
                 </PopoverContent>
               </Popover>
             </div>
-            {/* <div className="flex border items-center bg-white px-4 h-9 rounded-md">
-                <select
-                className="bg-white"
-                value={groupLevel}
-                onChange={handleLevelChange}
-              >
-                {levelOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex border items-center bg-white px-4 h-9 rounded-md">
-                <select
-                  className="bg-white "
-                value={groupName}
-                onChange={handleGroupChange}
-              >
-                {groupOptions.map((option) => (
-                  <option value={option.value}>{option.label}</option>
-                ))}
-              </select>
-            </div> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Ustunlar <ChevronDown className="w-4 h-4 ml-2" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             <Button className="ml-auto" onClick={handleSubmit}>
               Qidirish
             </Button>
           </div>
-          <div className="flex space-x-3 justify-end">
-            <Button className="ml-3" onClick={() => downloadCsv({...visitFilter, type: "teachers"})}>
-              Export Teachers
-            </Button>
-            <Button className="ml-3" onClick={() => downloadCsv({...visitFilter, type: "students"})}>
-              Export Students
-            </Button>
-          </div>
-        </div>
-        <div className="border rounded-md">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <Download className="w-5 h-5 mr-2" />
+                Export <ChevronDown className="w-4 h-4 ml-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="divide-y">
+              <DropdownMenuItem className="capitalize">
+                <div className="flex items-center w-fit space-x-3">
+                  <SolarUsersGroupRoundedBroken className="w-5 h-5" />
+                  <span
+                    onClick={() =>
+                      downloadCsv({ ...visitFilter, type: "teachers" })
+                    }
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-2">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={8} className="h-24 text-center">
-                    Hech nima topilmadi.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
-            Jami: {table.getFilteredRowModel().rows.length}
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={previousPage}
-              disabled={currentPage == 0}
-            >
-              Oldingi
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={nextPage}
-              disabled={currentPage == pagesCount - 1}
-            >
-              Keyingi
-            </Button>
-          </div>
+                    Export Teachers
+                  </span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="capitalize">
+                <div className="flex items-center w-fit space-x-3">
+                  <SolarUserHandsOutline className="w-5 h-5" />
+                  <span
+                    onClick={() =>
+                      downloadCsv({ ...visitFilter, type: "students" })
+                    }
+                  >
+                    Export Students
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
-    </Dialog>
+      <div className="border rounded-md">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="py-2">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} className="h-24 text-center">
+                  Hech nima topilmadi.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end py-4 space-x-2">
+        <div className="space-x-2">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" onClick={() => setCurrentPage(currentPage - 1)} />
+              </PaginationItem>
+              {paginate(currentPage, pagesCount)
+                .map(page => {
+                  return <PaginationItem>
+                    {page == 0
+                      ? <PaginationEllipsis />
+                      : <PaginationLink
+                          href="#"
+                          isActive={page==currentPage}
+                          onClick={() => {setCurrentPage(page)}}
+                        >
+                          {page}
+                        </PaginationLink>
+                    }
+                  </PaginationItem>
+                })
+              }
+              <PaginationItem>
+                <PaginationNext href="#" onClick={() => setCurrentPage(currentPage + 1)} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
+    </div>
   );
 }

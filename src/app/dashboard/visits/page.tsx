@@ -127,47 +127,47 @@ export default function VisitsPage() {
     setVisit(visit);
   }
 
-  const [groupLevel, setLevelValue] = useState();
+  // const [groupLevel, setLevelValue] = useState();
 
-  const handleLevelChange = (event: any) => {
-    setLevelValue(event.target.value);
-  };
+  // const handleLevelChange = (event: any) => {
+  //   setLevelValue(event.target.value);
+  // };
 
-  const [groupName, setGroupValue] = useState("");
+  // const [groupName, setGroupValue] = useState("");
 
-  const handleGroupChange = (event: any) => {
-    setGroupValue(event.target.value);
-  };
+  // const handleGroupChange = (event: any) => {
+  //   setGroupValue(event.target.value);
+  // };
   const [from, setStartDate] = useState<Date | any>();
   const [to, setEndDate] = useState<Date | any>();
 
-  const onChange = (dates: any) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
+  // const onChange = (dates: any) => {
+  //   const [start, end] = dates;
+  //   setStartDate(start);
+  //   setEndDate(end);
+  // };
 
-  const levelOptions = [
-    { value: "", label: "Sinf", disabled: true },
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-    { label: "4", value: 4 },
-    { label: "5", value: 5 },
-    { label: "6", value: 6 },
-    { label: "7", value: 7 },
-    { label: "8", value: 8 },
-    { label: "9", value: 9 },
-    { label: "10", value: 10 },
-    { label: "11", value: 11 },
-  ];
+  // const levelOptions = [
+  //   { value: "", label: "Sinf", disabled: true },
+  //   { label: "1", value: 1 },
+  //   { label: "2", value: 2 },
+  //   { label: "3", value: 3 },
+  //   { label: "4", value: 4 },
+  //   { label: "5", value: 5 },
+  //   { label: "6", value: 6 },
+  //   { label: "7", value: 7 },
+  //   { label: "8", value: 8 },
+  //   { label: "9", value: 9 },
+  //   { label: "10", value: 10 },
+  //   { label: "11", value: 11 },
+  // ];
 
-  const groupOptions = [
-    { value: "", label: "Guruh", disabled: true },
-    { label: "A", value: "A" },
-    { label: "B", value: "B" },
-    { label: "C", value: "C" },
-  ];
+  // const groupOptions = [
+  //   { value: "", label: "Guruh", disabled: true },
+  //   { label: "A", value: "A" },
+  //   { label: "B", value: "B" },
+  //   { label: "C", value: "C" },
+  // ];
 
   useEffect(() => {
     if (!currentUser?.User?.role?.includes("admin")) {
@@ -188,15 +188,40 @@ export default function VisitsPage() {
   const handleSubmit = () => {
     setVisitFilter(
       {
-        groupName: groupName,
-        groupLevel: groupLevel,
+        groupName: selectedGroup?.name,
+        groupLevel: selectedGroup?.level,
         from: from,
         to: to,
       }
     );
+    setCurrentPage(0)
   };
 
+  const previousPage = () => {
+    setVisitFilter(
+      {
+        groupName: selectedGroup?.name,
+        groupLevel: selectedGroup?.level,
+        from: from,
+        to: to,
+        page: currentPage - 1
+      }
+    );
+    setCurrentPage(currentPage - 1)
+  };
 
+  const nextPage = () => {
+    setVisitFilter(
+      {
+        groupName: selectedGroup?.name,
+        groupLevel: selectedGroup?.level,
+        from: from,
+        to: to,
+        page: currentPage + 1
+      }
+    );
+    setCurrentPage(currentPage + 1)
+  };
 
 
   const groupResponse = useGroupsList();
@@ -206,6 +231,8 @@ export default function VisitsPage() {
   const [openGroup, setOpenGroup] = useState(false)
   const [visit, setVisit] = useState<Visit | null>(null);
   const [visitFilter, setVisitFilter] = useState<VisitFilter>({});
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [pagesCount, setPagesCount] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -216,6 +243,7 @@ export default function VisitsPage() {
 
   const { data, isError, isLoading, refetch } = useVisitsList(visitFilter);
   const visits = data?.data?.visits ?? [];
+  setPagesCount(data?.data.totalPages ?? 0)
 
   
   const table = useReactTable({
@@ -284,49 +312,55 @@ export default function VisitsPage() {
               placeholderText={"dd/MM/yyyy"}
             />
 
-<div className="flex space-x-1">
-                                    <Popover open={openGroup} onOpenChange={setOpenGroup}>
-                                        <p className="text-base font-semibold text-gray-500">Guruh:</p>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                aria-expanded={openGroup}
-                                                className="justify-between w-full"
-                                            >
-                                                {selectedGroup
-                                                    ? `${selectedGroup?.level}-${selectedGroup?.name}`
-                                                    : "Guruh tanlash..."}
-                                                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0"/>
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-full p-0">
-                                            <Command>
-                                                <CommandInput placeholder="Izlash..."/>
-                                                <CommandEmpty>Guruh topilmadi.</CommandEmpty>
-                                                <CommandGroup className="overflow-auto max-h-80">
-                                                    {groups?.sort((a, b) => a.level - b.level)?.map((group) => (
-                                                        <CommandItem
-                                                            key={group?.id}
-                                                            onSelect={() => {
-                                                                setSelectedGroup(group)
-                                                                setOpenGroup(false)
-                                                            }}
-                                                        >
-                                                            <Check
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    selectedGroup?.id === group?.id ? "opacity-100" : "opacity-0"
-                                                                )}
-                                                            />
-                                                            {`${group?.level}-${group?.name}`}
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </Command>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
+            <div className="flex space-x-1">
+              <Popover open={openGroup} onOpenChange={setOpenGroup}>
+                <p className="text-base flex items-center font-semibold text-gray-500">
+                  Guruh:
+                </p>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openGroup}
+                    className="justify-between w-full"
+                  >
+                    {selectedGroup
+                      ? `${selectedGroup?.level}-${selectedGroup?.name}`
+                      : "Guruh tanlash..."}
+                    <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Izlash..." />
+                    <CommandEmpty>Guruh topilmadi.</CommandEmpty>
+                    <CommandGroup className="overflow-auto max-h-80">
+                      {groups
+                        ?.sort((a, b) => a.level - b.level)
+                        ?.map((group) => (
+                          <CommandItem
+                            key={group?.id}
+                            onSelect={() => {
+                              setSelectedGroup(group);
+                              setOpenGroup(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedGroup?.id === group?.id
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {`${group?.level}-${group?.name}`}
+                          </CommandItem>
+                        ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
             {/* <div className="flex border items-center bg-white px-4 h-9 rounded-md">
                 <select
                 className="bg-white"
@@ -379,7 +413,9 @@ export default function VisitsPage() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button className="ml-auto" onClick={handleSubmit}>Qidirish </Button>
+            <Button className="ml-auto" onClick={handleSubmit}>
+              Qidirish
+            </Button>
           </div>
           <div className="flex space-x-3 justify-end">
             <Button className="ml-3" onClick={() => downloadCsv(table)}>
@@ -445,16 +481,16 @@ export default function VisitsPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={previousPage}
+              disabled={currentPage == 0}
             >
               Oldingi
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={nextPage}
+              disabled={currentPage == pagesCount - 1}
             >
               Keyingi
             </Button>

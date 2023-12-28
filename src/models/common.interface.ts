@@ -268,3 +268,13 @@ export type Stats = {
   inSchool: number;
   didNotCome: number;
 };
+
+export type SmsStats = {
+  total: number;
+  sent: number;
+  delivered: number;
+  notDelivered: number;
+  failed: number;
+  transmitted: number;
+  undefined: number;
+}

@@ -16,6 +16,7 @@ import * as React from "react"
 
 import Loader from "@/components/client/Loader"
 import {Button} from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import {
     Table,
     TableBody,
@@ -24,7 +25,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {useMessagesList} from "@/hooks/useMessages"
+import { useMessagesList, getMessagesStats, useMessagesStats } from "@/hooks/useMessages"
 import useUserInfo from "@/hooks/useUserInfo"
 import {dateFormatter, translateSMSStatus} from "@/lib/composables"
 import {Link2Icon} from "lucide-react"
@@ -107,6 +108,8 @@ export default function MessagesPage() {
 
     const {data, isError, isLoading} = useMessagesList();
 
+    const stats = useMessagesStats().data?.data;
+
     let d = data?.data ?? []
     const table = useReactTable({
         data: d,
@@ -184,8 +187,20 @@ export default function MessagesPage() {
                 </Table>
             </div>
             <div className="flex items-center justify-end py-4 space-x-2">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    Jami: {table.getFilteredRowModel().rows.length}
+                <div className="flex-1">
+                    <div className="flex items-start space-x-4 text-sm text-muted-foreground">
+                        <div>Jami: {stats?.total}</div>
+                        <Separator orientation="vertical" />
+                        <div>{translateSMSStatus("Delivered")}: {stats?.delivered}</div>
+                        <Separator orientation="vertical" />
+                        <div>{translateSMSStatus("Sent")}: {stats?.sent}</div>
+                        <Separator orientation="vertical" />
+                        <div>{translateSMSStatus("NotDelivered")}: {stats?.notDelivered}</div>
+                        <Separator orientation="vertical" />
+                        <div>{translateSMSStatus("Failed")}: {stats?.failed}</div>
+                        <Separator orientation="vertical" />
+                        <div>{translateSMSStatus("Undefined")}: {stats?.undefined + stats?.transmitted}</div>
+                    </div>
                 </div>
                 <div className="space-x-2">
                     <Button

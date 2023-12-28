@@ -47,12 +47,35 @@ export type Visit = {
   visitType: string;
   assetId: string;
   fullName: string;
+  group?: string;
+  groupLevel?: number;
+  groupName?: string;
+  teacherWorkload?: number;
 };
 
 export type UpdateVisit = {
   id: string;
   filename: null;
 };
+
+export type VisitFilter = {
+  fullName?: string;
+  personId?: string;
+  groupLevel?: number;
+  groupName?: string;
+  type?: "teachers" | "students";
+  from?: string,
+  to?: string,
+  perPage?: number,
+  page?: number,
+}
+
+export type VisitResponse = {
+  visits: Visit[];
+  page: number;
+  perPage: number;
+  totalPages: number;
+}
 
 export type Teacher = {
   id: string;

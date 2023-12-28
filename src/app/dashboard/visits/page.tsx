@@ -423,7 +423,7 @@ export default function VisitsPage() {
               </PaginationItem>
               {paginate(currentPage, pagesCount)
                 .map(page => {
-                  return <PaginationItem>
+                  return <PaginationItem key={page}>
                     {page == 0
                       ? <PaginationEllipsis />
                       : <PaginationLink

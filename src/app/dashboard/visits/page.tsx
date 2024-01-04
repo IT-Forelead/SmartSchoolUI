@@ -199,7 +199,7 @@ export default function VisitsPage() {
     else if (currentPage > pagesCount)
       setCurrentPage(pagesCount)
     else
-      setVisitFilter({...visitFilter, page: currentPage})
+      setVisitFilter({ ...visitFilter, page: currentPage })
   }, [currentPage])
 
   if (data?.data.totalPages != pagesCount) {

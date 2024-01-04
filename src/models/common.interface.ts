@@ -25,6 +25,18 @@ export type Message = {
   status: string;
 };
 
+export type MessageResponse = {
+  messages: Message[];
+  page: number;
+  perPage: number;
+  totalPages: number;
+}
+
+export type PaginationFilter = {
+  page?: number;
+  perPage?: number;
+}
+
 export type Room = {
   number: number;
   name: string;

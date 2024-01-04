@@ -13,6 +13,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import * as React from "react"
+import { PaginationFilter } from "@/models/common.interface";
 
 import Loader from "@/components/client/Loader"
 import {Button} from "@/components/ui/button"
@@ -31,7 +32,17 @@ import {dateFormatter, translateSMSStatus} from "@/lib/composables"
 import {Link2Icon} from "lucide-react"
 import {useRouter} from "next/navigation"
 import {Message} from "@/models/common.interface"
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
+import { paginate } from "@/lib/pagination"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+  } from "@/components/ui/pagination";
 
 export const columns: ColumnDef<Message>[] = [
     {
@@ -105,12 +116,34 @@ export default function MessagesPage() {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
-
-    const {data, isError, isLoading} = useMessagesList();
-
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const { data, isError, isLoading, refetch } = useMessagesList({page: currentPage});
+    const d = data?.data?.messages ?? []
+    
     const stats = useMessagesStats().data?.data;
+    const [pagesCount, setPagesCount] = useState<number>(
+        data?.data.totalPages ?? 1
+      );
+    useEffect(() => {
+        if (currentPage <= 0) {
+          setCurrentPage(1);
+        } else if (currentPage > pagesCount) {
+          setCurrentPage(pagesCount)
+        } else {
+          setCurrentPage(currentPage);
+          refetch()
+        }
+    }, [currentPage])
+    
+    
+    if (data?.data.totalPages != pagesCount) {
+      if (typeof data?.data.totalPages == "number") {
+        setPagesCount(data?.data.totalPages ?? 1);
+      }
+    }
 
-    let d = data?.data ?? []
+
+    
     const table = useReactTable({
         data: d,
         columns: columns,
@@ -199,10 +232,10 @@ export default function MessagesPage() {
                         <Separator orientation="vertical" />
                         <div>{translateSMSStatus("Failed")}: {stats?.failed}</div>
                         <Separator orientation="vertical" />
-                        <div>{translateSMSStatus("Undefined")}: {stats?.undefined + stats?.transmitted}</div>
+                    <div>{translateSMSStatus("Undefined")}: {stats?.undefined + stats?.transmitted}</div>
                     </div>
                 </div>
-                <div className="space-x-2">
+                {/* <div className="space-x-2">
                     <Button
                         variant="outline"
                         size="sm"
@@ -219,6 +252,36 @@ export default function MessagesPage() {
                     >
                         Keyingi
                     </Button>
+                </div> */}
+                <div className="flex items-center justify-end py-4 space-x-2">
+                    <div className="space-x-2">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" onClick={() => setCurrentPage(currentPage - 1)} />
+                                </PaginationItem>
+                                {paginate(currentPage, pagesCount)
+                                    .map(page => {
+                                    return <PaginationItem key={page}>
+                                        {page == 0
+                                        ? <PaginationEllipsis />
+                                        : <PaginationLink
+                                            href="#"
+                                            isActive={page==currentPage}
+                                            onClick={() => {setCurrentPage(page)}}
+                                            >
+                                            {page}
+                                            </PaginationLink>
+                                        }
+                                    </PaginationItem>
+                                    })
+                                }
+                                <PaginationItem>
+                                    <PaginationNext href="#" onClick={() => setCurrentPage(currentPage + 1)} />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
                 </div>
             </div>
         </div>

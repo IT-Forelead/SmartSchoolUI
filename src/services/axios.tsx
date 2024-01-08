@@ -30,7 +30,7 @@ axiosClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosClient.interceptors.response.use(
@@ -45,19 +45,19 @@ axiosClient.interceptors.response.use(
       if (err.response.status === 403 && !config?.sent) {
         config.sent = true;
 
-        const result = await refreshToken()
+        const result = await refreshToken();
         if (result?.accessToken) {
           config.headers = {
             ...config.headers,
             Authorization: `Bearer ${result?.accessToken}`,
-          }
+          };
         }
-        let res = await axios(config)
-        return res?.data
+        let res = await axios(config);
+        return res?.data;
       }
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 export default axiosClient;

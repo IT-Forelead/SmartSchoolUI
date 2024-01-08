@@ -8,7 +8,7 @@ export interface UserInfo {
     createdAt: string;
     role: string;
     phone: string;
-  }
+  };
 }
 
 export interface LessonBodyData {

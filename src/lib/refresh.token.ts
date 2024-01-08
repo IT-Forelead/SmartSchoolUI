@@ -18,7 +18,7 @@ export async function refreshToken() {
     setCookie("access-token", res.data.accessToken);
     setCookie("refresh-token", res.data.refreshToken);
 
-    return session
+    return session;
   } catch (error: any) {
     if (error?.response?.status === 403) {
       alert("Your session has been expired!");

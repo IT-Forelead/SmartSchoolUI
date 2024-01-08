@@ -6,21 +6,21 @@ import { AxiosError } from "axios";
 /* APIs */
 const getVisitsList = async (filters: VisitFilter) => {
   return await axios.post<VisitResponse>("/visit/history", filters);
-}
+};
 
 export const updateVisit = async (id: string, data: FormData) => {
   return await axios.post<any>(`/visit/update/${id}`, data, {
     headers: {
-      'Content-Type': 'multipart/form-data',
-    }
-  })
-}
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 /* Hooks */
 export const useVisitsList = (filters: VisitFilter) => {
   return useQuery({
-    queryKey: ['visits', filters],
+    queryKey: ["visits", filters],
     queryFn: () => getVisitsList(filters),
-    onError: (err: AxiosError) => err
-  })
-}
+    onError: (err: AxiosError) => err,
+  });
+};

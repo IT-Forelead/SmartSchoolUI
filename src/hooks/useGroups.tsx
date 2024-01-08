@@ -9,12 +9,11 @@ const getGroupsList = async () => {
 };
 
 export const useGroupsList = () => {
-  const placeholderData = useMemo(() => getGroupsList, [])
+  const placeholderData = useMemo(() => getGroupsList, []);
   return useQuery({
-    queryKey: ['groups'],
+    queryKey: ["groups"],
     queryFn: () => getGroupsList(),
     onError: (err: AxiosError) => err,
-    placeholderData
-  })
+    placeholderData,
+  });
 };
-

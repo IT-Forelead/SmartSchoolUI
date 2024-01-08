@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,20 +11,25 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
-import * as React from "react"
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
+import * as React from "react";
 
-import Loader from "@/components/client/Loader"
-import { Button } from "@/components/ui/button"
+import Loader from "@/components/client/Loader";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -32,20 +37,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useRoomsList } from "@/hooks/useRooms"
-import useUserInfo from "@/hooks/useUserInfo"
-import { useRouter } from "next/navigation"
-import { Room } from "@/models/common.interface"
-import { translateRoomType } from "@/lib/composables"
-import { useEffect, useState } from "react"
+} from "@/components/ui/table";
+import { useRoomsList } from "@/hooks/useRooms";
+import useUserInfo from "@/hooks/useUserInfo";
+import { useRouter } from "next/navigation";
+import { Room } from "@/models/common.interface";
+import { translateRoomType } from "@/lib/composables";
+import { useEffect, useState } from "react";
 
 export const columns: ColumnDef<Room>[] = [
   {
     header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
+    cell: ({ row }) => <div>{parseInt(row.id, 10) + 1}</div>,
   },
   {
     accessorKey: "name",
@@ -58,31 +61,29 @@ export const columns: ColumnDef<Room>[] = [
           Xona nomi
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('name')}</div>
-    ),
+    cell: ({ row }) => <div className="uppercase">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "number",
-    header: 'Xona raqami',
+    header: "Xona raqami",
     cell: ({ row }) => (
-      <div className="uppercase">{`${row.getValue('number')} - xona`}</div>
+      <div className="uppercase">{`${row.getValue("number")} - xona`}</div>
     ),
   },
   {
     accessorKey: "type",
-    header: 'Xona turi',
+    header: "Xona turi",
     cell: ({ row }) => (
-      <div className="uppercase">{translateRoomType(row.getValue('type'))}</div>
+      <div className="uppercase">{translateRoomType(row.getValue("type"))}</div>
     ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const room = row.original
+      const room = row.original;
 
       return (
         <DropdownMenu>
@@ -105,30 +106,27 @@ export const columns: ColumnDef<Room>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export default function RoomsPage() {
-  const currentUser = useUserInfo()
-  const router = useRouter()
+  const currentUser = useUserInfo();
+  const router = useRouter();
   useEffect(() => {
-    if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+    if (!currentUser?.User?.role?.includes("admin")) {
+      router.push("/dashboard/denied");
     }
-  }, [currentUser?.User?.role, router])
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  }, [currentUser?.User?.role, router]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const { data, isError, isLoading } = useRoomsList();
 
-  let d = data?.data ?? []
+  let d = data?.data ?? [];
   const table = useReactTable({
     data: d,
     columns: columns,
@@ -146,10 +144,10 @@ export default function RoomsPage() {
       columnVisibility,
       rowSelection,
     },
-  })
-  table.getState().pagination.pageSize = 40
+  });
+  table.getState().pagination.pageSize = 40;
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   return (
@@ -165,11 +163,11 @@ export default function RoomsPage() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -185,7 +183,7 @@ export default function RoomsPage() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -228,5 +226,5 @@ export default function RoomsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

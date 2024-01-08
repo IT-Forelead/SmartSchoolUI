@@ -5,7 +5,11 @@ import AbsentLesson from "@/components/client/timetable/AbsentLesson";
 import TargetLesson from "@/components/client/timetable/TargetLesson";
 import TimetableChangesHistory from "@/components/client/timetable/TimetableChangesHistory";
 import { Button } from "@/components/ui/button";
-import { lessonForSwap, rebuildTimetable, useTimeTable } from "@/hooks/useTimeTable";
+import {
+  lessonForSwap,
+  rebuildTimetable,
+  useTimeTable,
+} from "@/hooks/useTimeTable";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarRefreshSquareBroken } from "@/icons/Reload";
 import { translateWeekday, weekdays } from "@/lib/composables";
@@ -15,58 +19,69 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export default function TimeTablePage() {
-  const currentUser = useUserInfo()
+  const currentUser = useUserInfo();
   const timeTableResponse = useTimeTable();
   const timetable = timeTableResponse?.data?.data ?? {};
   let groups: string[] = Object.keys(timetable) ?? [];
 
-  const [isGenerating, setIsGenerating] = useState<boolean>(false)
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   async function regenerate() {
-    setIsGenerating(true)
-    await rebuildTimetable().then((res) => {
-      setIsGenerating(false)
-      timeTableResponse.refetch();
-    }).catch((err) => {
-      notifyError('Dars jadvalini qayta shakllantirishda muammo yuzaga keldi!')
-      setTimeout(() => {
-        setIsGenerating(false)
-      }, 3000)
-    });
+    setIsGenerating(true);
+    await rebuildTimetable()
+      .then((res) => {
+        setIsGenerating(false);
+        timeTableResponse.refetch();
+      })
+      .catch((err) => {
+        notifyError(
+          "Dars jadvalini qayta shakllantirishda muammo yuzaga keldi!",
+        );
+        setTimeout(() => {
+          setIsGenerating(false);
+        }, 3000);
+      });
   }
 
-  const [availableLessons, setAvailableLessons] = useState<LessonBody[]>([])
-  const [selectedSubject, setSelectedSubject] = useState<LessonBody>()
+  const [availableLessons, setAvailableLessons] = useState<LessonBody[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<LessonBody>();
 
   function getAvailableLessonForSwap(lesson: LessonBody) {
-    lessonForSwap(lesson).then((res) => {
-      setAvailableLessons(res.data)
-    }).catch((err) => {
-      notifyError('Dars pozitsiyalarini olishda muammo yuzaga keldi')
-    })
+    lessonForSwap(lesson)
+      .then((res) => {
+        setAvailableLessons(res.data);
+      })
+      .catch((err) => {
+        notifyError("Dars pozitsiyalarini olishda muammo yuzaga keldi");
+      });
   }
 
   return (
     <div className="p-2 px-5">
-      {currentUser?.User?.role?.includes('admin') ?
+      {currentUser?.User?.role?.includes("admin") ? (
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center justify-center my-3 space-x-5">
             <TimetableChangesHistory />
             <TargetLesson />
-            {!isGenerating ?
-              <Button onClick={() => regenerate()} className="flex items-center whitespace-nowrap">
+            {!isGenerating ? (
+              <Button
+                onClick={() => regenerate()}
+                className="flex items-center whitespace-nowrap"
+              >
                 <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
                 Qayta generatsiya qilish
               </Button>
-              : <Button disabled className="select-none">
+            ) : (
+              <Button disabled className="select-none">
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Qayta generatsiya qilinmoqda...
               </Button>
-            }
-
+            )}
           </div>
-        </div> : <div></div>
-      }
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       {!timeTableResponse.isLoading ? (
         <table className="w-full text-sm border">
@@ -102,7 +117,10 @@ export default function TimeTablePage() {
                 return (
                   <tr
                     key={item}
-                    className={`border ${idx % 2 !== 1 ? "bg-white" : "bg-gray-100"}`}>
+                    className={`border ${
+                      idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
+                    }`}
+                  >
                     <td className="p-1 font-medium text-center text-gray-500 border">
                       {item}
                     </td>
@@ -116,8 +134,14 @@ export default function TimeTablePage() {
                             {timetable[item][translateWeekday(day)]?.map(
                               (subject: any, idx: any) => {
                                 return (
-                                  <AbsentLesson key={idx} subject={subject} class={item} day={day}
-                                    getAvailableLessonForSwap={getAvailableLessonForSwap}
+                                  <AbsentLesson
+                                    key={idx}
+                                    subject={subject}
+                                    class={item}
+                                    day={day}
+                                    getAvailableLessonForSwap={
+                                      getAvailableLessonForSwap
+                                    }
                                     setAvailableLessons={setAvailableLessons}
                                     availableLessons={availableLessons}
                                     setSelectedSubject={setSelectedSubject}
@@ -125,7 +149,7 @@ export default function TimeTablePage() {
                                     refetch={timeTableResponse.refetch}
                                   />
                                 );
-                              }
+                              },
                             )}
                           </ol>
                         </td>

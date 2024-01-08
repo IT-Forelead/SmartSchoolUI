@@ -9,9 +9,8 @@ const getRoomsList = async () => {
 
 export const useRoomsList = () => {
   return useQuery({
-    queryKey: ['rooms'],
+    queryKey: ["rooms"],
     queryFn: () => getRoomsList(),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
-

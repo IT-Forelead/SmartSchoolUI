@@ -26,8 +26,15 @@ export const paginate = (currentPage: number, totalPages: number): number[] => {
       pageNumbers.push(1, 2, 3, 4, 0, totalPages);
       break;
 
-    case currentPage == totalPages-2 && totalPages >= 6:
-      pageNumbers.push(1, 0, totalPages-3, totalPages-2, totalPages-1, totalPages);
+    case currentPage == totalPages - 2 && totalPages >= 6:
+      pageNumbers.push(
+        1,
+        0,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      );
       break;
 
     default:
@@ -40,4 +47,4 @@ export const paginate = (currentPage: number, totalPages: number): number[] => {
   }
 
   return pageNumbers;
-}
+};

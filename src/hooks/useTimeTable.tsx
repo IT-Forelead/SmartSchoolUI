@@ -35,38 +35,38 @@ export const deleteTimetableHistory = async (data: LessonBody) => {
 /* Hooks */
 export const useTimeTable = () => {
   return useQuery({
-    queryKey: ['timetable'],
+    queryKey: ["timetable"],
     queryFn: () => getTimeTable(),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 export const useTimeTableHistory = () => {
   return useQuery({
-    queryKey: ['timetableHistory'],
+    queryKey: ["timetableHistory"],
     queryFn: () => getTimetableHistory(),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 /* Mutations */
 export const useTargetLesson = () => {
   return useMutation({
     mutationFn: (body: LessonBody) => targetLesson(body),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 export const useSwitchTwoLessonOrder = () => {
   return useMutation({
     mutationFn: (body: LessonBodyData) => switchTwoLessonOrder(body),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 export const useDeleteTimeTableHistory = () => {
   return useMutation({
     mutationFn: (body: LessonBody) => deleteTimetableHistory(body),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };

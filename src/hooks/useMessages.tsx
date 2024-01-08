@@ -1,11 +1,9 @@
 import { PaginationFilter } from "@/models/common.interface";
 
-
 import { Message, MessageResponse, SmsStats } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-
 
 const getMessagesList = async (filter: PaginationFilter) => {
   return await axios.post<MessageResponse>("/sms/messages", filter);
@@ -13,10 +11,10 @@ const getMessagesList = async (filter: PaginationFilter) => {
 
 export const useMessagesList = (filter: PaginationFilter) => {
   return useQuery({
-    queryKey: ['messages'],
+    queryKey: ["messages"],
     queryFn: () => getMessagesList(filter),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 export const getMessagesStats = async () => {
@@ -25,8 +23,8 @@ export const getMessagesStats = async () => {
 
 export const useMessagesStats = () => {
   return useQuery({
-    queryKey: ['messagesStats'],
+    queryKey: ["messagesStats"],
     queryFn: () => getMessagesStats(),
-    onError: (err: AxiosError) => err
-  })
-}
+    onError: (err: AxiosError) => err,
+  });
+};

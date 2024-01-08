@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,20 +11,20 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
+} from "@tanstack/react-table";
+import { MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react";
 
-import Loader from "@/components/client/Loader"
-import { ChangeWorkload } from "@/components/client/teachers/ChangeWorkload"
-import { Button } from "@/components/ui/button"
+import Loader from "@/components/client/Loader";
+import { ChangeWorkload } from "@/components/client/teachers/ChangeWorkload";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -32,20 +32,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useTeachersList, useWorkloadHistoryList } from "@/hooks/useTeachers"
-import useUserInfo from "@/hooks/useUserInfo"
-import { SolarDownloadSquareBroken } from "@/icons/DownloadIcon"
-import { Teacher, WorkloadHistory } from "@/models/common.interface"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+} from "@/components/ui/table";
+import { useTeachersList, useWorkloadHistoryList } from "@/hooks/useTeachers";
+import useUserInfo from "@/hooks/useUserInfo";
+import { SolarDownloadSquareBroken } from "@/icons/DownloadIcon";
+import { Teacher, WorkloadHistory } from "@/models/common.interface";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function getTeacherData(list: Teacher[], id: string) {
-  return list.find(teacher => teacher?.id === id)?.fullName
+  return list.find((teacher) => teacher?.id === id)?.fullName;
 }
 
 function downloadFile(fileName: string) {
-  const downloadLink = document.createElement('a');
+  const downloadLink = document.createElement("a");
   downloadLink.href = `http://25-school.uz/school/api/v1/asset/${fileName}`;
   downloadLink.download = fileName;
   downloadLink.target = "_blank";
@@ -63,39 +63,44 @@ function downloadFile(fileName: string) {
 export const columns = (teachers: Teacher[]): ColumnDef<WorkloadHistory>[] => [
   {
     header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
+    cell: ({ row }) => <div>{parseInt(row.id, 10) + 1}</div>,
   },
   {
     accessorKey: "from",
     header: "Kimdan",
     cell: ({ row }) => (
-      <div className="uppercase">{getTeacherData(teachers, row.getValue('from'))}</div>
+      <div className="uppercase">
+        {getTeacherData(teachers, row.getValue("from"))}
+      </div>
     ),
   },
   {
     accessorKey: "to",
     header: "Kimga",
     cell: ({ row }) => (
-      <div className="uppercase">{getTeacherData(teachers, row.getValue('to'))}</div>
+      <div className="uppercase">
+        {getTeacherData(teachers, row.getValue("to"))}
+      </div>
     ),
   },
   {
     accessorKey: "workload",
-    header: 'Dars soati',
+    header: "Dars soati",
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('workload')}</div>
+      <div className="uppercase">{row.getValue("workload")}</div>
     ),
   },
   {
     accessorKey: "reasonDocId",
-    header: 'Asos hujjat',
+    header: "Asos hujjat",
     cell: ({ row }) => (
       <div className="flex items-center uppercase">
-        {row.getValue('reasonDocId')}
+        {row.getValue("reasonDocId")}
         {
-          <SolarDownloadSquareBroken onClick={() => downloadFile(row.getValue('reasonDocId'))} className="w-5 h-5 ml-3 text-blue-600 hover:cursor-pointer hover:scale-105" />
+          <SolarDownloadSquareBroken
+            onClick={() => downloadFile(row.getValue("reasonDocId"))}
+            className="w-5 h-5 ml-3 text-blue-600 hover:cursor-pointer hover:scale-105"
+          />
         }
       </div>
     ),
@@ -105,7 +110,7 @@ export const columns = (teachers: Teacher[]): ColumnDef<WorkloadHistory>[] => [
     header: "Amallar",
     enableHiding: false,
     cell: ({ row }) => {
-      const hours = row.original
+      const hours = row.original;
 
       return (
         <DropdownMenu>
@@ -128,33 +133,30 @@ export const columns = (teachers: Teacher[]): ColumnDef<WorkloadHistory>[] => [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export default function TeacherWorkloadPage() {
-  const currentUser = useUserInfo()
-  const router = useRouter()
+  const currentUser = useUserInfo();
+  const router = useRouter();
   useEffect(() => {
-    if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+    if (!currentUser?.User?.role?.includes("admin")) {
+      router.push("/dashboard/denied");
     }
-  }, [currentUser?.User?.role, router])
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  }, [currentUser?.User?.role, router]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const { data, isError, isLoading } = useWorkloadHistoryList();
   const teacherResponse = useTeachersList();
 
-  const teachers = teacherResponse?.data?.data || []
+  const teachers = teacherResponse?.data?.data || [];
 
-  let d = data?.data ?? []
+  let d = data?.data ?? [];
   const table = useReactTable({
     data: d,
     columns: columns(teachers),
@@ -172,10 +174,10 @@ export default function TeacherWorkloadPage() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   return (
@@ -194,11 +196,11 @@ export default function TeacherWorkloadPage() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -214,7 +216,7 @@ export default function TeacherWorkloadPage() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -222,10 +224,7 @@ export default function TeacherWorkloadPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={6}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={6} className="h-24 text-center">
                   Hech nima topilmadi.
                 </TableCell>
               </TableRow>
@@ -257,5 +256,5 @@ export default function TeacherWorkloadPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

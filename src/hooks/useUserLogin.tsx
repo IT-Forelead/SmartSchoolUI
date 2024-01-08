@@ -12,6 +12,6 @@ export const useUserLogin = () => {
   // return useMutation((data: LoginData) => postUserData(data), {});
   return useMutation({
     mutationFn: (data: LoginData) => postUserData(data),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };

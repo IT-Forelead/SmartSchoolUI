@@ -30,12 +30,12 @@ export type MessageResponse = {
   page: number;
   perPage: number;
   totalPages: number;
-}
+};
 
 export type PaginationFilter = {
   page?: number;
   perPage?: number;
-}
+};
 
 export type Room = {
   number: number;
@@ -76,18 +76,18 @@ export type VisitFilter = {
   groupLevel?: number;
   groupName?: string;
   type?: "teachers" | "students";
-  from?: string,
-  to?: string,
-  perPage?: number,
-  page?: number,
-}
+  from?: string;
+  to?: string;
+  perPage?: number;
+  page?: number;
+};
 
 export type VisitResponse = {
   visits: Visit[];
   page: number;
   perPage: number;
   totalPages: number;
-}
+};
 
 export type Teacher = {
   id: string;
@@ -111,7 +111,7 @@ export type Teacher = {
       needDivideStudents: boolean;
       hourForBeginner: number;
       hourForHigher: number;
-    }
+    },
   ];
   degree: string;
   workload: number;
@@ -122,11 +122,11 @@ export type Teacher = {
       certificateId: string;
       approved: string;
       rejected: string;
-    }
+    },
   ];
 };
 
-export  type  Student = {
+export type Student = {
   id: string;
   dateOfBirth: string;
   gender: "female" | "male";
@@ -143,11 +143,11 @@ export  type  Student = {
     {
       id: string;
       level: string;
-      name: string
-    }
+      name: string;
+    },
   ];
   barcode: string;
-}
+};
 
 export type StudentUpdate = {
   id: string;
@@ -166,8 +166,8 @@ export type StudentUpdate = {
     {
       id: string;
       level: string;
-      name: string
-    }
+      name: string;
+    },
   ];
   barcode: string;
 };
@@ -252,7 +252,7 @@ export type WorkloadFormula = {
     {
       teacher: Teacher;
       hour: number;
-    }
+    },
   ];
   mode: number;
 };
@@ -289,4 +289,4 @@ export type SmsStats = {
   failed: number;
   transmitted: number;
   undefined: number;
-}
+};

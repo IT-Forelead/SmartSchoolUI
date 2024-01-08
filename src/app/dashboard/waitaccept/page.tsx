@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,12 +11,24 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, EyeIcon, Loader2, MoreHorizontal } from "lucide-react"
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  EyeIcon,
+  Loader2,
+  MoreHorizontal,
+} from "lucide-react";
 
-import Loader from "@/components/client/Loader"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import Loader from "@/components/client/Loader";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -25,8 +37,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -34,43 +46,52 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { approveTeacherDocAsAdmin, useDegreesList, useEditTeacher, useTeachersList, useTeachersNotCheckedDocList } from "@/hooks/useTeachers"
-import useUserInfo from "@/hooks/useUserInfo"
-import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
-import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
-import { SolarUserBroken } from "@/icons/UserIcon"
-import { dateFormatter } from "@/lib/composables"
-import { notifyError, notifySuccess } from "@/lib/notify"
-import { Teacher, TeacherUpdate } from "@/models/common.interface"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import ImageFull from "@/components/client/timetable/ImageFull"
+} from "@/components/ui/table";
+import {
+  approveTeacherDocAsAdmin,
+  useDegreesList,
+  useEditTeacher,
+  useTeachersList,
+  useTeachersNotCheckedDocList,
+} from "@/hooks/useTeachers";
+import useUserInfo from "@/hooks/useUserInfo";
+import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
+import { SolarCloseCircleBroken } from "@/icons/RejectIcon";
+import { SolarUserBroken } from "@/icons/UserIcon";
+import { dateFormatter } from "@/lib/composables";
+import { notifyError, notifySuccess } from "@/lib/notify";
+import { Teacher, TeacherUpdate } from "@/models/common.interface";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import ImageFull from "@/components/client/timetable/ImageFull";
 
 function returnApprovedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.approved)?.length
+  return list?.filter((doc: any) => doc.approved)?.length;
 }
 
 function returnNotApprovedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.rejected === null && doc.approved === null)?.length
+  return list?.filter(
+    (doc: any) => doc.rejected === null && doc.approved === null,
+  )?.length;
 }
 
 function returnRejectedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.rejected)?.length
+  return list?.filter((doc: any) => doc.rejected)?.length;
 }
 
 function listToString(list: any) {
-  return list?.map((subject: any) => subject?.name)?.join(', ')
+  return list?.map((subject: any) => subject?.name)?.join(", ");
 }
 
-export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
+export const columns = (
+  setTeacher: Dispatch<SetStateAction<Teacher | null>>,
+  showCertificates: any,
+): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
+    cell: ({ row }) => <div>{parseInt(row.id, 10) + 1}</div>,
   },
   {
     accessorKey: "fullName",
@@ -83,48 +104,59 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
           F.I.SH
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('fullName')}</div>
+      <div className="capitalize">{row.getValue("fullName")}</div>
     ),
   },
   {
     accessorKey: "subjects",
-    header: 'Fanlar',
+    header: "Fanlar",
     cell: ({ row }) => (
-      <div className="uppercase">{listToString(row.getValue('subjects')) || "-"}</div>
+      <div className="uppercase">
+        {listToString(row.getValue("subjects")) || "-"}
+      </div>
     ),
   },
   {
     accessorKey: "dateOfBirth",
-    header: 'Tug`ilgan sanasi',
+    header: "Tug`ilgan sanasi",
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('dateOfBirth')}</div>
+      <div className="uppercase">{row.getValue("dateOfBirth")}</div>
     ),
   },
   {
     accessorKey: "phone",
-    header: 'Telefon raqami',
+    header: "Telefon raqami",
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('phone') ?? "-"}</div>
+      <div className="uppercase">{row.getValue("phone") ?? "-"}</div>
     ),
   },
   {
     accessorKey: "workload",
-    header: 'Dars soati',
+    header: "Dars soati",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('workload') ?? 0}</div>
+      <div className="capitalize">{row.getValue("workload") ?? 0}</div>
     ),
   },
   {
     accessorKey: "documents",
-    header: 'Sertifikatlar soni',
+    header: "Sertifikatlar soni",
     cell: ({ row }) => (
       <div>
-        <p className="text-green-500">Tasdiqlangan: <b>{returnApprovedDocLength(row.getValue('documents')) ?? 0}</b></p>
-        <p className="text-orange-500">Tasdiqlanmagan: <b>{returnNotApprovedDocLength(row.getValue('documents')) ?? 0}</b></p>
-        <p className="text-red-500">Rad etilgan: <b>{returnRejectedDocLength(row.getValue('documents')) ?? 0}</b></p>
+        <p className="text-green-500">
+          Tasdiqlangan:{" "}
+          <b>{returnApprovedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
+        <p className="text-orange-500">
+          Tasdiqlanmagan:{" "}
+          <b>{returnNotApprovedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
+        <p className="text-red-500">
+          Rad etilgan:{" "}
+          <b>{returnRejectedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
       </div>
     ),
   },
@@ -133,7 +165,7 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
     header: "Amallar",
     enableHiding: false,
     cell: ({ row }) => {
-      const teacher = row.original
+      const teacher = row.original;
 
       return (
         <DropdownMenu>
@@ -147,93 +179,96 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
             <DropdownMenuLabel>Amallar</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-green-600">
-              <DialogTrigger className="flex items-center space-x-2" onClick={() => showCertificates('show', teacher)}>
+              <DialogTrigger
+                className="flex items-center space-x-2"
+                onClick={() => showCertificates("show", teacher)}
+              >
                 <EyeIcon className="w-4 h-4 mr-1" />
                 Sertifikatlar
               </DialogTrigger>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export default function TeachersPage() {
-  const currentUser = useUserInfo()
-  const router = useRouter()
+  const currentUser = useUserInfo();
+  const router = useRouter();
 
   function showCertificates(mode: string, teacher: Teacher) {
-    setMode(mode)
-    setTeacher(teacher)
+    setMode(mode);
+    setTeacher(teacher);
   }
 
-  const [isApproving, setIsApproving] = useState<boolean>(false)
-  const [isRejecting, setIsRejecting] = useState<boolean>(false)
+  const [isApproving, setIsApproving] = useState<boolean>(false);
+  const [isRejecting, setIsRejecting] = useState<boolean>(false);
 
   function approveTeacherDocument(approved: boolean, id: string) {
     if (approved) {
-      setIsApproving(true)
+      setIsApproving(true);
     } else {
-      setIsRejecting(true)
+      setIsRejecting(true);
     }
-    approveTeacherDocAsAdmin(
-      {
-        approved: approved,
-        degreeId: id,
-        teacherId: teacher?.id ?? ""
-      }
-    ).then(() => {
-      setIsApproving(false)
-      setIsRejecting(false)
-      notifySuccess("Sertifikat muvaffaqiyatli tasdiqlandi")
-      refetch()
-    }).catch((err) => {
-      notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
-      setTimeout(() => {
-        setIsApproving(false)
-        setIsRejecting(false)
-      }, 2000)
+    approveTeacherDocAsAdmin({
+      approved: approved,
+      degreeId: id,
+      teacherId: teacher?.id ?? "",
     })
+      .then(() => {
+        setIsApproving(false);
+        setIsRejecting(false);
+        notifySuccess("Sertifikat muvaffaqiyatli tasdiqlandi");
+        refetch();
+      })
+      .catch((err) => {
+        notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!");
+        setTimeout(() => {
+          setIsApproving(false);
+          setIsRejecting(false);
+        }, 2000);
+      });
   }
 
   useEffect(() => {
-    if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+    if (!currentUser?.User?.role?.includes("admin")) {
+      router.push("/dashboard/denied");
     }
-  }, [currentUser?.User?.role, router])
+  }, [currentUser?.User?.role, router]);
 
-  const [teacher, setTeacher] = useState<Teacher | null>(null)
-  const [mode, setMode] = useState<string>('')
+  const [teacher, setTeacher] = useState<Teacher | null>(null);
+  const [mode, setMode] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
 
   const degreesResponse = useDegreesList();
-  const degrees = degreesResponse?.data?.data
+  const degrees = degreesResponse?.data?.data;
 
   function getDegree(id: string) {
-    return degrees?.find(deg => deg?.id === id)?.description
+    return degrees?.find((deg) => deg?.id === id)?.description;
   }
 
   const { data, isError, isLoading, refetch } = useTeachersNotCheckedDocList();
 
   useEffect(() => {
     if (isSuccess) {
-      notifySuccess("O`zgarishlar saqlandi")
-      refetch()
-      setOpen(false)
+      notifySuccess("O`zgarishlar saqlandi");
+      refetch();
+      setOpen(false);
     } else if (error) {
-      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi");
     } else return;
   }, [isSuccess, error]);
 
-  let teachers = data?.data ?? []
+  let teachers = data?.data ?? [];
   const table = useReactTable({
     data: teachers,
     columns: columns(setTeacher, showCertificates),
@@ -251,88 +286,81 @@ export default function TeachersPage() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
-  const image = null
+  const image = null;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
+      <DialogContent
+        className={mode?.includes("show") ? `max-w-5xl` : `max-w-2xl`}
+      >
         <DialogHeader>
-          {mode?.includes('show') ?
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> :
+          {mode?.includes("show") ? (
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle>
+          ) : (
             <DialogTitle>O`qituvchi profili</DialogTitle>
-          }
+          )}
         </DialogHeader>
-        {mode?.includes('show') ?
+        {mode?.includes("show") ? (
           <div className="px-4 py-2">
             <div className="flex p-5 space-y-4 bg-white rounded">
               <div className="flex items-start space-x-4">
-                {
-                  image ?
-                    <div>
-                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                    </div> :
-                    <div>
-                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                    </div>
-                }
+                {image ? (
+                  <div>
+                    <Image
+                      src="/public/test.png"
+                      alt="teacher image"
+                      width={100}
+                      height={100}
+                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                  </div>
+                )}
                 <div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      F.I.SH:
-                    </div>
+                    <div className="text-base text-gray-500">F.I.SH:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.fullName}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Telefon:
-                    </div>
+                    <div className="text-base text-gray-500">Telefon:</div>
+                    <div className="text-lg font-medium">{teacher?.phone}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">Jinsi:</div>
                     <div className="text-lg font-medium">
-                      {teacher?.phone}
+                      {teacher?.gender.includes("female") ? "Ayol" : "Erkak"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Jinsi:
-                    </div>
+                    <div className="text-base text-gray-500">Fani:</div>
                     <div className="text-lg font-medium">
-                      {teacher?.gender.includes('female') ? 'Ayol' : 'Erkak'}
+                      {teacher?.subjects?.map((s) => s?.name)?.join(", ") ||
+                        "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Fani:
-                    </div>
-                    <div className="text-lg font-medium">
-                      {teacher?.subjects?.map(s => s?.name)?.join(', ') || "-"}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Daraja:
-                    </div>
+                    <div className="text-base text-gray-500">Daraja:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.degree ?? "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Millati:
-                    </div>
+                    <div className="text-base text-gray-500">Millati:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.nationality ?? "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Hujjat turi:
-                    </div>
+                    <div className="text-base text-gray-500">Hujjat turi:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.documentType}
                     </div>
@@ -356,66 +384,106 @@ export default function TeachersPage() {
                 </div>
               </div>
             </div>
-            <div className='items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]'>
-              {!isLoading ?
-                teacher?.documents?.map(({ id, certificateId, approved, rejected }) => {
-                  return (
-                    <div key={id} className="p-1 my-3 bg-white border shadow rounded-xl">
-                      <div className='my-3 w-96'>{getDegree(id)}</div>
-                      <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
-                        <div className='absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105'>
-                          <ImageFull cId={certificateId} />
-                        </div>
-                        <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
-                        {
-                          approved || rejected ? "" :
-                            <div className='absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5'>
-                              {isApproving ?
-                                <Button className='bg-green-400 hover:bg-green-700 whitespace-nowrap' disabled={true}>
-                                  <Loader2 className='w-6 h-6 mr-2' />
+            <div className="items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]">
+              {!isLoading ? (
+                teacher?.documents?.map(
+                  ({ id, certificateId, approved, rejected }) => {
+                    return (
+                      <div
+                        key={id}
+                        className="p-1 my-3 bg-white border shadow rounded-xl"
+                      >
+                        <div className="my-3 w-96">{getDegree(id)}</div>
+                        <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                          <div className="absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105">
+                            <ImageFull cId={certificateId} />
+                          </div>
+                          <Image
+                            src={
+                              `http://25-school.uz/school/api/v1/asset/${certificateId}` ??
+                              ""
+                            }
+                            alt="Hujjat"
+                            layout="fill"
+                            className="top-0 object-contain duration-500 rounded-lg"
+                          />
+                          {approved || rejected ? (
+                            ""
+                          ) : (
+                            <div className="absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5">
+                              {isApproving ? (
+                                <Button
+                                  className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+                                  disabled={true}
+                                >
+                                  <Loader2 className="w-6 h-6 mr-2" />
                                   Tasdiqlanmoqda...
                                 </Button>
-                                : <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true, id)}>
-                                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                              ) : (
+                                <Button
+                                  className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+                                  onClick={() =>
+                                    approveTeacherDocument(true, id)
+                                  }
+                                >
+                                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
                                   Tasdiqlash
                                 </Button>
-                              }
-                              {isRejecting ?
-                                <Button className='bg-red-400 hover:bg-red-700 whitespace-nowrap' disabled={true}>
-                                  <Loader2 className='w-6 h-6 mr-2' />
+                              )}
+                              {isRejecting ? (
+                                <Button
+                                  className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+                                  disabled={true}
+                                >
+                                  <Loader2 className="w-6 h-6 mr-2" />
                                   Rad qilinmoqda...
                                 </Button>
-                                : <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false, id)}>
-                                  <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
+                              ) : (
+                                <Button
+                                  className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+                                  onClick={() =>
+                                    approveTeacherDocument(false, id)
+                                  }
+                                >
+                                  <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
                                   Rad qilish
                                 </Button>
-                              }
+                              )}
                             </div>
-                        }
+                          )}
+                        </div>
+                        {approved ? (
+                          <h1 className="text-green-500">Tasdiqlangan</h1>
+                        ) : rejected ? (
+                          <h1 className="text-red-500">Rad etilgan</h1>
+                        ) : (
+                          <h1 className="text-orange-500">Tasdiqlanmagan</h1>
+                        )}
                       </div>
-                      {
-                        approved ?
-                          <h1 className='text-green-500'>Tasdiqlangan</h1> : rejected ?
-                            <h1 className='text-red-500'>Rad etilgan</h1> :
-                            <h1 className='text-orange-500'>Tasdiqlanmagan</h1>
-                      }
-                    </div>
-                  )
-                }) : <Loader />
-              }
+                    );
+                  },
+                )
+              ) : (
+                <Loader />
+              )}
             </div>
-          </div >
-          : ""
-        }
+          </div>
+        ) : (
+          ""
+        )}
       </DialogContent>
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input
             placeholder="F.I.SH bo`yicha izlash..."
-            value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
+            }
             className="max-w-sm"
             onChange={(event) => {
-              return table.getColumn("fullName")?.setFilterValue(event.target.value)
+              return table
+                .getColumn("fullName")
+                ?.setFilterValue(event.target.value);
             }}
           />
           <DropdownMenu>
@@ -440,7 +508,7 @@ export default function TeachersPage() {
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -456,11 +524,11 @@ export default function TeachersPage() {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -476,7 +544,7 @@ export default function TeachersPage() {
                       <TableCell key={cell.id} className="py-2">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -484,10 +552,7 @@ export default function TeachersPage() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="h-24 text-center"
-                  >
+                  <TableCell colSpan={8} className="h-24 text-center">
                     Hech nima topilmadi.
                   </TableCell>
                 </TableRow>
@@ -520,5 +585,5 @@ export default function TeachersPage() {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

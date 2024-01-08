@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,7 +11,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 import {
   ArrowUpDown,
   ChevronDown,
@@ -20,27 +20,33 @@ import {
   PencilIcon,
   PlusCircleIcon,
   QrCodeIcon,
-  TrashIcon
-} from "lucide-react"
-import * as React from "react"
-import Loader from "@/components/client/Loader"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+  TrashIcon,
+} from "lucide-react";
+import * as React from "react";
+import Loader from "@/components/client/Loader";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { 
-  Select, 
-  SelectContent, 
-  SelectGroup, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -48,52 +54,55 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useSubjectsList } from "@/hooks/useSubjects"
-import { 
-  addSubjectToTeacherFunc, 
-  useAddQrcodeToTeacher, 
-  approveTeacherDocAsAdmin, 
-  useDegreesList, 
-  useEditTeacher, 
-  useTeachersList 
-} from "@/hooks/useTeachers"
-import useUserInfo from "@/hooks/useUserInfo"
-import { SolarCheckCircleBroken } from "@/icons/ApproveIcon"
-import { SolarCloseCircleBroken } from "@/icons/RejectIcon"
-import { SolarUserBroken } from "@/icons/UserIcon"
-import { dateFormatter } from "@/lib/composables"
-import { notifyError, notifySuccess } from "@/lib/notify"
-import { Teacher, TeacherUpdate, AddQrCode } from "@/models/common.interface"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import ImageFull from "@/components/client/timetable/ImageFull"
+} from "@/components/ui/table";
+import { useSubjectsList } from "@/hooks/useSubjects";
+import {
+  addSubjectToTeacherFunc,
+  useAddQrcodeToTeacher,
+  approveTeacherDocAsAdmin,
+  useDegreesList,
+  useEditTeacher,
+  useTeachersList,
+} from "@/hooks/useTeachers";
+import useUserInfo from "@/hooks/useUserInfo";
+import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
+import { SolarCloseCircleBroken } from "@/icons/RejectIcon";
+import { SolarUserBroken } from "@/icons/UserIcon";
+import { dateFormatter } from "@/lib/composables";
+import { notifyError, notifySuccess } from "@/lib/notify";
+import { Teacher, TeacherUpdate, AddQrCode } from "@/models/common.interface";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import ImageFull from "@/components/client/timetable/ImageFull";
 import useWebSocket from "react-use-websocket";
 
 function returnApprovedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.approved)?.length
+  return list?.filter((doc: any) => doc.approved)?.length;
 }
 
 function returnNotApprovedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.rejected === null && doc.approved === null)?.length
+  return list?.filter(
+    (doc: any) => doc.rejected === null && doc.approved === null,
+  )?.length;
 }
 
 function returnRejectedDocLength(list: any) {
-  return list?.filter((doc: any) => doc.rejected)?.length
+  return list?.filter((doc: any) => doc.rejected)?.length;
 }
 
 function listToString(list: any) {
-  return list?.map((subject: any) => subject?.name)?.join(', ')
+  return list?.map((subject: any) => subject?.name)?.join(", ");
 }
 
-export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, showCertificates: any): ColumnDef<Teacher, any>[] => [
+export const columns = (
+  setTeacher: Dispatch<SetStateAction<Teacher | null>>,
+  showCertificates: any,
+): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
+    cell: ({ row }) => <div>{parseInt(row.id, 10) + 1}</div>,
   },
   {
     accessorKey: "fullName",
@@ -106,41 +115,52 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
           F.I.SH
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('fullName')}</div>
+      <div className="capitalize">{row.getValue("fullName")}</div>
     ),
   },
   {
     accessorKey: "subjects",
-    header: 'Fanlar',
+    header: "Fanlar",
     cell: ({ row }) => (
-      <div className="uppercase">{listToString(row.getValue('subjects')) || "-"}</div>
+      <div className="uppercase">
+        {listToString(row.getValue("subjects")) || "-"}
+      </div>
     ),
   },
   {
     accessorKey: "phone",
-    header: 'Telefon raqami',
+    header: "Telefon raqami",
     cell: ({ row }) => (
-      <div className="uppercase">{row.getValue('phone') ?? "-"}</div>
+      <div className="uppercase">{row.getValue("phone") ?? "-"}</div>
     ),
   },
   {
     accessorKey: "workload",
-    header: 'Dars soati',
+    header: "Dars soati",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('workload') ?? 0}</div>
+      <div className="capitalize">{row.getValue("workload") ?? 0}</div>
     ),
   },
   {
     accessorKey: "documents",
-    header: 'Sertifikatlar soni',
+    header: "Sertifikatlar soni",
     cell: ({ row }) => (
       <div>
-        <p className="text-green-500">Tasdiqlangan: <b>{returnApprovedDocLength(row.getValue('documents')) ?? 0}</b></p>
-        <p className="text-orange-500">Tasdiqlanmagan: <b>{returnNotApprovedDocLength(row.getValue('documents')) ?? 0}</b></p>
-        <p className="text-red-500">Rad etilgan: <b>{returnRejectedDocLength(row.getValue('documents')) ?? 0}</b></p>
+        <p className="text-green-500">
+          Tasdiqlangan:{" "}
+          <b>{returnApprovedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
+        <p className="text-orange-500">
+          Tasdiqlanmagan:{" "}
+          <b>{returnNotApprovedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
+        <p className="text-red-500">
+          Rad etilgan:{" "}
+          <b>{returnRejectedDocLength(row.getValue("documents")) ?? 0}</b>
+        </p>
       </div>
     ),
   },
@@ -149,196 +169,228 @@ export const columns = (setTeacher: Dispatch<SetStateAction<Teacher | null>>, sh
     header: "Amallar",
     enableHiding: false,
     cell: ({ row }) => {
-      const teacher = row.original
+      const teacher = row.original;
       return (
         <div className="flex items-center">
           <Button variant="ghost">
-            <DialogTrigger className="flex items-center" onClick={() => showCertificates('subject', teacher)}>
+            <DialogTrigger
+              className="flex items-center"
+              onClick={() => showCertificates("subject", teacher)}
+            >
               <PlusCircleIcon className="text-indigo-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger className="flex items-center" onClick={() => showCertificates('show', teacher)}>
+            <DialogTrigger
+              className="flex items-center"
+              onClick={() => showCertificates("show", teacher)}
+            >
               <EyeIcon className="text-green-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger className="flex items-center" onClick={() => showCertificates('update', teacher)}>
+            <DialogTrigger
+              className="flex items-center"
+              onClick={() => showCertificates("update", teacher)}
+            >
               <PencilIcon className="text-blue-600 w-5 h-5" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger className="text-red-600" onClick={() => showCertificates('delete', teacher)}>
+            <DialogTrigger
+              className="text-red-600"
+              onClick={() => showCertificates("delete", teacher)}
+            >
               <TrashIcon className="w-5 h-5" />
             </DialogTrigger>
           </Button>
-          { teacher.barcode ? (
+          {teacher.barcode ? (
             <Button variant="ghost">
-              <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+              <DialogTrigger
+                className="flex items-center"
+                onClick={() => showCertificates("qrcode", teacher)}
+              >
                 <QrCodeIcon className="w-5 h-5 text-blue-600" />
               </DialogTrigger>
             </Button>
           ) : (
             <Button variant="ghost">
-              <DialogTrigger className="flex items-center" onClick={() => showCertificates('qrcode', teacher)}>
+              <DialogTrigger
+                className="flex items-center"
+                onClick={() => showCertificates("qrcode", teacher)}
+              >
                 <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
               </DialogTrigger>
             </Button>
-          )
-          }
+          )}
         </div>
-      )
+      );
     },
-  }
-]
+  },
+];
 
 export default function TeachersPage() {
-  const currentUser = useUserInfo()
-  const router = useRouter()
+  const currentUser = useUserInfo();
+  const router = useRouter();
 
   function showCertificates(mode: string, teacher: Teacher) {
-    setSubjectIdsList([])
-    setMode(mode)
-    setTeacher(teacher)
+    setSubjectIdsList([]);
+    setMode(mode);
+    setTeacher(teacher);
   }
 
   // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
   // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>("wss://25-school.uz/school/api/v1/ws")
+  const [socketUrl, setSocketUrl] = useState<string>(
+    "wss://25-school.uz/school/api/v1/ws",
+  );
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
-  const [isApproving, setIsApproving] = useState<boolean>(false)
-  const [isRejecting, setIsRejecting] = useState<boolean>(false)
+  const [isApproving, setIsApproving] = useState<boolean>(false);
+  const [isRejecting, setIsRejecting] = useState<boolean>(false);
 
   function approveTeacherDocument(approved: boolean, id: string) {
     if (approved) {
-      setIsApproving(true)
+      setIsApproving(true);
     } else {
-      setIsRejecting(true)
+      setIsRejecting(true);
     }
-    approveTeacherDocAsAdmin(
-      {
-        approved: approved,
-        degreeId: id,
-        teacherId: teacher?.id ?? ""
-      }
-    ).then(() => {
-      setIsApproving(false)
-      setIsRejecting(false)
-      notifySuccess("Sertifikat muvaffaqiyatli tasdiqlandi")
-      refetch()
-    }).catch((err) => {
-      notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!")
-      setTimeout(() => {
-        setIsApproving(false)
-        setIsRejecting(false)
-      }, 2000)
+    approveTeacherDocAsAdmin({
+      approved: approved,
+      degreeId: id,
+      teacherId: teacher?.id ?? "",
     })
+      .then(() => {
+        setIsApproving(false);
+        setIsRejecting(false);
+        notifySuccess("Sertifikat muvaffaqiyatli tasdiqlandi");
+        refetch();
+      })
+      .catch((err) => {
+        notifyError("Sertifikatni tasdiqlashda muammo yuzaga keldi!");
+        setTimeout(() => {
+          setIsApproving(false);
+          setIsRejecting(false);
+        }, 2000);
+      });
   }
 
-  const [subjectIdsList, setSubjectIdsList] = useState<string[]>([])
+  const [subjectIdsList, setSubjectIdsList] = useState<string[]>([]);
 
   function addSubjectToTeacher() {
-    setIsSaving(true)
-    addSubjectToTeacherFunc(
-      {
-        teacherId: teacher?.id ?? "",
-        subjectIds: subjectIdsList
-      }
-    ).then(() => {
-      notifySuccess("Fan muvaffaqiyatli qo`shildi")
-      refetch()
-      setIsSaving(false)
-    }).catch((err) => {
-      notifyError("Fanni qo`shishda muammo yuzaga keldi!")
-      setTimeout(() => {
-        setIsSaving(false)
-      }, 2000)
+    setIsSaving(true);
+    addSubjectToTeacherFunc({
+      teacherId: teacher?.id ?? "",
+      subjectIds: subjectIdsList,
     })
+      .then(() => {
+        notifySuccess("Fan muvaffaqiyatli qo`shildi");
+        refetch();
+        setIsSaving(false);
+      })
+      .catch((err) => {
+        notifyError("Fanni qo`shishda muammo yuzaga keldi!");
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 2000);
+      });
   }
 
   useEffect(() => {
-    if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+    if (!currentUser?.User?.role?.includes("admin")) {
+      router.push("/dashboard/denied");
     }
-  }, [currentUser?.User?.role, router])
-  const [teacher, setTeacher] = useState<Teacher | null>(null)
-  const [mode, setMode] = useState<string>('')
+  }, [currentUser?.User?.role, router]);
+  const [teacher, setTeacher] = useState<Teacher | null>(null);
+  const [mode, setMode] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
-  const { mutate: addQrCodeToTeacher, isSuccess: isSuccessAddQrcode, error: addCrcodeError } = useAddQrcodeToTeacher();
+  const {
+    mutate: addQrCodeToTeacher,
+    isSuccess: isSuccessAddQrcode,
+    error: addCrcodeError,
+  } = useAddQrcodeToTeacher();
   const { register, handleSubmit, reset } = useForm<TeacherUpdate>();
-  const { register: qrCodeRegister, handleSubmit: qrCodeHandleSubmit, setValue, getValues } = useForm<AddQrCode>();
+  const {
+    register: qrCodeRegister,
+    handleSubmit: qrCodeHandleSubmit,
+    setValue,
+    getValues,
+  } = useForm<AddQrCode>();
 
   const degreesResponse = useDegreesList();
-  const degrees = degreesResponse?.data?.data
+  const degrees = degreesResponse?.data?.data;
 
   function getDegree(id: string) {
-    return degrees?.find(deg => deg?.id === id)?.description
+    return degrees?.find((deg) => deg?.id === id)?.description;
   }
 
   useEffect(() => {
-    reset({ ...teacher })
-  }, [reset, teacher])
+    reset({ ...teacher });
+  }, [reset, teacher]);
 
   useEffect(() => {
-    if (mode === 'qrcode' && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("qrcodeId", lastJsonMessage?.data ?? "")
+    if (mode === "qrcode" && lastJsonMessage?.kind === "qr_code_assign") {
+      setValue("qrcodeId", lastJsonMessage?.data ?? "");
     }
-  }, [lastJsonMessage])
+  }, [lastJsonMessage]);
 
   function getSelectData(order: number, sv: string) {
-    if (order === 0 && subjectIdsList.length !== 2 || order === 1 && subjectIdsList.length !== 2) {
-      setSubjectIdsList([...subjectIdsList, sv])
+    if (
+      (order === 0 && subjectIdsList.length !== 2) ||
+      (order === 1 && subjectIdsList.length !== 2)
+    ) {
+      setSubjectIdsList([...subjectIdsList, sv]);
     } else {
-      subjectIdsList[order] = sv
-      setSubjectIdsList(subjectIdsList)
+      subjectIdsList[order] = sv;
+      setSubjectIdsList(subjectIdsList);
     }
   }
 
   useEffect(() => {
-    if (mode === 'qrcode') {
-      setValue("personId", teacher?.id ?? "")
+    if (mode === "qrcode") {
+      setValue("personId", teacher?.id ?? "");
     }
-  }, [mode])
+  }, [mode]);
 
   useEffect(() => {
     if (isSuccessAddQrcode) {
-      notifySuccess("Qr kod qo'shildi!")
-      setValue("personId", "")
-      setValue("qrcodeId", "")
-      refetch()
-      setOpen(false)
+      notifySuccess("Qr kod qo'shildi!");
+      setValue("personId", "");
+      setValue("qrcodeId", "");
+      refetch();
+      setOpen(false);
     } else if (addCrcodeError) {
-      notifyError("Qr kod qo'shishda xatolik yuz berdi!")
+      notifyError("Qr kod qo'shishda xatolik yuz berdi!");
     } else return;
   }, [isSuccessAddQrcode, addCrcodeError]);
 
   const onSubmit: SubmitHandler<TeacherUpdate> = (data) => editTeacher(data);
 
-  const onSubmitAddQrcode: SubmitHandler<AddQrCode> = (data) => addQrCodeToTeacher(data);
+  const onSubmitAddQrcode: SubmitHandler<AddQrCode> = (data) =>
+    addQrCodeToTeacher(data);
 
   const subjectsResponse = useSubjectsList();
-  const subjects = subjectsResponse?.data?.data
+  const subjects = subjectsResponse?.data?.data;
 
   const { data, isError, isLoading, refetch } = useTeachersList();
 
   useEffect(() => {
     if (isSuccess) {
-      notifySuccess("O`zgarishlar saqlandi")
-      refetch()
-      setOpen(false)
+      notifySuccess("O`zgarishlar saqlandi");
+      refetch();
+      setOpen(false);
     } else if (error) {
-      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi")
+      notifyError("O`zgarishlarni saqlashda muammo yuzaga keldi");
     } else return;
   }, [isSuccess, error]);
 
-  let teachers = data?.data ?? []
+  let teachers = data?.data ?? [];
   const table = useReactTable({
     data: teachers,
     columns: columns(setTeacher, showCertificates),
@@ -356,98 +408,91 @@ export default function TeachersPage() {
       columnVisibility,
       rowSelection,
     },
-  })
-  table.getState().pagination.pageSize = 40
+  });
+  table.getState().pagination.pageSize = 40;
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
-  const image = null
+  const image = null;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={mode?.includes('show') ? `max-w-5xl` : `max-w-2xl`}>
+      <DialogContent
+        className={mode?.includes("show") ? `max-w-5xl` : `max-w-2xl`}
+      >
         <DialogHeader>
-          {mode?.includes('show') ?
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle> : mode?.includes('qrcode') ?
-              <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle> : mode?.includes('subject') ?
-                <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle> :
-                <DialogTitle>O`qituvchi profili</DialogTitle>
-          }
+          {mode?.includes("show") ? (
+            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle>
+          ) : mode?.includes("qrcode") ? (
+            <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle>
+          ) : mode?.includes("subject") ? (
+            <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle>
+          ) : (
+            <DialogTitle>O`qituvchi profili</DialogTitle>
+          )}
         </DialogHeader>
-        {mode?.includes('show') ?
+        {mode?.includes("show") ? (
           <div className="px-4 py-2">
             <div className="flex p-5 space-y-4 bg-white rounded">
               <div className="flex items-start space-x-4">
-                {
-                  image ?
-                    <div>
-                      <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                        className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                    </div> :
-                    <div>
-                      <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                    </div>
-                }
+                {image ? (
+                  <div>
+                    <Image
+                      src="/public/test.png"
+                      alt="teacher image"
+                      width={100}
+                      height={100}
+                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                  </div>
+                )}
                 <div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      F.I.SH:
-                    </div>
+                    <div className="text-base text-gray-500">F.I.SH:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.fullName}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Telefon:
-                    </div>
+                    <div className="text-base text-gray-500">Telefon:</div>
+                    <div className="text-lg font-medium">{teacher?.phone}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">QR kod:</div>
                     <div className="text-lg font-medium">
-                      {teacher?.phone}
+                      {teacher?.barcode ? teacher?.barcode : "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      QR kod:
-                    </div>
+                    <div className="text-base text-gray-500">Jinsi:</div>
                     <div className="text-lg font-medium">
-                      {teacher?.barcode ? teacher?.barcode : '-'}
+                      {teacher?.gender.includes("female") ? "Ayol" : "Erkak"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Jinsi:
-                    </div>
+                    <div className="text-base text-gray-500">Fani:</div>
                     <div className="text-lg font-medium">
-                      {teacher?.gender.includes('female') ? 'Ayol' : 'Erkak'}
+                      {teacher?.subjects?.map((s) => s?.name)?.join(", ") ||
+                        "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Fani:
-                    </div>
-                    <div className="text-lg font-medium">
-                      {teacher?.subjects?.map(s => s?.name)?.join(', ') || "-"}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Daraja:
-                    </div>
+                    <div className="text-base text-gray-500">Daraja:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.degree ?? "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Millati:
-                    </div>
+                    <div className="text-base text-gray-500">Millati:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.nationality ?? "-"}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-base text-gray-500">
-                      Hujjat turi:
-                    </div>
+                    <div className="text-base text-gray-500">Hujjat turi:</div>
                     <div className="text-lg font-medium capitalize">
                       {teacher?.documentType}
                     </div>
@@ -471,60 +516,94 @@ export default function TeachersPage() {
                 </div>
               </div>
             </div>
-            <div className='items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]'>
-              {!isLoading ?
-                teacher?.documents?.map(({ id, certificateId, approved, rejected }) => {
-                  return (
-                    <div key={id} className="p-1 my-3 bg-white border shadow rounded-xl">
-                      <div className='my-3 w-96'>{getDegree(id)}</div>
-                      <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
-                        <div className='absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105'>
-                          <ImageFull cId={certificateId} />
-                        </div>
-                        <Image src={`http://25-school.uz/school/api/v1/asset/${certificateId}` ?? ''} alt="Hujjat" layout='fill' className="top-0 object-contain duration-500 rounded-lg" />
-                        {
-                          approved || rejected ? "" :
-                            <div className='absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5'>
-                              {isApproving ?
-                                <Button className='bg-green-400 hover:bg-green-700 whitespace-nowrap' disabled={true}>
-                                  <Loader2 className='w-6 h-6 mr-2' />
+            <div className="items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]">
+              {!isLoading ? (
+                teacher?.documents?.map(
+                  ({ id, certificateId, approved, rejected }) => {
+                    return (
+                      <div
+                        key={id}
+                        className="p-1 my-3 bg-white border shadow rounded-xl"
+                      >
+                        <div className="my-3 w-96">{getDegree(id)}</div>
+                        <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
+                          <div className="absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105">
+                            <ImageFull cId={certificateId} />
+                          </div>
+                          <Image
+                            src={
+                              `http://25-school.uz/school/api/v1/asset/${certificateId}` ??
+                              ""
+                            }
+                            alt="Hujjat"
+                            layout="fill"
+                            className="top-0 object-contain duration-500 rounded-lg"
+                          />
+                          {approved || rejected ? (
+                            ""
+                          ) : (
+                            <div className="absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5">
+                              {isApproving ? (
+                                <Button
+                                  className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+                                  disabled={true}
+                                >
+                                  <Loader2 className="w-6 h-6 mr-2" />
                                   Tasdiqlanmoqda...
                                 </Button>
-                                : <Button className='bg-green-500 hover:bg-green-700 whitespace-nowrap' onClick={() => approveTeacherDocument(true, id)}>
-                                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+                              ) : (
+                                <Button
+                                  className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+                                  onClick={() =>
+                                    approveTeacherDocument(true, id)
+                                  }
+                                >
+                                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
                                   Tasdiqlash
                                 </Button>
-                              }
-                              {isRejecting ?
-                                <Button className='bg-red-400 hover:bg-red-700 whitespace-nowrap' disabled={true}>
-                                  <Loader2 className='w-6 h-6 mr-2' />
+                              )}
+                              {isRejecting ? (
+                                <Button
+                                  className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+                                  disabled={true}
+                                >
+                                  <Loader2 className="w-6 h-6 mr-2" />
                                   Rad qilinmoqda...
                                 </Button>
-                                : <Button className='bg-red-500 hover:bg-red-700 whitespace-nowrap' onClick={() => approveTeacherDocument(false, id)}>
-                                  <SolarCloseCircleBroken className='w-6 h-6 mr-2' />
+                              ) : (
+                                <Button
+                                  className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+                                  onClick={() =>
+                                    approveTeacherDocument(false, id)
+                                  }
+                                >
+                                  <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
                                   Rad qilish
                                 </Button>
-                              }
+                              )}
                             </div>
-                        }
+                          )}
+                        </div>
+                        {approved ? (
+                          <h1 className="text-green-500">Tasdiqlangan</h1>
+                        ) : rejected ? (
+                          <h1 className="text-red-500">Rad etilgan</h1>
+                        ) : (
+                          <h1 className="text-orange-500">Tasdiqlanmagan</h1>
+                        )}
                       </div>
-                      {
-                        approved ?
-                          <h1 className='text-green-500'>Tasdiqlangan</h1> : rejected ?
-                            <h1 className='text-red-500'>Rad etilgan</h1> :
-                            <h1 className='text-orange-500'>Tasdiqlanmagan</h1>
-                      }
-                    </div>
-                  )
-                }) : <Loader />
-              }
+                    );
+                  },
+                )
+              ) : (
+                <Loader />
+              )}
             </div>
-          </div >
-          : mode?.includes('subject') ? <div className="space-y-3">
+          </div>
+        ) : mode?.includes("subject") ? (
+          <div className="space-y-3">
             <div className="flex items-center w-full space-x-2">
-              <div className="text-base text-gray-500">
-                F.I.SH:
-              </div>
+              <div className="text-base text-gray-500">F.I.SH:</div>
               <div className="w-full text-lg font-medium capitalize">
                 {teacher?.fullName}
               </div>
@@ -542,8 +621,10 @@ export default function TeachersPage() {
                     <SelectGroup className="overflow-auto h-52">
                       {subjects?.map(({ name, id }) => {
                         return (
-                          <SelectItem key={id} value={id}>{name}</SelectItem>
-                        )
+                          <SelectItem key={id} value={id}>
+                            {name}
+                          </SelectItem>
+                        );
                       })}
                     </SelectGroup>
                   </SelectContent>
@@ -563,8 +644,10 @@ export default function TeachersPage() {
                     <SelectGroup className="overflow-auto h-52">
                       {subjects?.map(({ name, id }) => {
                         return (
-                          <SelectItem key={id} value={id}>{name}</SelectItem>
-                        )
+                          <SelectItem key={id} value={id}>
+                            {name}
+                          </SelectItem>
+                        );
                       })}
                     </SelectGroup>
                   </SelectContent>
@@ -572,109 +655,133 @@ export default function TeachersPage() {
               </div>
             </div>
             <div className="flex items-center justify-end">
-              {isSaving ?
+              {isSaving ? (
                 <Button disabled={true}>
-                  <Loader2 className='w-6 h-6 mr-2' />
+                  <Loader2 className="w-6 h-6 mr-2" />
                   Saqlanmoqda...
                 </Button>
-                : <Button onClick={() => addSubjectToTeacher()}>
-                  <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
+              ) : (
+                <Button onClick={() => addSubjectToTeacher()}>
+                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
                   Saqlash
                 </Button>
-              }
+              )}
             </div>
-          </div >
-            : mode?.includes('qrcode') ? <form onSubmit={qrCodeHandleSubmit(onSubmitAddQrcode)}>
-              <div className="space-y-3">
-                <div className="flex flex-col items-center w-full space-y-2">
-                  {
-                    image ?
-                      <div>
-                        <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                          className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                      </div> :
-                      <div>
-                        <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                      </div>
-                  }
-                  <div className="w-full text-lg font-medium text-center capitalize">
-                    {teacher?.fullName}
+          </div>
+        ) : mode?.includes("qrcode") ? (
+          <form onSubmit={qrCodeHandleSubmit(onSubmitAddQrcode)}>
+            <div className="space-y-3">
+              <div className="flex flex-col items-center w-full space-y-2">
+                {image ? (
+                  <div>
+                    <Image
+                      src="/public/test.png"
+                      alt="teacher image"
+                      width={100}
+                      height={100}
+                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                    />
                   </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                  <Input className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case" placeholder="QR kodni skanerlang..." {...qrCodeRegister("qrcodeId", { required: true })}  disabled />
-                </div>
-                <div className="flex items-center justify-end">
-                  <Button autoFocus={true}>
-                    <SolarCheckCircleBroken className='w-6 h-6 mr-2' />
-                    QR kod biriktirish
-                  </Button>
+                ) : (
+                  <div>
+                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                  </div>
+                )}
+                <div className="w-full text-lg font-medium text-center capitalize">
+                  {teacher?.fullName}
                 </div>
               </div>
-            </form> : <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="w-full space-y-4 bg-white rounded">
-                <div className="flex items-start space-x-4">
-                  {
-                    image ?
-                      <div>
-                        <Image src="/public/test.png" alt="teacher image" width={100} height={100}
-                          className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down" />
-                      </div> :
-                      <div>
-                        <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
-                      </div>
-                  }
-                  <div className="w-full space-y-3">
-                    <div className="flex items-center w-full space-x-2">
-                      <div className="text-base text-gray-500">
-                        F.I.SH:
-                      </div>
-                      <div className="w-full text-lg font-medium capitalize">
-                        <Input type="text" className="w-full" {...register("fullName", { required: false })} />
-                      </div>
-                    </div>
-                    <div className="flex items-center w-full space-x-2">
-                      <div className="text-base text-gray-500">
-                        Fan:
-                      </div>
-                      <div className="w-full text-lg font-medium capitalize">
-                        {teacher?.degree}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="text-base text-gray-500">
-                        Telefon:
-                      </div>
-                      <div className="w-full text-lg font-medium capitalize">
-                        <Input className="w-full" {...register("phone", { required: false })} />
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="text-base text-gray-500">
-                        Yaratilgan sana:
-                      </div>
-                      <div className="text-lg font-medium">
-                        {dateFormatter(teacher?.createdAt)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2">
+                <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                <Input
+                  className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case"
+                  placeholder="QR kodni skanerlang..."
+                  {...qrCodeRegister("qrcodeId", { required: true })}
+                  disabled
+                />
               </div>
               <div className="flex items-center justify-end">
-                <Button autoFocus={true}>Saqlash</Button>
+                <Button autoFocus={true}>
+                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                  QR kod biriktirish
+                </Button>
               </div>
-            </form>
-        }
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="w-full space-y-4 bg-white rounded">
+              <div className="flex items-start space-x-4">
+                {image ? (
+                  <div>
+                    <Image
+                      src="/public/test.png"
+                      alt="teacher image"
+                      width={100}
+                      height={100}
+                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                  </div>
+                )}
+                <div className="w-full space-y-3">
+                  <div className="flex items-center w-full space-x-2">
+                    <div className="text-base text-gray-500">F.I.SH:</div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      <Input
+                        type="text"
+                        className="w-full"
+                        {...register("fullName", { required: false })}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center w-full space-x-2">
+                    <div className="text-base text-gray-500">Fan:</div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      {teacher?.degree}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">Telefon:</div>
+                    <div className="w-full text-lg font-medium capitalize">
+                      <Input
+                        className="w-full"
+                        {...register("phone", { required: false })}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-base text-gray-500">
+                      Yaratilgan sana:
+                    </div>
+                    <div className="text-lg font-medium">
+                      {dateFormatter(teacher?.createdAt)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end">
+              <Button autoFocus={true}>Saqlash</Button>
+            </div>
+          </form>
+        )}
       </DialogContent>
       <div className="w-full p-5">
         <div className="flex items-center py-4">
           <Input
             placeholder="F.I.SH bo`yicha izlash..."
-            value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
+            }
             className="max-w-sm"
             onChange={(event) => {
-              return table.getColumn("fullName")?.setFilterValue(event.target.value)
+              return table
+                .getColumn("fullName")
+                ?.setFilterValue(event.target.value);
             }}
           />
           <DropdownMenu>
@@ -699,7 +806,7 @@ export default function TeachersPage() {
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -715,11 +822,11 @@ export default function TeachersPage() {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -735,7 +842,7 @@ export default function TeachersPage() {
                       <TableCell key={cell.id} className="py-2">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -743,10 +850,7 @@ export default function TeachersPage() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="h-24 text-center"
-                  >
+                  <TableCell colSpan={8} className="h-24 text-center">
                     Hech nima topilmadi.
                   </TableCell>
                 </TableRow>
@@ -779,5 +883,5 @@ export default function TeachersPage() {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

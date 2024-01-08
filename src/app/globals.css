@@ -20,35 +20,35 @@
 /*}*/
 
 .swiper-pagination-bullet {
-    width: 100px !important;
-    opacity: 1 !important;
-    height: 8px !important;
-    margin-right: 10px !important;
-    border-radius: .5rem !important;
-    background: rgba(0,0,0,0.4) !important;
+  width: 100px !important;
+  opacity: 1 !important;
+  height: 8px !important;
+  margin-right: 10px !important;
+  border-radius: 0.5rem !important;
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 
 .swiper-pagination-bullet-active {
-    position: relative !important;
+  position: relative !important;
 }
 
 .swiper-pagination-bullet-active::before {
-    left: 0;
-    width: 0%;
-    content: '';
-    height: 100%;
-    position: absolute;
-    animation: anima 5s;
-    border-radius: .5rem;
-    background-color: #fff;
+  left: 0;
+  width: 0%;
+  content: "";
+  height: 100%;
+  position: absolute;
+  animation: anima 5s;
+  border-radius: 0.5rem;
+  background-color: #fff;
 }
 
 @keyframes anima {
-    0% {
-        width: 0%;
-    }
+  0% {
+    width: 0%;
+  }
 
-    100% {
-        width: 100%;
-    }
+  100% {
+    width: 100%;
+  }
 }

@@ -12,7 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Check, ChevronDown, ChevronsUpDown, Download } from "lucide-react";
+import {
+  ArrowUpDown,
+  Check,
+  ChevronDown,
+  ChevronsUpDown,
+  Download,
+} from "lucide-react";
 import * as React from "react";
 import ViewVisitorPicture from "@/components/client/visits/ViewVisitorPicture";
 import Loader from "@/components/client/Loader";
@@ -51,7 +57,11 @@ import { downloadCsv } from "@/lib/csv";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useGroupsList } from "@/hooks/useGroups";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -62,12 +72,12 @@ import {
 import { cn } from "@/lib/utils";
 import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
 import { SolarUserHandsOutline } from "@/icons/StudentsIcon";
-import { paginate } from "@/lib/pagination"
+import { paginate } from "@/lib/pagination";
 import moment from "moment";
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
-  showCertificates: any
+  showCertificates: any,
 ): ColumnDef<Visit, any>[] => [
   {
     header: "No",
@@ -165,8 +175,8 @@ export default function VisitsPage() {
     setVisitFilter({
       groupName: selectedGroup?.name,
       groupLevel: selectedGroup?.level,
-      from: from ? moment(from).format('yyyy-MM-DD') : undefined,
-      to: to ? moment(to).format('yyyy-MM-DD') : undefined,
+      from: from ? moment(from).format("yyyy-MM-DD") : undefined,
+      to: to ? moment(to).format("yyyy-MM-DD") : undefined,
     });
     setCurrentPage(1);
     // refetch()
@@ -190,17 +200,14 @@ export default function VisitsPage() {
   const { data, isError, isLoading, refetch } = useVisitsList(visitFilter);
   const visits = data?.data?.visits ?? [];
   const [pagesCount, setPagesCount] = useState<number>(
-    data?.data.totalPages ?? 1
+    data?.data.totalPages ?? 1,
   );
 
   useEffect(() => {
-    if (currentPage <= 0)
-      setCurrentPage(1);
-    else if (currentPage > pagesCount)
-      setCurrentPage(pagesCount)
-    else
-      setVisitFilter({ ...visitFilter, page: currentPage })
-  }, [currentPage])
+    if (currentPage <= 0) setCurrentPage(1);
+    else if (currentPage > pagesCount) setCurrentPage(pagesCount);
+    else setVisitFilter({ ...visitFilter, page: currentPage });
+  }, [currentPage]);
 
   if (data?.data.totalPages != pagesCount) {
     if (typeof data?.data.totalPages == "number") {
@@ -305,7 +312,7 @@ export default function VisitsPage() {
                             onSelect={() => {
                               selectedGroup == group
                                 ? setSelectedGroup(undefined)
-                                : setSelectedGroup(group)
+                                : setSelectedGroup(group);
                               setOpenGroup(false);
                             }}
                           >
@@ -314,7 +321,7 @@ export default function VisitsPage() {
                                 "mr-2 h-4 w-4",
                                 selectedGroup?.id === group?.id
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             {`${group?.level}-${group?.name}`}
@@ -379,7 +386,7 @@ export default function VisitsPage() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -398,7 +405,7 @@ export default function VisitsPage() {
                     <TableCell key={cell.id} className="py-2">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -419,26 +426,35 @@ export default function VisitsPage() {
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious href="#" onClick={() => setCurrentPage(currentPage - 1)} />
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                />
               </PaginationItem>
-              {paginate(currentPage, pagesCount)
-                .map(page => {
-                  return <PaginationItem key={page}>
-                    {page == 0
-                      ? <PaginationEllipsis />
-                      : <PaginationLink
-                          href="#"
-                          isActive={page==currentPage}
-                          onClick={() => {setCurrentPage(page)}}
-                        >
-                          {page}
-                        </PaginationLink>
-                    }
+              {paginate(currentPage, pagesCount).map((page) => {
+                return (
+                  <PaginationItem key={page}>
+                    {page == 0 ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        href="#"
+                        isActive={page == currentPage}
+                        onClick={() => {
+                          setCurrentPage(page);
+                        }}
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
                   </PaginationItem>
-                })
-              }
+                );
+              })}
               <PaginationItem>
-                <PaginationNext href="#" onClick={() => setCurrentPage(currentPage + 1)} />
+                <PaginationNext
+                  href="#"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>

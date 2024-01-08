@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,20 +11,25 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, PencilIcon, TrashIcon } from "lucide-react"
-import * as React from "react"
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
+import * as React from "react";
 
-import Loader from "@/components/client/Loader"
-import { Button } from "@/components/ui/button"
+import Loader from "@/components/client/Loader";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -32,19 +37,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useGroupsList } from "@/hooks/useGroups"
-import useUserInfo from "@/hooks/useUserInfo"
-import { useRouter } from "next/navigation"
-import { Group } from "@/models/common.interface"
-import { useEffect, useState } from "react"
+} from "@/components/ui/table";
+import { useGroupsList } from "@/hooks/useGroups";
+import useUserInfo from "@/hooks/useUserInfo";
+import { useRouter } from "next/navigation";
+import { Group } from "@/models/common.interface";
+import { useEffect, useState } from "react";
 
 export const columns: ColumnDef<Group>[] = [
   {
     header: "No",
-    cell: ({ row }) => (
-      <div>{parseInt(row.id, 10) + 1}</div>
-    ),
+    cell: ({ row }) => <div>{parseInt(row.id, 10) + 1}</div>,
   },
   {
     accessorKey: "name",
@@ -57,24 +60,26 @@ export const columns: ColumnDef<Group>[] = [
           Guruh nomi
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className="uppercase">{`${row.getValue('level')} - ${row.getValue('name')}`}</div>
+      <div className="uppercase">{`${row.getValue("level")} - ${row.getValue(
+        "name",
+      )}`}</div>
     ),
   },
   {
     accessorKey: "level",
-    header: 'Sinf',
+    header: "Sinf",
     cell: ({ row }) => (
-      <div className="uppercase">{`${row.getValue('level')} - sinf`}</div>
+      <div className="uppercase">{`${row.getValue("level")} - sinf`}</div>
     ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const group = row.original
+      const group = row.original;
 
       return (
         <DropdownMenu>
@@ -97,30 +102,27 @@ export const columns: ColumnDef<Group>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export default function GroupsPage() {
-  const currentUser = useUserInfo()
-  const router = useRouter()
+  const currentUser = useUserInfo();
+  const router = useRouter();
   useEffect(() => {
-    if (!currentUser?.User?.role?.includes('admin')) {
-      router.push('/dashboard/denied')
+    if (!currentUser?.User?.role?.includes("admin")) {
+      router.push("/dashboard/denied");
     }
-  }, [currentUser?.User?.role, router])
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  }, [currentUser?.User?.role, router]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const { data, isLoading } = useGroupsList();
 
-  let groups = data?.data ?? []
+  let groups = data?.data ?? [];
   const table = useReactTable({
     data: groups,
     columns: columns,
@@ -138,10 +140,10 @@ export default function GroupsPage() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   return (
@@ -157,11 +159,11 @@ export default function GroupsPage() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -177,7 +179,7 @@ export default function GroupsPage() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -220,5 +222,5 @@ export default function GroupsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

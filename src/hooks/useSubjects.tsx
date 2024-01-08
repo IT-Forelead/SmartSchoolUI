@@ -9,9 +9,8 @@ const getSubjectsList = async () => {
 
 export const useSubjectsList = () => {
   return useQuery({
-    queryKey: ['subjects'],
+    queryKey: ["subjects"],
     queryFn: () => getSubjectsList(),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
-

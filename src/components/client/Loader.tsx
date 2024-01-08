@@ -1,5 +1,5 @@
-import { SvgSpinnersBouncingBall } from '@/icons/LoaderIcon'
-import React from 'react'
+import { SvgSpinnersBouncingBall } from "@/icons/LoaderIcon";
+import React from "react";
 
 export default function Loader() {
   return (
@@ -7,5 +7,5 @@ export default function Loader() {
       <SvgSpinnersBouncingBall className="w-7 h-7" />
       Ma`lumotlar yuklanmoqda...
     </div>
-  )
+  );
 }

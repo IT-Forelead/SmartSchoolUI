@@ -15,16 +15,16 @@ const changeTeacherLessonHour = async (data: LessonHour) => {
 /* Hooks */
 export const useStudyHoursList = () => {
   return useQuery({
-    queryKey: ['studyHours'],
+    queryKey: ["studyHours"],
     queryFn: () => getStudyHoursList(),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };
 
 export const useChangeTeacherLessonHour = () => {
   // return useMutation((data: LessonHour) => changeTeacherLessonHour(data), {});
   return useMutation({
     mutationFn: (data: LessonHour) => changeTeacherLessonHour(data),
-    onError: (err: AxiosError) => err
-  })
+    onError: (err: AxiosError) => err,
+  });
 };

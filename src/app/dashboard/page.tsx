@@ -1,15 +1,36 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+import useUserInfo from "@/hooks/useUserInfo";
+import { Skeleton } from "@/components/ui/skeleton";
 import TeacherStatistics from "@/components/client/main/TeacherStatistics";
 import StudentStatistics from "@/components/client/main/StudentStatistics";
-import SmsMessagesChart from "@/components/client/main/SmsMessagesChart";
-import TeacherVisitsChart from "@/components/client/main/TeacherVisitsChart";
-import StudentVisitsChart from "@/components/client/main/StudentVisitsChart";
-import useUserInfo from "@/hooks/useUserInfo";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
+  const SmsMessagesChart = dynamic(
+    () => import("@/components/client/main/SmsMessagesChart"),
+    {
+      ssr: false,
+      loading: () => <Skeleton className="col-span-2 rounded-lg" />,
+    }
+  );
+  const TeacherVisitsChart = dynamic(
+    () => import("@/components/client/main/TeacherVisitsChart"),
+    {
+      ssr: false,
+      loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
+    }
+  );
+  const StudentVisitsChart = dynamic(
+    () => import("@/components/client/main/StudentVisitsChart"),
+    {
+      ssr: false,
+      loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
+    }
+  );
+
   const currentUser = useUserInfo();
   const router = useRouter();
   useEffect(() => {

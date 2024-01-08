@@ -1,11 +1,8 @@
 "use client";
 
-import ReactApexChart from "react-apexcharts";
 import moment from "moment";
+import ReactApexChart from "react-apexcharts";
 import { SolarChatRoundLineBroken } from "@/icons/ChatIcon";
-import dynamic from "next/dynamic";
-
-const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function SmsMessagesChart() {
   const series = [
@@ -17,7 +14,6 @@ export default function SmsMessagesChart() {
 
   const options = {
     chart: {
-      type: "bar",
       zoom: {
         enabled: false,
       },
@@ -79,9 +75,7 @@ export default function SmsMessagesChart() {
       },
       labels: {
         show: true,
-        formatter: function (val: string) {
-          return moment(val).format("D-MMM");
-        },
+        formatter: (val: number): string => moment(val).format("D-MMM"),
       },
     },
     grid: {
@@ -107,7 +101,12 @@ export default function SmsMessagesChart() {
           <SolarChatRoundLineBroken className="w-8 h-8 text-white" />
         </div>
       </div>
-      <ApexChart options={options} series={series} type="bar" height={250} />
+      <ReactApexChart
+        options={options}
+        series={series}
+        type="bar"
+        height={250}
+      />
     </div>
   );
 }

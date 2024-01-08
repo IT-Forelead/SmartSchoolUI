@@ -1,11 +1,8 @@
 "use client";
 
-import ReactApexChart from "react-apexcharts";
 import moment from "moment";
+import ReactApexChart from "react-apexcharts";
 import { SolarUsersGroupTwoRoundedBroken } from "@/icons/GroupIcon";
-import dynamic from "next/dynamic";
-
-const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function StudentVisitsChart() {
   const series = [
@@ -17,7 +14,6 @@ export default function StudentVisitsChart() {
 
   const options = {
     chart: {
-      type: "bar",
       zoom: {
         enabled: false,
       },
@@ -159,7 +155,12 @@ export default function StudentVisitsChart() {
           <SolarUsersGroupTwoRoundedBroken className="w-8 h-8 text-white" />
         </div>
       </div>
-      <ApexChart options={options} series={series} type="bar" height={300} />
+      <ReactApexChart
+        options={options}
+        series={series}
+        type="bar"
+        height={300}
+      />
     </div>
   );
 }

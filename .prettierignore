@@ -1,0 +1,12 @@
+.github/
+.husky/
+.next/
+node_modules/
+
+.*ignore
+.env*
+
+public/
+
+pnpm-lock.yaml
+package-lock.json

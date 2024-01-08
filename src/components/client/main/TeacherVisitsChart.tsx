@@ -3,12 +3,15 @@
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
+import { getTeacherStats } from "@/lib/stats";
 
-export default function TeacherVisitsChart() {
+export default async function TeacherVisitsChart() {
+  const stats = await getTeacherStats();
+
   const series = [
     {
       name: "O`qituvchilar",
-      data: [60, 56, 51, 49, 57, 61, 56],
+      data: stats.map((s) => s.count),
     },
   ];
 
@@ -77,15 +80,7 @@ export default function TeacherVisitsChart() {
       show: false,
     },
     xaxis: {
-      categories: [
-        "2023-11-27",
-        "2023-11-28",
-        "2023-11-29",
-        "2023-11-30",
-        "2023-12-01",
-        "2023-12-02",
-        "2023-12-03",
-      ],
+      categories: stats.map((s) => s.date),
       labels: {
         style: {
           fontSize: "12px",

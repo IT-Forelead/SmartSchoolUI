@@ -14,21 +14,21 @@ export default function Home() {
     {
       ssr: false,
       loading: () => <Skeleton className="col-span-2 rounded-lg" />,
-    }
+    },
   );
   const TeacherVisitsChart = dynamic(
     () => import("@/components/client/main/TeacherVisitsChart"),
     {
       ssr: false,
       loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
-    }
+    },
   );
   const StudentVisitsChart = dynamic(
     () => import("@/components/client/main/StudentVisitsChart"),
     {
       ssr: false,
       loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
-    }
+    },
   );
 
   const currentUser = useUserInfo();

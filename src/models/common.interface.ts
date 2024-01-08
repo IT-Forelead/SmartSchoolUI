@@ -290,3 +290,8 @@ export type SmsStats = {
   transmitted: number;
   undefined: number;
 };
+
+export type StatsDaily = {
+  date: string;
+  count: number;
+};

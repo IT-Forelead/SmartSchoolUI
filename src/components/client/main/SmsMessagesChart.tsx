@@ -3,12 +3,15 @@
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 import { SolarChatRoundLineBroken } from "@/icons/ChatIcon";
+import { getSmsStats } from "@/lib/stats";
 
-export default function SmsMessagesChart() {
+export default async function SmsMessagesChart() {
+  const stats = await getSmsStats();
+
   const series = [
     {
       name: "Yuborilgan SMS xabarlar",
-      data: [362, 348, 299, 341, 378, 384, 391],
+      data: stats.map((s) => s.count),
     },
   ];
 
@@ -47,15 +50,7 @@ export default function SmsMessagesChart() {
       show: false,
     },
     xaxis: {
-      categories: [
-        "2023-11-27",
-        "2023-11-28",
-        "2023-11-29",
-        "2023-11-30",
-        "2023-12-01",
-        "2023-12-02",
-        "2023-12-03",
-      ],
+      categories: stats.map((s) => s.date),
       tooltip: {
         enabled: false,
       },

@@ -21,7 +21,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import {
   Popover,
@@ -31,7 +30,7 @@ import {
 import { useGroupsList } from "@/hooks/useGroups";
 import { useSubjectsList } from "@/hooks/useSubjects";
 import { useTeachersList } from "@/hooks/useTeachers";
-import { useTargetLesson } from "@/hooks/useTimeTable";
+import { useLessonTimes, useTargetLesson } from "@/hooks/useTimeTable";
 import { SolarBoxMinimalisticBroken } from "@/icons/BoxIcon";
 import {
   moments,
@@ -41,9 +40,9 @@ import {
 } from "@/lib/composables";
 import { notifyError, notifySuccess } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { LessonCreate } from "@/models/common.interface";
+import { LessonCreate, LessonFilter } from "@/models/common.interface";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -63,12 +62,11 @@ export default function TargetLesson() {
   const subjectResponse = useSubjectsList();
   const subjects = subjectResponse?.data?.data || [];
 
-  const {
-    mutate: targetLesson,
-    isSuccess,
-    error,
-    isLoading,
-  } = useTargetLesson();
+  const [lessonFilter, setLessonFilter] = useState<LessonFilter>({});
+  const { data } = useLessonTimes(lessonFilter);
+  const lessonTimes = data ?? [];
+
+  const { mutate: targetLesson, isSuccess, error } = useTargetLesson();
 
   useEffect(() => {
     if (isSuccess) {
@@ -113,7 +111,12 @@ export default function TargetLesson() {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        form.reset();
+        setLessonFilter({});
+      }}
+    >
       <DialogTrigger>
         <Button className="bg-blue-700 hover:bg-blue-900">
           <SolarBoxMinimalisticBroken className="w-6 h-6 mr-2" />
@@ -168,6 +171,11 @@ export default function TargetLesson() {
                               key={teacher.id}
                               onSelect={() => {
                                 form.setValue("teacherId", teacher.id);
+                                form.setValue("times", []);
+                                setLessonFilter({
+                                  ...lessonFilter,
+                                  teacherId: teacher.id,
+                                });
                               }}
                             >
                               <Check
@@ -185,7 +193,6 @@ export default function TargetLesson() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -232,6 +239,11 @@ export default function TargetLesson() {
                               key={group.id}
                               onSelect={() => {
                                 form.setValue("groupId", group.id);
+                                form.setValue("times", []);
+                                setLessonFilter({
+                                  ...lessonFilter,
+                                  groupId: group.id,
+                                });
                               }}
                             >
                               <Check
@@ -249,7 +261,6 @@ export default function TargetLesson() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -294,6 +305,7 @@ export default function TargetLesson() {
                               key={subject.id}
                               onSelect={() => {
                                 form.setValue("subjectId", subject.id);
+                                form.setValue("times", []);
                               }}
                             >
                               <Check
@@ -311,7 +323,6 @@ export default function TargetLesson() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -357,6 +368,9 @@ export default function TargetLesson() {
                                             id={item}
                                             className="peer"
                                             hidden={true}
+                                            disabled={lessonTimes.includes(
+                                              item,
+                                            )}
                                             checked={field.value?.includes(
                                               item,
                                             )}
@@ -376,7 +390,7 @@ export default function TargetLesson() {
                                         </FormControl>
                                         <label
                                           htmlFor={item}
-                                          className="block py-2 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:bg-cyan-300 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                          className="peer-disabled:bg-[#fc888a] peer-checked:bg-[#7cc4f7] block py-2 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                                         >
                                           &nbsp;
                                         </label>
@@ -391,11 +405,12 @@ export default function TargetLesson() {
                       ))}
                     </tbody>
                   </table>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="bg-green-600">
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>

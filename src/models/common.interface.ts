@@ -257,6 +257,11 @@ export type LessonCreate = {
   times: LessonTime[];
 };
 
+export type LessonFilter = {
+  teacherId?: string;
+  groupId?: string;
+};
+
 export type WorkloadFormula = {
   x: number;
   total: number;

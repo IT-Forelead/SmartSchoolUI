@@ -1,8 +1,14 @@
-import { LessonBody, LessonCreate } from "@/models/common.interface";
+import {
+  LessonBody,
+  LessonCreate,
+  LessonFilter,
+  LessonTime,
+} from "@/models/common.interface";
 import { LessonBodyData } from "@/models/user.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+
 /* APIs */
 const getTimeTable = async () => {
   return await axios.get<any>("/timetable/fetch");
@@ -30,6 +36,16 @@ export const getTimetableHistory = async () => {
 
 export const deleteTimetableHistory = async (data: LessonBody) => {
   return await axios.patch<any>("/timetable/available/lesson", data);
+};
+
+export const getLessonTimes = async (filter: LessonFilter) => {
+  let times: LessonTime[] = [];
+
+  if (filter.groupId && filter.teacherId)
+    times = (await axios.post<LessonTime[]>("/timetable/available", filter))
+      .data;
+
+  return times.map((time) => time.weekday + "-" + time.moment);
 };
 
 /* Hooks */
@@ -67,6 +83,14 @@ export const useSwitchTwoLessonOrder = () => {
 export const useDeleteTimeTableHistory = () => {
   return useMutation({
     mutationFn: (body: LessonBody) => deleteTimetableHistory(body),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useLessonTimes = (filter: LessonFilter) => {
+  return useQuery({
+    queryKey: ["lessonTimes", filter],
+    queryFn: () => getLessonTimes(filter),
     onError: (err: AxiosError) => err,
   });
 };

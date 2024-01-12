@@ -24,7 +24,7 @@ export const downloadCsv = async (filter: VisitFilter) => {
       "Visit Time": visit.createdAt,
       "Visit Type": visit.visitType,
       "Picture Link": visit.assetId
-        ? "https://25-school.uz/asset/view/" + visit.assetId
+        ? process.env.NEXT_PUBLIC_API_URI + "/asset/view/" + visit.assetId
         : "",
     };
   });

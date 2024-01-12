@@ -1,4 +1,4 @@
-import { LessonBody } from "@/models/common.interface";
+import { LessonBody, LessonCreate } from "@/models/common.interface";
 import { LessonBodyData } from "@/models/user.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ export const rebuildTimetable = async () => {
   return await axios.get<any>("/timetable");
 };
 
-export const targetLesson = async (data: LessonBody) => {
+export const targetLesson = async (data: LessonCreate) => {
   return await axios.post<any>("/timetable", data);
 };
 
@@ -52,7 +52,7 @@ export const useTimeTableHistory = () => {
 /* Mutations */
 export const useTargetLesson = () => {
   return useMutation({
-    mutationFn: (body: LessonBody) => targetLesson(body),
+    mutationFn: (body: LessonCreate) => targetLesson(body),
     onError: (err: AxiosError) => err,
   });
 };

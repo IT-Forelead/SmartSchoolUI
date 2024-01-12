@@ -245,6 +245,18 @@ export type LessonBody = {
   moment: number;
 };
 
+export type LessonTime = {
+  weekday: string;
+  moment: number;
+};
+
+export type LessonCreate = {
+  teacherId: string;
+  subjectId: string;
+  groupId: string;
+  times: LessonTime[];
+};
+
 export type WorkloadFormula = {
   x: number;
   total: number;

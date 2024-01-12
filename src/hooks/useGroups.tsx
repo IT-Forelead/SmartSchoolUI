@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Group } from "@/models/common.interface";
 import axios from "@/services/axios";
@@ -9,11 +8,9 @@ const getGroupsList = async () => {
 };
 
 export const useGroupsList = () => {
-  const placeholderData = useMemo(() => getGroupsList, []);
   return useQuery({
     queryKey: ["groups"],
     queryFn: () => getGroupsList(),
     onError: (err: AxiosError) => err,
-    placeholderData,
   });
 };

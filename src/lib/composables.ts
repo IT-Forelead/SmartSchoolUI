@@ -1,4 +1,6 @@
 import moment from "moment";
+import { Group } from "@/models/common.interface";
+
 export function dateFormatter(date: moment.MomentInput) {
   if (date) {
     return moment(date).format("DD/MM/YYYY HH:mm");
@@ -71,4 +73,8 @@ export function fillColor(studentsCount: number, divide: boolean) {
     return "bg-green-500 hover:bg-green-600";
   }
   return "bg-white hover:bg-gray-100";
+}
+
+export function translateGroup(group?: Group) {
+  return group?.level + "-" + group?.name;
 }

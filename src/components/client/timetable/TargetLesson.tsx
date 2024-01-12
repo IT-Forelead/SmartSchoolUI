@@ -16,30 +16,44 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useGroupsList } from "@/hooks/useGroups";
 import { useSubjectsList } from "@/hooks/useSubjects";
 import { useTeachersList } from "@/hooks/useTeachers";
 import { useTargetLesson } from "@/hooks/useTimeTable";
 import { SolarBoxMinimalisticBroken } from "@/icons/BoxIcon";
-import { moments, translateWeekday, weekdays } from "@/lib/composables";
+import {
+  moments,
+  translateGroup,
+  weekdays,
+  weekdaysThreeLetter,
+} from "@/lib/composables";
 import { notifyError, notifySuccess } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { Group, LessonBody, Subject, Teacher } from "@/models/common.interface";
+import { LessonCreate } from "@/models/common.interface";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+const FormSchema = z.object({
+  teacherId: z.string().uuid(),
+  subjectId: z.string().uuid(),
+  groupId: z.string().uuid(),
+  times: z.array(z.string()).min(1),
+});
 
 export default function TargetLesson() {
   const teacherResponse = useTeachersList();
@@ -49,27 +63,6 @@ export default function TargetLesson() {
   const subjectResponse = useSubjectsList();
   const subjects = subjectResponse?.data?.data || [];
 
-  const [openTeacher, setOpenTeacher] = useState(false);
-  const [selectedTeacher, setSelectedTeacher] = useState<Teacher>();
-
-  const [openGroup, setOpenGroup] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState<Group>();
-
-  const [openSubject, setOpenSubject] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState<Subject>();
-
-  const [day, setDay] = useState("");
-  const [moment, setMoment] = useState(0);
-
-  function getSelectedDay(givenDay: string) {
-    setDay(givenDay);
-  }
-
-  function getSelectedMoment(order: string) {
-    setMoment(+order);
-  }
-
-  const { handleSubmit } = useForm<LessonBody>();
   const {
     mutate: targetLesson,
     isSuccess,
@@ -77,41 +70,47 @@ export default function TargetLesson() {
     isLoading,
   } = useTargetLesson();
 
-  const onSubmit: SubmitHandler<LessonBody> = (data) => {
-    data.teacherId = selectedTeacher?.id || "";
-    data.groupId = selectedGroup?.id || "";
-    data.subjectId = selectedSubject?.id || "";
-    data.weekday = day;
-    data.moment = moment;
-    if (!data.teacherId) {
-      notifyError("Iltimos o`qituvchini tanlang!");
-    } else if (!data.groupId) {
-      notifyError("Iltimos guruhni tanlang!");
-    } else if (!data.subjectId) {
-      notifyError("Iltimos fanni tanlang!");
-    } else if (!data.weekday) {
-      notifyError("Iltimos kunni tanlang!");
-    } else if (!data.moment) {
-      notifyError("Iltimos dars joylashuvini tanlang!");
-    } else {
-      targetLesson(data);
-    }
-  };
-
   useEffect(() => {
     if (isSuccess) {
-      notifySuccess("So`rov yuborildi");
+      notifySuccess("So'rov yuborildi");
     } else if (error) {
       if (error?.response?.data) {
         notifyError(
           (error?.response?.data as string) ||
-            "So`rov yuborishda muammo yuzaga keldi",
+            "So'rov yuborishda muammo yuzaga keldi",
         );
       } else {
-        notifyError("So`rov yuborishda muammo yuzaga keldi");
+        notifyError("So'rov yuborishda muammo yuzaga keldi");
       }
     } else return;
   }, [isSuccess, error]);
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      teacherId: "",
+      subjectId: "",
+      groupId: "",
+      times: [],
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    const times = data.times.map((time) => {
+      const [weekday, moment] = time.split("-");
+      return {
+        moment: parseInt(moment),
+        weekday: weekday,
+      };
+    });
+    const newData: LessonCreate = {
+      teacherId: data.teacherId,
+      groupId: data.groupId,
+      subjectId: data.subjectId,
+      times: times,
+    };
+    targetLesson(newData);
+  };
 
   return (
     <Dialog>
@@ -124,187 +123,281 @@ export default function TargetLesson() {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            Dars jadvalidan o`qituvchiga mos kunni belgilash
+            Dars jadvalidan o&apos;qituvchiga mos kunni belgilash
           </DialogTitle>
         </DialogHeader>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          method="POST"
-          content=""
-          className="space-y-3"
-        >
-          <Popover open={openTeacher} onOpenChange={setOpenTeacher}>
-            <p className="font-semibold">O`qituvchi:</p>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openTeacher}
-                className="justify-between w-full"
-              >
-                {selectedTeacher
-                  ? selectedTeacher?.fullName
-                  : "O`qituvchi tanlash..."}
-                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Izlash..." />
-                <CommandEmpty>O`qituvchi topilmadi.</CommandEmpty>
-                <CommandGroup className="overflow-auto max-h-80">
-                  {teachers?.map((teacher) => (
-                    <CommandItem
-                      key={teacher?.id}
-                      onSelect={() => {
-                        setSelectedTeacher(teacher);
-                        setOpenTeacher(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedTeacher?.id === teacher?.id
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
-                      {teacher?.fullName}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Popover open={openGroup} onOpenChange={setOpenGroup}>
-            <p className="font-semibold">Guruh:</p>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openGroup}
-                className="justify-between w-full"
-              >
-                {selectedGroup
-                  ? `${selectedGroup?.level}-${selectedGroup?.name}`
-                  : "Guruh tanlash..."}
-                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Izlash..." />
-                <CommandEmpty>Guruh topilmadi.</CommandEmpty>
-                <CommandGroup className="overflow-auto max-h-80">
-                  {groups
-                    ?.sort((a, b) => a.level - b.level)
-                    ?.map((group) => (
-                      <CommandItem
-                        key={group?.id}
-                        onSelect={() => {
-                          setSelectedGroup(group);
-                          setOpenGroup(false);
-                        }}
-                      >
-                        <Check
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="teacherId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>O&apos;qituvchi</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
                           className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedGroup?.id === group?.id
-                              ? "opacity-100"
-                              : "opacity-0",
+                            "justify-between",
+                            !field.value && "text-muted-foreground",
                           )}
+                        >
+                          {field.value
+                            ? teachers.find(
+                                (teacher) => teacher.id === field.value,
+                              )?.fullName
+                            : "O'qituvchi tanlash"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="O'qituvchi tanlash..."
+                          className=""
                         />
-                        {`${group?.level}-${group?.name}`}
-                      </CommandItem>
-                    ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Popover open={openSubject} onOpenChange={setOpenSubject}>
-            <p className="font-semibold">Fan:</p>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openSubject}
-                className="justify-between w-full"
-              >
-                {selectedSubject ? selectedSubject?.name : "Fan tanlash..."}
-                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Izlash..." />
-                <CommandEmpty>Fan topilmadi.</CommandEmpty>
-                <CommandGroup className="overflow-auto max-h-80">
-                  {subjects.map((subject) => (
-                    <CommandItem
-                      key={subject?.id}
-                      onSelect={() => {
-                        setSelectedSubject(subject);
-                        setOpenSubject(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedSubject?.id === subject?.id
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
-                      {subject?.name}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Select onValueChange={(val) => getSelectedDay(val)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Hafta kunlari..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup className="overflow-auto h-52">
-                {weekdays?.map((day, idx) => {
-                  return (
-                    <SelectItem key={idx} value={translateWeekday(day)}>
-                      {day}
-                    </SelectItem>
-                  );
-                })}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select onValueChange={(val) => getSelectedMoment(val)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Dars joylashuvi..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup className="overflow-auto h-52">
-                {moments?.map((moment, idx) => {
-                  return (
-                    <SelectItem key={idx} value={`${moment}`}>
-                      {moment}-para
-                    </SelectItem>
-                  );
-                })}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <div className="flex items-center justify-end mt-5">
-            {!isLoading ? (
-              <Button autoFocus={true}>So`rov yuborish</Button>
-            ) : (
-              <Button disabled className="select-none">
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                So`rov yuborilmoqda...
-              </Button>
-            )}
-          </div>
-        </form>
+                        <CommandEmpty>O&apos;qituvchi topilmadi.</CommandEmpty>
+                        <CommandGroup>
+                          {teachers.map((teacher) => (
+                            <CommandItem
+                              value={teacher.fullName}
+                              key={teacher.id}
+                              onSelect={() => {
+                                form.setValue("teacherId", teacher.id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  teacher.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {teacher.fullName}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="groupId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Guruh</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value
+                            ? translateGroup(
+                                groups.find(
+                                  (group) => group.id === field.value,
+                                ),
+                              )
+                            : "Guruh tanlash"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Guruh tanlash..."
+                          className=""
+                        />
+                        <CommandEmpty>Guruh topilmadi.</CommandEmpty>
+                        <CommandGroup>
+                          {groups.map((group) => (
+                            <CommandItem
+                              value={translateGroup(group)}
+                              key={group.id}
+                              onSelect={() => {
+                                form.setValue("groupId", group.id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  group.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {translateGroup(group)}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="subjectId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Fan</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value
+                            ? subjects.find(
+                                (subject) => subject.id === field.value,
+                              )?.name
+                            : "Fan tanlash"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Fan tanlash..."
+                          className=""
+                        />
+                        <CommandEmpty>Fan topilmadi.</CommandEmpty>
+                        <CommandGroup>
+                          {subjects.map((subject) => (
+                            <CommandItem
+                              value={subject.name}
+                              key={subject.id}
+                              onSelect={() => {
+                                form.setValue("subjectId", subject.id);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  subject.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {subject.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="times"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="text-base">Dars soatlari</FormLabel>
+                  <table className="border w-fit table-auto">
+                    <thead>
+                      <tr>
+                        <td></td>
+                        {weekdays.map((w) => (
+                          <th className="border p-2" key={w}>
+                            {w}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {moments.map((m) => (
+                        <tr key={m}>
+                          <th className="border px-2">{m}-para</th>
+                          {weekdaysThreeLetter.map((w) => {
+                            const item = w + "-" + m;
+                            return (
+                              <td className="border" key={w}>
+                                <FormField
+                                  key={item}
+                                  control={form.control}
+                                  name="times"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={item}
+                                        className="space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <input
+                                            type="checkbox"
+                                            id={item}
+                                            className="peer"
+                                            hidden={true}
+                                            checked={field.value?.includes(
+                                              item,
+                                            )}
+                                            onChange={(event) => {
+                                              return event.target.checked
+                                                ? field.onChange([
+                                                    ...field.value,
+                                                    item,
+                                                  ])
+                                                : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== item,
+                                                    ),
+                                                  );
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <label
+                                          htmlFor={item}
+                                          className="block py-2 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:bg-cyan-300 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                        >
+                                          &nbsp;
+                                        </label>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -13,11 +13,19 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
-import { PaginationFilter } from "@/models/common.interface";
+import { MessageFilter } from "@/models/common.interface";
+
+import { format } from "date-fns";
 
 import Loader from "@/components/client/Loader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -26,14 +34,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  useMessagesList,
-  getMessagesStats,
-  useMessagesStats,
-} from "@/hooks/useMessages";
+import { useMessagesList, useMessagesStats } from "@/hooks/useMessages";
 import useUserInfo from "@/hooks/useUserInfo";
 import { dateFormatter, translateSMSStatus } from "@/lib/composables";
-import { Link2Icon } from "lucide-react";
+import { CalendarIcon, Link2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Message } from "@/models/common.interface";
 import { useEffect, useState } from "react";
@@ -47,6 +51,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { humanize } from "@/lib/date";
 
 export const columns: ColumnDef<Message>[] = [
   {
@@ -91,7 +98,7 @@ export const columns: ColumnDef<Message>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status");
+      const status: string = row.getValue("status");
       let styleStatus = "bg-gray-600  text-white py-1 rounded-full text-center";
       if (status === "Sent") {
         styleStatus = "bg-blue-600 text-white py-1 rounded-full text-center";
@@ -125,10 +132,23 @@ export default function MessagesPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { data, isError, isLoading, refetch } = useMessagesList({
-    page: currentPage,
-  });
+  const [filter, setFilter] = useState<MessageFilter>({});
+  const { data, isError, isLoading, refetch } = useMessagesList(filter);
   const d = data?.data?.messages ?? [];
+
+  const [dateStart, setDateStart] = useState<Date | undefined>(undefined);
+  const [dateEnd, setDateEnd] = useState<Date | undefined>(undefined);
+  const [phone, setPhone] = useState<string>("");
+
+  const handleSubmit = () => {
+    const data = {
+      from: dateStart ? format(dateStart, "yyyy-MM-dd") : undefined,
+      to: dateEnd ? format(dateEnd, "yyyy-MM-dd") : undefined,
+      phone: phone == "" ? undefined : phone,
+      page: 1,
+    };
+    setFilter(data);
+  };
 
   const stats = useMessagesStats().data?.data;
   const [pagesCount, setPagesCount] = useState<number>(
@@ -141,7 +161,10 @@ export default function MessagesPage() {
       setCurrentPage(pagesCount);
     } else {
       setCurrentPage(currentPage);
-      refetch();
+      setFilter({
+        ...filter,
+        page: currentPage,
+      });
     }
   }, [currentPage]);
 
@@ -176,6 +199,65 @@ export default function MessagesPage() {
 
   return (
     <div className="w-full p-5">
+      <div>
+        <div className="flex space-x-1 w-full justify-between items-center py-4">
+          <div className="flex w-full justify-start space-x-5 items-center py-4">
+            <Input
+              placeholder="Raqam bo`yicha izlash..."
+              className="max-w-sm w-54"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+            />
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !dateStart && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dateStart ? humanize(dateStart) : <span>Sana tanlash</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={dateStart}
+                  onSelect={setDateStart}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !dateEnd && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dateEnd ? humanize(dateEnd) : <span>Sana tanlash</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={dateEnd}
+                  onSelect={setDateEnd}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <Button onClick={handleSubmit}>Qidirish</Button>
+        </div>
+      </div>
       <div className="border rounded-md">
         <Table>
           <TableHeader>
@@ -249,28 +331,10 @@ export default function MessagesPage() {
             <Separator orientation="vertical" />
             <div>
               {translateSMSStatus("Undefined")}:{" "}
-              {stats?.undefined + stats?.transmitted}
+              {(stats?.undefined ?? 0) + (stats?.transmitted ?? 0)}
             </div>
           </div>
         </div>
-        {/* <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Oldingi
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Keyingi
-                    </Button>
-                </div> */}
         <div className="flex items-center justify-end py-4 space-x-2">
           <div className="space-x-2">
             <Pagination>

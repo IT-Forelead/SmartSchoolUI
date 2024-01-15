@@ -32,9 +32,12 @@ export type MessageResponse = {
   totalPages: number;
 };
 
-export type PaginationFilter = {
+export type MessageFilter = {
   page?: number;
   perPage?: number;
+  phone?: string;
+  from?: string;
+  to?: string;
 };
 
 export type Room = {

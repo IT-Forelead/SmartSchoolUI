@@ -67,7 +67,7 @@ export default function ChangeLessonHour(props: {
 
   return (
     <td
-      className={`p-2 border cursor-pointer ${fillColor(
+      className={`cursor-pointer border p-2 ${fillColor(
         props?.studentCount,
         subject?.needDivideStudents,
       )}`}
@@ -93,12 +93,12 @@ export default function ChangeLessonHour(props: {
               {...register("hour", { required: true })}
               placeholder="5"
             />
-            <DialogTrigger className="flex items-center justify-end w-full mt-5">
+            <DialogTrigger className="mt-5 flex w-full items-center justify-end">
               {!isLoading ? (
                 <Button autoFocus={true}>Saqlash</Button>
               ) : (
                 <Button disabled className="select-none">
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saqlanmoqda...
                 </Button>
               )}

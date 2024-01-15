@@ -20,7 +20,7 @@ export default function ViewVisitorPicture({
     <Dialog>
       <DialogTrigger>
         <Button variant="outline" size="sm">
-          <EyeIcon className="w-6 h-6 mr-2" />
+          <EyeIcon className="mr-2 h-6 w-6" />
           Tashrif buyuruvchi rasmi
         </Button>
       </DialogTrigger>
@@ -31,7 +31,7 @@ export default function ViewVisitorPicture({
         <img
           src={`https://25-school.uz/school/api/v1/asset/view/${assetId}`}
           alt="Visitor picture"
-          className="w-full h-[500px] rounded"
+          className="h-[500px] w-full rounded"
         />
       </DialogContent>
     </Dialog>

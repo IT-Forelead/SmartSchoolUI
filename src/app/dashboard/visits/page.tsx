@@ -92,7 +92,7 @@ export const columns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           F.I.SH
-          <ArrowUpDown className="w-4 h-4 ml-2" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -114,7 +114,7 @@ export const columns = (
     header: "Tashrif turi",
     cell: ({ row }) => (
       <div
-        className={`py-1 px-3 text-base inline-block text-white rounded-full ${
+        className={`inline-block rounded-full px-3 py-1 text-base text-white ${
           row.getValue("visitType") === "come_in"
             ? "bg-green-600"
             : "bg-red-600"
@@ -244,14 +244,14 @@ export default function VisitsPage() {
   ) : (
     <div className="w-full p-5">
       <div>
-        <div className="flex space-x-1 w-full justify-between items-center py-4">
-          <div className="flex w-full justify-start space-x-5 items-center py-4">
+        <div className="flex w-full items-center justify-between space-x-1 py-4">
+          <div className="flex w-full items-center justify-start space-x-5 py-4">
             <Input
               placeholder="F.I.SH bo`yicha izlash..."
               value={
                 (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
               }
-              className="max-w-sm w-54"
+              className="w-54 max-w-sm"
               onChange={(event) => {
                 return table
                   .getColumn("fullName")
@@ -283,7 +283,7 @@ export default function VisitsPage() {
 
             <div className="flex space-x-1">
               <Popover open={openGroup} onOpenChange={setOpenGroup}>
-                <p className="text-base flex items-center font-semibold text-gray-500">
+                <p className="flex items-center text-base font-semibold text-gray-500">
                   Guruh:
                 </p>
                 <PopoverTrigger asChild>
@@ -291,19 +291,19 @@ export default function VisitsPage() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={openGroup}
-                    className="justify-between w-full"
+                    className="w-full justify-between"
                   >
                     {selectedGroup
                       ? `${selectedGroup?.level}-${selectedGroup?.name}`
                       : "Guruh tanlash..."}
-                    <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command>
                     <CommandInput placeholder="Izlash..." />
                     <CommandEmpty>Guruh topilmadi.</CommandEmpty>
-                    <CommandGroup className="overflow-auto max-h-80">
+                    <CommandGroup className="max-h-80 overflow-auto">
                       {groups
                         ?.sort((a, b) => a.level - b.level)
                         ?.map((group) => (
@@ -341,14 +341,14 @@ export default function VisitsPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                <Download className="w-5 h-5 mr-2" />
-                Export <ChevronDown className="w-4 h-4 ml-4" />
+                <Download className="mr-2 h-5 w-5" />
+                Export <ChevronDown className="ml-4 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="divide-y">
               <DropdownMenuItem className="capitalize">
-                <div className="flex items-center w-fit space-x-3">
-                  <SolarUsersGroupRoundedBroken className="w-5 h-5" />
+                <div className="flex w-fit items-center space-x-3">
+                  <SolarUsersGroupRoundedBroken className="h-5 w-5" />
                   <span
                     onClick={() =>
                       downloadCsv({ ...visitFilter, type: "teachers" })
@@ -359,8 +359,8 @@ export default function VisitsPage() {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="capitalize">
-                <div className="flex items-center w-fit space-x-3">
-                  <SolarUserHandsOutline className="w-5 h-5" />
+                <div className="flex w-fit items-center space-x-3">
+                  <SolarUserHandsOutline className="h-5 w-5" />
                   <span
                     onClick={() =>
                       downloadCsv({ ...visitFilter, type: "students" })
@@ -374,7 +374,7 @@ export default function VisitsPage() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="border rounded-md">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -421,7 +421,7 @@ export default function VisitsPage() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end py-4 space-x-2">
+      <div className="flex items-center justify-end space-x-2 py-4">
         <div className="space-x-2">
           <Pagination>
             <PaginationContent>

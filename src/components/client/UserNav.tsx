@@ -30,9 +30,9 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative w-8 h-8 border rounded-full shadow"
+          className="relative h-8 w-8 rounded-full border shadow"
         >
-          <Avatar className="w-8 h-8">
+          <Avatar className="h-8 w-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
             <AvatarFallback className="uppercase">
               {currentUser?.User?.role[0] ?? ""}
@@ -42,17 +42,17 @@ export function UserNav() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="flex items-center font-normal">
-          <Avatar className="w-8 h-8">
+          <Avatar className="h-8 w-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
             <AvatarFallback className="uppercase">
               {currentUser?.User?.role[0] ?? ""}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col ml-3 space-y-1">
-            <p className="text-sm font-medium leading-none capitalize">
+          <div className="ml-3 flex flex-col space-y-1">
+            <p className="text-sm font-medium capitalize leading-none">
               {currentUser?.User?.role ?? ""}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="text-muted-foreground text-xs leading-none">
               {currentUser?.User?.phone}
             </p>
           </div>

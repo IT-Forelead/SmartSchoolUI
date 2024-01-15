@@ -200,11 +200,11 @@ export default function MessagesPage() {
   return (
     <div className="w-full p-5">
       <div>
-        <div className="flex space-x-1 w-full justify-between items-center py-4">
-          <div className="flex w-full justify-start space-x-5 items-center py-4">
+        <div className="flex w-full items-center justify-between space-x-1 py-4">
+          <div className="flex w-full items-center justify-start space-x-5 py-4">
             <Input
               placeholder="Raqam bo`yicha izlash..."
-              className="max-w-sm w-54"
+              className="w-54 max-w-sm"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
             />
@@ -258,7 +258,7 @@ export default function MessagesPage() {
           <Button onClick={handleSubmit}>Qidirish</Button>
         </div>
       </div>
-      <div className="border rounded-md">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -308,9 +308,9 @@ export default function MessagesPage() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end py-4 space-x-2">
+      <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1">
-          <div className="flex items-start space-x-4 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-start space-x-4 text-sm">
             <div>Jami: {stats?.total}</div>
             <Separator orientation="vertical" />
             <div>
@@ -335,7 +335,7 @@ export default function MessagesPage() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
+        <div className="flex items-center justify-end space-x-2 py-4">
           <div className="space-x-2">
             <Pagination>
               <PaginationContent>

@@ -26,159 +26,159 @@ export default function Sidebar() {
         <span className="font-bold text-blue-600">25</span>
         <b className="text-3xl font-extrabold">SCHOOL</b>
       </h1>
-      <div className="max-h-[80vh] mt-10 overflow-auto">
-        <div className="font-medium space-y-7">
+      <div className="mt-10 max-h-[80vh] overflow-auto">
+        <div className="space-y-7 font-medium">
           <Link
             href={"/dashboard"}
-            className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
-              path === "/dashboard" ? "text-gray-900 font-semibold" : ""
+            className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
+              path === "/dashboard" ? "font-semibold text-gray-900" : ""
             }`}
           >
-            <SolarHome2Broken className="w-6 h-6 mr-3" />
+            <SolarHome2Broken className="mr-3 h-6 w-6" />
             <p>Bosh sahifa</p>
           </Link>
           <Link
             href={"/dashboard/last-visits"}
-            className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+            className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
               path === "/dashboard/last-visits"
-                ? "text-gray-900 font-semibold"
+                ? "font-semibold text-gray-900"
                 : ""
             }`}
           >
-            <SolarUserCheckBroken className="w-6 h-6 mr-3" />
+            <SolarUserCheckBroken className="mr-3 h-6 w-6" />
             <p>So`ngi tashriflar</p>
           </Link>
           <Link
             href={"/dashboard/studyhours"}
-            className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+            className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
               path === "/dashboard/studyhours"
-                ? "text-gray-900 font-semibold"
+                ? "font-semibold text-gray-900"
                 : ""
             }`}
           >
-            <SolarAlarmBroken className="w-6 h-6 mr-3" />
+            <SolarAlarmBroken className="mr-3 h-6 w-6" />
             <p>Dars soatlari</p>
           </Link>
           <Link
             href={"/dashboard/timetable"}
-            className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+            className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
               path === "/dashboard/timetable"
-                ? "text-gray-900 font-semibold"
+                ? "font-semibold text-gray-900"
                 : ""
             }`}
           >
-            <SolarWindowFrameBroken className="w-6 h-6 mr-3" />
+            <SolarWindowFrameBroken className="mr-3 h-6 w-6" />
             <p>Dars jadvali</p>
           </Link>
         </div>
         {currentUser?.User?.role?.includes("admin") ? (
-          <div className="font-medium space-y-7 mt-7">
+          <div className="mt-7 space-y-7 font-medium">
             <Link
               href={"/dashboard/visits"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/visits"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarUserCheckBroken className="w-6 h-6 mr-3" />
+              <SolarUserCheckBroken className="mr-3 h-6 w-6" />
               <p>Tashriflar</p>
             </Link>
             <Link
               href={"/dashboard/teachers"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/teachers"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarUsersGroupRoundedBroken className="w-6 h-6 mr-3" />
+              <SolarUsersGroupRoundedBroken className="mr-3 h-6 w-6" />
               <p>O`qituvchilar</p>
             </Link>
             <Link
               href={"/dashboard/students"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/students"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarUserHandsOutline className="w-6 h-6 mr-3" />
+              <SolarUserHandsOutline className="mr-3 h-6 w-6" />
               <p>O`quvchilar</p>
             </Link>
             <Link
               href={"/dashboard/waitaccept"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/waitaccept"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarCheckCircleBroken className="w-6 h-6 mr-3" />
+              <SolarCheckCircleBroken className="mr-3 h-6 w-6" />
               <p>Tasdiqlash</p>
             </Link>
             <Link
               href={"/dashboard/groups"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/groups"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarUsersGroupTwoRoundedBroken className="w-6 h-6 mr-3" />
+              <SolarUsersGroupTwoRoundedBroken className="mr-3 h-6 w-6" />
               <p>Sinflar</p>
             </Link>
             <Link
               href={"/dashboard/rooms"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
-                path === "/dashboard/rooms" ? "text-gray-900 font-semibold" : ""
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
+                path === "/dashboard/rooms" ? "font-semibold text-gray-900" : ""
               }`}
             >
-              <BiDoorOpen className="w-6 h-6 mr-3" />
+              <BiDoorOpen className="mr-3 h-6 w-6" />
               <p>Xonalar</p>
             </Link>
             <Link
               href={"/dashboard/subjects"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/subjects"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarBookMinimalisticBroken className="w-6 h-6 mr-3" />
+              <SolarBookMinimalisticBroken className="mr-3 h-6 w-6" />
               <p>Fanlar</p>
             </Link>
             <Link
               href={"/dashboard/messages"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/messages"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarChatRoundLineBroken className="w-6 h-6 mr-3" />
+              <SolarChatRoundLineBroken className="mr-3 h-6 w-6" />
               <p>SMS xabarlar</p>
             </Link>
             <Link
               href={"/dashboard/lesson/hours"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/lesson/hours"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarClockSquareBroken className="w-6 h-6 mr-3" />
+              <SolarClockSquareBroken className="mr-3 h-6 w-6" />
               <p>Dars soatlarini boshqarish</p>
             </Link>
             <Link
               href={"/dashboard/substitution"}
-              className={`flex items-center text-gray-500 transition-all duration-300 cursor-pointer hover:text-gray-900 hover:font-semibold ${
+              className={`flex cursor-pointer items-center text-gray-500 transition-all duration-300 hover:font-semibold hover:text-gray-900 ${
                 path === "/dashboard/substitution"
-                  ? "text-gray-900 font-semibold"
+                  ? "font-semibold text-gray-900"
                   : ""
               }`}
             >
-              <SolarSquareTransferHorizontalBroken className="w-6 h-6 mr-3" />
+              <SolarSquareTransferHorizontalBroken className="mr-3 h-6 w-6" />
               <p>Dars almashtirishlar</p>
             </Link>
           </div>
@@ -186,12 +186,12 @@ export default function Sidebar() {
           ""
         )}
       </div>
-      <div className="absolute text-sm text-center text-gray-500 -translate-x-1/2 left-1/2 bottom-5 whitespace-nowrap">
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-sm text-gray-500">
         &copy;{" "}
         <a
           href="http://it-forelead.uz"
           target="_blank"
-          className="font-semibold hover:underline hover:text-blue-600"
+          className="font-semibold hover:text-blue-600 hover:underline"
         >
           IT-Forelead
         </a>{" "}

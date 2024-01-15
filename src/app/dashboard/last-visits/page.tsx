@@ -59,7 +59,7 @@ export const columns = (
     header: "Tashrif turi",
     cell: ({ row }) => (
       <div
-        className={`py-1 px-3 text-sm capitalize inline-block text-black rounded-full ${
+        className={`inline-block rounded-full px-3 py-1 text-sm capitalize text-black ${
           row.getValue("visitType") === "come_in"
             ? "bg-green-600 text-white"
             : "bg-red-600 text-white"
@@ -163,8 +163,8 @@ export default function VisitsPage() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="grid grid-cols-3 gap-2">
-        <div className="flex flex-col items-center p-5 space-y-2">
-          <div className="rounded-lg overflow-hidden w-full h-auto mb-2">
+        <div className="flex flex-col items-center space-y-2 p-5">
+          <div className="mb-2 h-auto w-full overflow-hidden rounded-lg">
             <Webcam
               audio={false}
               mirrored={true}
@@ -181,12 +181,12 @@ export default function VisitsPage() {
             message?.kind === "visit" ? (
               <div
                 key={idx}
-                className="flex items-center w-full px-4 py-2 space-x-4 border rounded-md"
+                className="flex w-full items-center space-x-4 rounded-md border px-4 py-2"
               >
                 <div className="rounded-lg border p-1.5">
-                  <SolarUserBroken className="w-20 h-20 text-gray-500" />
+                  <SolarUserBroken className="h-20 w-20 text-gray-500" />
                 </div>
-                <div className="space-y-1 space-x-1">
+                <div className="space-x-1 space-y-1">
                   <div className="text-lg font-medium">
                     {message?.data?.fullName}
                   </div>
@@ -194,7 +194,7 @@ export default function VisitsPage() {
                     {dateFormatter(message?.data?.createdAt)}
                   </div>
                   <div
-                    className={`inline-block px-4 py-0.5 text-sm capitalize rounded-full ${
+                    className={`inline-block rounded-full px-4 py-0.5 text-sm capitalize ${
                       message?.data?.label === "teacher"
                         ? "bg-blue-600 text-white"
                         : message?.data?.label === "student"
@@ -209,7 +209,7 @@ export default function VisitsPage() {
                         : "Hodim"}
                   </div>
                   <div
-                    className={`inline-block px-8 py-0.5 text-sm capitalize rounded-full ${
+                    className={`inline-block rounded-full px-8 py-0.5 text-sm capitalize ${
                       message?.data?.visitType === "come_in"
                         ? "bg-green-600 text-white"
                         : "bg-red-600 text-white"
@@ -222,10 +222,10 @@ export default function VisitsPage() {
             ) : (
               <div
                 key={idx}
-                className="flex items-center w-full px-4 py-2 space-x-2 border rounded-md"
+                className="flex w-full items-center space-x-2 rounded-md border px-4 py-2"
               >
-                <div className="flex items-center justify-center bg-gray-200 rounded-md p-2">
-                  <SolarQrCodeBroken className="w-8 h-8" />
+                <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
+                  <SolarQrCodeBroken className="h-8 w-8" />
                 </div>
                 <div className="text-lg font-medium">
                   Ushbu Qr kodga foydalanuvchi biriktirlmagan!
@@ -234,8 +234,8 @@ export default function VisitsPage() {
             ),
           )}
         </div>
-        <div className="w-full col-span-2 p-5">
-          <div className="border rounded-md">
+        <div className="col-span-2 w-full p-5">
+          <div className="rounded-md border">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (

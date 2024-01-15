@@ -58,17 +58,17 @@ export default function EditCertificate(prop: { degId: string }) {
     <div>
       <Dialog>
         <DialogTrigger>
-          <SolarPenNewSquareBroken className="w-6 h-6 text-blue-600" />
+          <SolarPenNewSquareBroken className="h-6 w-6 text-blue-600" />
         </DialogTrigger>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Dars olishni tahrirlash</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} method="POST" content="">
-            <div className="w-full mb-3 space-y-4 bg-white rounded">
+            <div className="mb-3 w-full space-y-4 rounded bg-white">
               <div className="flex items-start space-x-4">
                 <div className="w-full space-y-3">
-                  <div className="flex items-center w-full text-gray-500">
+                  <div className="flex w-full items-center text-gray-500">
                     Sertifikat:{" "}
                     <Input
                       id="file"
@@ -85,7 +85,7 @@ export default function EditCertificate(prop: { degId: string }) {
                 <Button autoFocus={true}>Saqlash</Button>
               ) : (
                 <Button disabled className="select-none">
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saqlanmoqda...
                 </Button>
               )}

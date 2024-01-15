@@ -17,7 +17,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="relative flex h-screen">
-      <div className="relative hidden md:block md:w-64 h-screen py-2.5 bg-white border-r border-gray-200 px-7">
+      <div className="relative hidden h-screen border-r border-gray-200 bg-white px-7 py-2.5 md:block md:w-64">
         <Sidebar />
       </div>
       <div className="flex-auto overflow-auto">

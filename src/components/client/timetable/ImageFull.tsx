@@ -6,7 +6,7 @@ export default function ImageFull(props: { cId: string }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <SolarFullScreenBold className="w-6 h-6 text-blue-600" />
+        <SolarFullScreenBold className="h-6 w-6 text-blue-600" />
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <div className="relative h-[85vh]">
@@ -14,7 +14,7 @@ export default function ImageFull(props: { cId: string }) {
             src={`http://25-school.uz/school/api/v1/asset/${props.cId}` ?? ""}
             alt="Hujjat"
             layout="fill"
-            className="top-0 object-contain duration-500 rounded-lg"
+            className="top-0 rounded-lg object-contain duration-500"
           />
         </div>
       </DialogContent>

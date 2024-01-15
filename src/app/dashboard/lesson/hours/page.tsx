@@ -99,7 +99,7 @@ export const columns = (teachers: Teacher[]): ColumnDef<WorkloadHistory>[] => [
         {
           <SolarDownloadSquareBroken
             onClick={() => downloadFile(row.getValue("reasonDocId"))}
-            className="w-5 h-5 ml-3 text-blue-600 hover:cursor-pointer hover:scale-105"
+            className="ml-3 h-5 w-5 text-blue-600 hover:scale-105 hover:cursor-pointer"
           />
         }
       </div>
@@ -115,20 +115,20 @@ export const columns = (teachers: Teacher[]): ColumnDef<WorkloadHistory>[] => [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Amallar</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-blue-600">
-              <PencilIcon className="w-4 h-4 mr-1" />
+              <PencilIcon className="mr-1 h-4 w-4" />
               Tahrirlash
             </DropdownMenuItem>
             <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="w-4 h-4 mr-1" />
+              <TrashIcon className="mr-1 h-4 w-4" />
               O`chirish
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -182,10 +182,10 @@ export default function TeacherWorkloadPage() {
 
   return (
     <div className="w-full p-5">
-      <div className="flex items-center justify-end w-full">
+      <div className="flex w-full items-center justify-end">
         <ChangeWorkload />
       </div>
-      <div className="border rounded-md">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -232,8 +232,8 @@ export default function TeacherWorkloadPage() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end py-4 space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground">
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="text-muted-foreground flex-1 text-sm">
           Jami: {table.getFilteredRowModel().rows.length}
         </div>
         <div className="space-x-2">

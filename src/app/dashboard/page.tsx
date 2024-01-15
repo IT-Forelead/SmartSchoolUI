@@ -20,14 +20,14 @@ export default function Home() {
     () => import("@/components/client/main/TeacherVisitsChart"),
     {
       ssr: false,
-      loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
+      loading: () => <Skeleton className="col-span-3 h-80 rounded-lg" />,
     },
   );
   const StudentVisitsChart = dynamic(
     () => import("@/components/client/main/StudentVisitsChart"),
     {
       ssr: false,
-      loading: () => <Skeleton className="col-span-3 rounded-lg h-80" />,
+      loading: () => <Skeleton className="col-span-3 h-80 rounded-lg" />,
     },
   );
 
@@ -39,9 +39,9 @@ export default function Home() {
     }
   }, [currentUser?.User?.role, router]);
   return (
-    <div className="flex-col hidden md:flex">
-      <div className="flex-1 p-8 pt-6 space-y-4">
-        <div className="grid gap-4 grid-cols-6">
+    <div className="hidden flex-col md:flex">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="grid grid-cols-6 gap-4">
           <TeacherStatistics />
           <StudentStatistics />
           <SmsMessagesChart />

@@ -71,7 +71,7 @@ export const columns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           O`qituvchi
-          <ArrowUpDown className="w-4 h-4 ml-2" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -124,9 +124,9 @@ export const columns = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -138,7 +138,7 @@ export const columns = (
               }}
               className="text-red-600"
             >
-              <TrashIcon className="w-4 h-4 mr-1" />
+              <TrashIcon className="mr-1 h-4 w-4" />
               O`chirish
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -222,7 +222,7 @@ export default function TimetableChangesHistory() {
           }}
           className="bg-indigo-700 hover:bg-indigo-900"
         >
-          <SolarHistoryBroken className="w-6 h-6 mr-2" />
+          <SolarHistoryBroken className="mr-2 h-6 w-6" />
           Dars jadvali o`zgarishlari
         </Button>
       </DialogTrigger>
@@ -234,7 +234,7 @@ export default function TimetableChangesHistory() {
           <Loader />
         ) : (
           <div className="w-full p-5">
-            <div className="border rounded-md">
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
@@ -281,8 +281,8 @@ export default function TimetableChangesHistory() {
                 </TableBody>
               </Table>
             </div>
-            <div className="flex items-center justify-end py-4 space-x-2">
-              <div className="flex-1 text-sm text-muted-foreground">
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="text-muted-foreground flex-1 text-sm">
                 Jami: {table.getFilteredRowModel().rows.length}
               </div>
               <div className="space-x-2">

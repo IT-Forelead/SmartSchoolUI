@@ -96,8 +96,8 @@ export function ChangeWorkload() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="flex items-center mt-2 mb-3">
-          <SolarClockSquareBroken className="w-6 h-6 mr-2" />
+        <Button className="mb-3 mt-2 flex items-center">
+          <SolarClockSquareBroken className="mr-2 h-6 w-6" />
           O`qituvchi dars soatini o`zgartirish
         </Button>
       </DialogTrigger>
@@ -113,19 +113,19 @@ export function ChangeWorkload() {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="justify-between w-full"
+                className="w-full justify-between"
               >
                 {fromTeacher
                   ? fromTeacher?.fullName + " | " + fromTeacher?.workload
                   : "O`qituvchi tanlash..."}
-                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-full p-0">
               <Command>
                 <CommandInput placeholder="Izlash..." />
                 <CommandEmpty>O`qituvchi topilmadi.</CommandEmpty>
-                <CommandGroup className="overflow-auto max-h-80">
+                <CommandGroup className="max-h-80 overflow-auto">
                   {teachers?.map((teacher) => (
                     <CommandItem
                       key={teacher?.id}
@@ -156,19 +156,19 @@ export function ChangeWorkload() {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="justify-between w-full"
+                className="w-full justify-between"
               >
                 {toTeacher
                   ? toTeacher?.fullName + " | " + toTeacher?.workload
                   : "O`qituvchi tanlash..."}
-                <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-full p-0">
               <Command>
                 <CommandInput placeholder="Izlash..." />
                 <CommandEmpty>O`qituvchi topilmadi.</CommandEmpty>
-                <CommandGroup className="overflow-auto max-h-80">
+                <CommandGroup className="max-h-80 overflow-auto">
                   {teachers.map((teacher) => (
                     <CommandItem
                       key={teacher?.id}
@@ -204,12 +204,12 @@ export function ChangeWorkload() {
             <p className="font-semibold">Asos hujjat</p>
             <Input type="file" onChange={(event) => catchFile(event)} />
           </div>
-          <div className="flex items-center justify-end mt-5">
+          <div className="mt-5 flex items-center justify-end">
             {!isLoading ? (
               <Button autoFocus={true}>Saqlash</Button>
             ) : (
               <Button disabled className="select-none">
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Saqlanmoqda...
               </Button>
             )}

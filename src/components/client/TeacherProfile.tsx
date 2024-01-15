@@ -79,8 +79,8 @@ export default function TeacherProfile() {
 
   return (
     <div className="px-4 py-2">
-      <div className="grid grid-cols-1 space-y-4 bg-white rounded md:p-5 md:grid-cols-2">
-        <div className="flex items-start space-x-4 scale-90 md:scale-100">
+      <div className="grid grid-cols-1 space-y-4 rounded bg-white md:grid-cols-2 md:p-5">
+        <div className="flex scale-90 items-start space-x-4 md:scale-100">
           {image ? (
             <div>
               <Image
@@ -88,12 +88,12 @@ export default function TeacherProfile() {
                 alt="teacher image"
                 width={100}
                 height={100}
-                className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
               />
             </div>
           ) : (
             <div>
-              <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
             </div>
           )}
           <div>
@@ -153,7 +153,7 @@ export default function TeacherProfile() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div>
-            <div className="w-full p-3 border rounded-lg md:w-96 h-fit">
+            <div className="h-fit w-full rounded-lg border p-3 md:w-96">
               <h1 className="font-bold">Dars bo`lish formulasi</h1>
               <div className="flex items-center space-x-2">
                 <div className="text-base text-gray-500">X:</div>
@@ -183,11 +183,11 @@ export default function TeacherProfile() {
               </div>
             </div>
           </div>
-          <div className="flex items-start justify-center w-full my-3 space-x-3 md:justify-end md:my-0">
+          <div className="my-3 flex w-full items-start justify-center space-x-3 md:my-0 md:justify-end">
             <Dialog>
               <DialogTrigger>
                 <Button>
-                  <SolarPenNewSquareBroken className="w-6 h-6 mr-2" />
+                  <SolarPenNewSquareBroken className="mr-2 h-6 w-6" />
                   Profilni tahrirlash
                 </Button>
               </DialogTrigger>
@@ -196,7 +196,7 @@ export default function TeacherProfile() {
                   <DialogTitle>Profilni tahrirlash</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="w-full space-y-4 bg-white rounded">
+                  <div className="w-full space-y-4 rounded bg-white">
                     <div className="flex items-start space-x-4">
                       <div className="hidden md:block">
                         {image ? (
@@ -206,17 +206,17 @@ export default function TeacherProfile() {
                               alt="teacher image"
                               width={100}
                               height={100}
-                              className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                              className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                             />
                           </div>
                         ) : (
                           <div>
-                            <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                            <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                           </div>
                         )}
                       </div>
                       <div className="w-full space-y-3">
-                        <div className="flex items-center w-full space-x-2">
+                        <div className="flex w-full items-center space-x-2">
                           <div className="text-base text-gray-500">F.I.SH:</div>
                           <div className="w-full text-lg font-medium capitalize">
                             <Input
@@ -245,7 +245,7 @@ export default function TeacherProfile() {
                                 <SelectValue placeholder="Fanlar..." />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectGroup className="overflow-auto h-52">
+                                <SelectGroup className="h-52 overflow-auto">
                                   {subjects?.map(({ name, id }) => {
                                     return (
                                       <SelectItem key={id} value={id}>
@@ -279,18 +279,18 @@ export default function TeacherProfile() {
           </div>
         </div>
       </div>
-      <div className="items-center justify-start md:space-x-3 md:flex md:flex-wrap">
+      <div className="items-center justify-start md:flex md:flex-wrap md:space-x-3">
         {!teacherResponse.isLoading ? (
           teacher?.documents?.map(
             ({ id, certificateId, approved, rejected }) => {
               return (
                 <div
                   key={id}
-                  className="p-1 my-3 bg-white border shadow rounded-xl"
+                  className="my-3 rounded-xl border bg-white p-1 shadow"
                 >
                   <div className="my-3 w-96">{getDegree(id)}</div>
-                  <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-[350px] md:w-96 dark:bg-gray-800 dark:border-gray-700">
-                    <div className="absolute z-30 top-5 right-5 hover:cursor-pointer hover:scale-105">
+                  <div className="relative h-96 w-[350px] rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800 md:w-96">
+                    <div className="absolute right-5 top-5 z-30 hover:scale-105 hover:cursor-pointer">
                       <ImageFull cId={certificateId} />
                     </div>
                     <Image
@@ -300,12 +300,12 @@ export default function TeacherProfile() {
                       }
                       alt="Hujjat"
                       layout="fill"
-                      className="top-0 object-contain duration-500 rounded-lg"
+                      className="top-0 rounded-lg object-contain duration-500"
                     />
                     {approved || rejected ? (
                       ""
                     ) : (
-                      <div className="absolute top-14 right-5 hover:cursor-pointer hover:scale-105">
+                      <div className="absolute right-5 top-14 hover:scale-105 hover:cursor-pointer">
                         <EditCertificate degId={id} />
                       </div>
                     )}

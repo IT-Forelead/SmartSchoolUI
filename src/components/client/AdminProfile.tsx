@@ -7,7 +7,7 @@ export default function AdminProfile() {
   const currentUser = useUserInfo();
   return (
     <div className="px-4 py-2">
-      <div className="p-5 space-y-4 bg-white rounded">
+      <div className="space-y-4 rounded bg-white p-5">
         <div className="flex items-start space-x-4">
           {image ? (
             <div>
@@ -16,12 +16,12 @@ export default function AdminProfile() {
                 alt="teacher image"
                 width={100}
                 height={100}
-                className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
               />
             </div>
           ) : (
             <div>
-              <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
             </div>
           )}
           <div>

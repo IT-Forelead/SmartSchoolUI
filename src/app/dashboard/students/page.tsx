@@ -87,7 +87,7 @@ export const columns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           F.I.SH
-          <ArrowUpDown className="w-4 h-4 ml-2" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -122,29 +122,29 @@ export const columns = (
           {student.barcode ? (
             <Button variant="ghost">
               <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="w-5 h-5 text-blue-600" />
+                <QrCodeIcon className="h-5 w-5 text-blue-600" />
               </DialogTrigger>
             </Button>
           ) : (
             <Button variant="ghost">
               <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="w-5 h-5 text-red-600" />
+                <QrCodeIcon className="h-5 w-5 text-red-600" />
               </DialogTrigger>
             </Button>
           )}
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("show", student)}>
-              <EyeIcon className="text-green-600 w-5 h-5" />
+              <EyeIcon className="h-5 w-5 text-green-600" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("update", student)}>
-              <PencilIcon className="text-blue-600 w-5 h-5" />
+              <PencilIcon className="h-5 w-5 text-blue-600" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("qr-delete", student)}>
-              <QrCodeIcon className="text-red-900 w-5 h-5" />
+              <QrCodeIcon className="h-5 w-5 text-red-900" />
             </DialogTrigger>
           </Button>
         </div>
@@ -303,7 +303,7 @@ export default function StudentsPage() {
         </DialogHeader>
         {mode?.includes("show") ? (
           <div className="px-4 py-2">
-            <div className="flex p-5 space-y-4 bg-white rounded">
+            <div className="flex space-y-4 rounded bg-white p-5">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -312,12 +312,12 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
                 <div>
@@ -386,7 +386,7 @@ export default function StudentsPage() {
         ) : mode?.includes("qrcode") ? (
           <form onSubmit={qrCodeHandleSubmit(onSubmitAddQrcode)}>
             <div className="space-y-3">
-              <div className="flex flex-col items-center w-full space-y-2">
+              <div className="flex w-full flex-col items-center space-y-2">
                 {image ? (
                   <div>
                     <Image
@@ -394,31 +394,31 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
-                <div className="w-full text-lg font-medium text-center uppercase">
+                <div className="w-full text-center text-lg font-medium uppercase">
                   {student?.fullName}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 {student?.barcode ? (
                   <>
-                    <QrCodeIcon className="w-8 h-8 text-gray-500" />
-                    <h1 className="flex w-full p-2 border-2">
+                    <QrCodeIcon className="h-8 w-8 text-gray-500" />
+                    <h1 className="flex w-full border-2 p-2">
                       {student.barcode}
                     </h1>
                   </>
                 ) : (
                   <>
-                    <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                    <QrCodeIcon className="h-8 w-8 text-gray-500" />
                     <Input
-                      className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case"
+                      className="w-full text-base font-bold uppercase text-green-900  placeholder:font-medium placeholder:normal-case"
                       placeholder="QR kodni skanerlang..."
                       {...qrCodeRegister("qrcodeId", { required: true })}
                       disabled
@@ -428,7 +428,7 @@ export default function StudentsPage() {
               </div>
               <div className="flex items-center justify-end">
                 <Button autoFocus={true}>
-                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                  <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                   QR kod biriktirish
                 </Button>
               </div>
@@ -437,7 +437,7 @@ export default function StudentsPage() {
         ) : mode?.includes("qr-delete") ? (
           <div className="px-4 py-2">
             <p>Haqiqatdan ham QR-kodni o‘chirib tashlamoqchimisiz?</p>
-            <div className="flex items-center justify-end mt-4 space-x-4">
+            <div className="mt-4 flex items-center justify-end space-x-4">
               <Button onClick={() => setOpen(false)} variant="outline">
                 Cancel
               </Button>
@@ -451,7 +451,7 @@ export default function StudentsPage() {
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 bg-white rounded">
+            <div className="w-full space-y-4 rounded bg-white">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -460,17 +460,17 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
 
                 <div className="w-full space-y-3">
-                  <div className="flex items-center w-full space-x-2">
+                  <div className="flex w-full items-center space-x-2">
                     <div className="text-base text-gray-500">F.I.SH:</div>
                     <div className="w-full text-lg font-medium capitalize">
                       <Input
@@ -515,7 +515,7 @@ export default function StudentsPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Ustunlar <ChevronDown className="w-4 h-4 ml-2" />
+                Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -539,7 +539,7 @@ export default function StudentsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="border rounded-md">
+        <div className="rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -586,8 +586,8 @@ export default function StudentsPage() {
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="text-muted-foreground flex-1 text-sm">
             Jami: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">

@@ -40,8 +40,8 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-screen space-y-5">
-        <h1 className="text-3xl font-bold text-center text-red-500">{error}</h1>
+      <div className="flex h-screen w-full flex-col items-center justify-center space-y-5">
+        <h1 className="text-center text-3xl font-bold text-red-500">{error}</h1>
         <Link href="/">
           <Button>Bosh sahifa</Button>
         </Link>
@@ -51,38 +51,38 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   return (
     <div>
-      <div className="flex items-center justify-center w-full h-screen space-x-5">
+      <div className="flex h-screen w-full items-center justify-center space-x-5">
         {isApproving ? (
           <Button
-            className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+            className="whitespace-nowrap bg-green-400 hover:bg-green-700"
             disabled={true}
           >
-            <Loader2 className="w-6 h-6 mr-2" />
+            <Loader2 className="mr-2 h-6 w-6" />
             Tasdiqlanmoqda...
           </Button>
         ) : (
           <Button
-            className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+            className="whitespace-nowrap bg-green-500 hover:bg-green-700"
             onClick={() => approveTeacherDocument(true)}
           >
-            <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+            <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
             Tasdiqlash
           </Button>
         )}
         {isRejecting ? (
           <Button
-            className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+            className="whitespace-nowrap bg-red-400 hover:bg-red-700"
             disabled={true}
           >
-            <Loader2 className="w-6 h-6 mr-2" />
+            <Loader2 className="mr-2 h-6 w-6" />
             Rad qilinmoqda...
           </Button>
         ) : (
           <Button
-            className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+            className="whitespace-nowrap bg-red-500 hover:bg-red-700"
             onClick={() => approveTeacherDocument(false)}
           >
-            <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
+            <SolarCloseCircleBroken className="mr-2 h-6 w-6" />
             Rad qilish
           </Button>
         )}

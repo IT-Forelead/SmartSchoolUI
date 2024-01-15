@@ -42,12 +42,12 @@ export default function Login() {
   return (
     <main className="">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <div className="flex items-center justify-center h-screen p-5 md:p-20 md:h-auto">
-          <div className="flex flex-col items-center justify-center w-full space-y-5 md:w-3/4 h-96">
-            <h1 className="text-4xl font-bold text-center">Tizimga kirish</h1>
+        <div className="flex h-screen items-center justify-center p-5 md:h-auto md:p-20">
+          <div className="flex h-96 w-full flex-col items-center justify-center space-y-5 md:w-3/4">
+            <h1 className="text-center text-4xl font-bold">Tizimga kirish</h1>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full p-5 mt-5 space-y-5 md:p-10"
+              className="mt-5 w-full space-y-5 p-5 md:p-10"
             >
               <Input
                 type="text"
@@ -60,23 +60,23 @@ export default function Login() {
                   placeholder="Parol"
                   {...register("password", { required: true })}
                 />
-                <div className="absolute z-10 -translate-y-1/2 cursor-pointer top-1/2 right-3">
+                <div className="absolute right-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer">
                   {isPasswordShow ? (
                     <PhEyeSlash
                       onClick={() => setPasswordShow(false)}
-                      className="w-6 h-6 text-gray-700"
+                      className="h-6 w-6 text-gray-700"
                     />
                   ) : (
                     <PhEyeThin
                       onClick={() => setPasswordShow(true)}
-                      className="w-6 h-6 text-gray-700"
+                      className="h-6 w-6 text-gray-700"
                     />
                   )}
                 </div>
               </div>
               {isLoading ? (
                 <Button disabled className="w-full select-none">
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Tekshirilmoqda...
                 </Button>
               ) : (
@@ -87,15 +87,15 @@ export default function Login() {
             </form>
           </div>
         </div>
-        <div className="items-center justify-center hidden w-full h-screen p-5 md:flex">
+        <div className="hidden h-screen w-full items-center justify-center p-5 md:flex">
           <div
-            className={`bg-[url('../public/slide.jpg')] flex items-end justify-center p-10 pb-40 bg-center bg-cover rounded-3xl min-w-full h-[95vh] relative`}
+            className={`relative flex h-[95vh] min-w-full items-end justify-center rounded-3xl bg-[url('../public/slide.jpg')] bg-cover bg-center p-10 pb-40`}
           >
-            <div className="absolute left-0 top-0 h-[95vh] rounded-3xl w-full bg-gray-900/50"></div>
+            <div className="absolute left-0 top-0 h-[95vh] w-full rounded-3xl bg-gray-900/50"></div>
             <Swiper
               pagination={true}
               modules={[Pagination, Autoplay]}
-              className="text-white h-52"
+              className="h-52 text-white"
               autoplay={true}
               loop={true}
               speed={1500}
@@ -104,7 +104,7 @@ export default function Login() {
               {quotes.map((item, idx) => {
                 return (
                   <SwiperSlide key={idx}>
-                    <div className="flex items-center justify-center h-full">
+                    <div className="flex h-full items-center justify-center">
                       <p className="text-2xl font-bold">{item}</p>
                     </div>
                   </SwiperSlide>

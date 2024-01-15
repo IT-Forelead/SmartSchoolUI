@@ -3,8 +3,8 @@ import React from "react";
 
 export default function Loader() {
   return (
-    <div className="flex items-center justify-center w-full h-20">
-      <SvgSpinnersBouncingBall className="w-7 h-7" />
+    <div className="flex h-20 w-full items-center justify-center">
+      <SvgSpinnersBouncingBall className="h-7 w-7" />
       Ma`lumotlar yuklanmoqda...
     </div>
   );

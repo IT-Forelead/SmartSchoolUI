@@ -59,8 +59,8 @@ export default function TimeTablePage() {
   return (
     <div className="p-2 px-5">
       {currentUser?.User?.role?.includes("admin") ? (
-        <div className="flex items-center justify-end w-full">
-          <div className="flex items-center justify-center my-3 space-x-5">
+        <div className="flex w-full items-center justify-end">
+          <div className="my-3 flex items-center justify-center space-x-5">
             <TimetableChangesHistory />
             <TargetLesson />
             {!isGenerating ? (
@@ -68,12 +68,12 @@ export default function TimeTablePage() {
                 onClick={() => regenerate()}
                 className="flex items-center whitespace-nowrap"
               >
-                <SolarRefreshSquareBroken className="w-6 h-6 mr-2" />
+                <SolarRefreshSquareBroken className="mr-2 h-6 w-6" />
                 Qayta generatsiya qilish
               </Button>
             ) : (
               <Button disabled className="select-none">
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Qayta generatsiya qilinmoqda...
               </Button>
             )}
@@ -84,15 +84,15 @@ export default function TimeTablePage() {
       )}
 
       {!timeTableResponse.isLoading ? (
-        <table className="w-full text-sm border">
+        <table className="w-full border text-sm">
           <thead>
-            <tr className="text-gray-500 bg-gray-100 border">
-              <th className="p-2 text-white bg-gray-500 border">
+            <tr className="border bg-gray-100 text-gray-500">
+              <th className="border bg-gray-500 p-2 text-white">
                 Dars jadvali
               </th>
               {weekdays.map((day) => {
                 return (
-                  <th key={day} className="p-2 border">
+                  <th key={day} className="border p-2">
                     {day}
                   </th>
                 );
@@ -121,14 +121,14 @@ export default function TimeTablePage() {
                       idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
                     }`}
                   >
-                    <td className="p-1 font-medium text-center text-gray-500 border">
+                    <td className="border p-1 text-center font-medium text-gray-500">
                       {item}
                     </td>
                     {weekdays.map((day) => {
                       return (
                         <td
                           key={day}
-                          className="p-1 font-medium text-gray-500 align-top border"
+                          className="border p-1 align-top font-medium text-gray-500"
                         >
                           <ol className="space-y-1">
                             {timetable[item][translateWeekday(day)]?.map(

@@ -67,44 +67,44 @@ export default function StudyHoursPage() {
 
   return (
     <div className="p-2 px-5">
-      <div className="flex items-center justify-end w-full">
+      <div className="flex w-full items-center justify-end">
         <Button
           onClick={() => downloadExcel()}
-          className="flex items-center mt-2 mb-3"
+          className="mb-3 mt-2 flex items-center"
         >
-          <SolarDownloadSquareBroken className="w-6 h-6 mr-2" />
+          <SolarDownloadSquareBroken className="mr-2 h-6 w-6" />
           Excel formatda yuklash
         </Button>
       </div>
       {!subjectResponse.isLoading ? (
-        <table className="w-full text-sm border">
+        <table className="w-full border text-sm">
           <thead>
-            <tr className="text-gray-500 border">
-              <th className="p-2 border">Fanlar</th>
+            <tr className="border text-gray-500">
+              <th className="border p-2">Fanlar</th>
               {groups
                 ?.sort((a, b) => a.level - b.level)
                 ?.map((group, idx) => {
                   return (
                     <th
                       key={idx}
-                      className="p-2 font-medium border whitespace-nowrap"
+                      className="whitespace-nowrap border p-2 font-medium"
                     >{`${group.level}${group.name}`}</th>
                   );
                 })}
-              <th className="p-2 text-center border">
+              <th className="border p-2 text-center">
                 Jami <br /> (boshlang`ich)
               </th>
-              <th className="p-2 text-center border">
+              <th className="border p-2 text-center">
                 Jami <br /> (yuqori)
               </th>
-              <th className="p-2 text-center border">Jami</th>
+              <th className="border p-2 text-center">Jami</th>
             </tr>
           </thead>
           <tbody>
             {subjects?.map((item, idx) => {
               return (
                 <tr key={idx} className="border">
-                  <td className="p-1 font-medium text-gray-500 border whitespace-nowrap">
+                  <td className="whitespace-nowrap border p-1 font-medium text-gray-500">
                     {item.name}
                   </td>
                   {groups?.map(({ level, id, studentCount }) => {
@@ -121,13 +121,13 @@ export default function StudyHoursPage() {
                       />
                     );
                   })}
-                  <td className="p-1 font-medium text-center border">
+                  <td className="border p-1 text-center font-medium">
                     {item.hourForBeginner}
                   </td>
-                  <td className="p-1 font-medium text-center border">
+                  <td className="border p-1 text-center font-medium">
                     {item.hourForHigher}
                   </td>
-                  <td className="p-1 font-medium text-center border">
+                  <td className="border p-1 text-center font-medium">
                     {item.hourForHigher + item.hourForBeginner}
                   </td>
                 </tr>

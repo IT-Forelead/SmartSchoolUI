@@ -151,11 +151,11 @@ export default function AbsentLesson(props: {
       {user?.User?.id === subject?.teacherId ? (
         <DialogTrigger className="w-full text-left">
           <li
-            className="p-1 text-white bg-green-500 border hover:cursor-pointer hover:bg-green-600"
+            className="border bg-green-500 p-1 text-white hover:cursor-pointer hover:bg-green-600"
             key={subject}
           >
             {subject?.moment}. {subject?.subjectName}
-            <p className="text-[11px] text-right capitalize font-bold">
+            <p className="text-right text-[11px] font-bold capitalize">
               {subject?.teacherName}
             </p>
           </li>
@@ -167,9 +167,9 @@ export default function AbsentLesson(props: {
             lessonBody,
           )} ${compareLessonBody(lessonBody)}`}
         >
-          <li className="p-1 border" key={subject}>
+          <li className="border p-1" key={subject}>
             {subject?.moment}. {subject?.subjectName}
-            <p className="text-[11px] text-right capitalize font-bold">
+            <p className="text-right text-[11px] font-bold capitalize">
               {subject?.teacherName}
             </p>
           </li>
@@ -184,12 +184,12 @@ export default function AbsentLesson(props: {
           <p>Guruh: {props.class}</p>
           <p>Kun: {props.day}</p>
           <p>Dars: {subject?.moment}-dars</p>
-          <div className="flex items-center justify-end mt-5">
+          <div className="mt-5 flex items-center justify-end">
             {!isLoading ? (
               <Button autoFocus={true}>So`rov yuborish</Button>
             ) : (
               <Button disabled className="select-none">
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 So`rov yuborilmoqda...
               </Button>
             )}

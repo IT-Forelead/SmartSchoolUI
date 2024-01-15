@@ -119,7 +119,7 @@ export default function TargetLesson() {
     >
       <DialogTrigger>
         <Button className="bg-blue-700 hover:bg-blue-900">
-          <SolarBoxMinimalisticBroken className="w-6 h-6 mr-2" />
+          <SolarBoxMinimalisticBroken className="mr-2 h-6 w-6" />
           Dars kunini belgilash
         </Button>
       </DialogTrigger>
@@ -333,7 +333,7 @@ export default function TargetLesson() {
               render={() => (
                 <FormItem>
                   <FormLabel className="text-base">Dars soatlari</FormLabel>
-                  <table className="border w-fit table-auto">
+                  <table className="w-fit table-auto border">
                     <thead>
                       <tr>
                         <td></td>
@@ -390,7 +390,7 @@ export default function TargetLesson() {
                                         </FormControl>
                                         <label
                                           htmlFor={item}
-                                          className="peer-disabled:bg-[#fc888a] peer-checked:bg-[#7cc4f7] block py-2 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                          className="block cursor-pointer py-2 hover:bg-gray-50 hover:text-gray-600 peer-checked:bg-[#7cc4f7] peer-checked:text-gray-600 peer-disabled:bg-[#fc888a] dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-gray-300"
                                         >
                                           &nbsp;
                                         </label>

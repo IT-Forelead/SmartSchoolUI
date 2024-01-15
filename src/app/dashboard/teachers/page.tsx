@@ -113,7 +113,7 @@ export const columns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           F.I.SH
-          <ArrowUpDown className="w-4 h-4 ml-2" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -177,7 +177,7 @@ export const columns = (
               className="flex items-center"
               onClick={() => showCertificates("subject", teacher)}
             >
-              <PlusCircleIcon className="text-indigo-600 w-5 h-5" />
+              <PlusCircleIcon className="h-5 w-5 text-indigo-600" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
@@ -185,7 +185,7 @@ export const columns = (
               className="flex items-center"
               onClick={() => showCertificates("show", teacher)}
             >
-              <EyeIcon className="text-green-600 w-5 h-5" />
+              <EyeIcon className="h-5 w-5 text-green-600" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
@@ -193,7 +193,7 @@ export const columns = (
               className="flex items-center"
               onClick={() => showCertificates("update", teacher)}
             >
-              <PencilIcon className="text-blue-600 w-5 h-5" />
+              <PencilIcon className="h-5 w-5 text-blue-600" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
@@ -201,7 +201,7 @@ export const columns = (
               className="text-red-600"
               onClick={() => showCertificates("delete", teacher)}
             >
-              <TrashIcon className="w-5 h-5" />
+              <TrashIcon className="h-5 w-5" />
             </DialogTrigger>
           </Button>
           {teacher.barcode ? (
@@ -210,7 +210,7 @@ export const columns = (
                 className="flex items-center"
                 onClick={() => showCertificates("qrcode", teacher)}
               >
-                <QrCodeIcon className="w-5 h-5 text-blue-600" />
+                <QrCodeIcon className="h-5 w-5 text-blue-600" />
               </DialogTrigger>
             </Button>
           ) : (
@@ -219,7 +219,7 @@ export const columns = (
                 className="flex items-center"
                 onClick={() => showCertificates("qrcode", teacher)}
               >
-                <QrCodeIcon className="flex m-auto justify-between w-5 h-5 text-red-600" />
+                <QrCodeIcon className="m-auto flex h-5 w-5 justify-between text-red-600" />
               </DialogTrigger>
             </Button>
           )}
@@ -432,7 +432,7 @@ export default function TeachersPage() {
         </DialogHeader>
         {mode?.includes("show") ? (
           <div className="px-4 py-2">
-            <div className="flex p-5 space-y-4 bg-white rounded">
+            <div className="flex space-y-4 rounded bg-white p-5">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -441,12 +441,12 @@ export default function TeachersPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
                 <div>
@@ -516,18 +516,18 @@ export default function TeachersPage() {
                 </div>
               </div>
             </div>
-            <div className="items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]">
+            <div className="max-h-[420px] items-center justify-start overflow-auto md:flex md:flex-wrap md:space-x-3">
               {!isLoading ? (
                 teacher?.documents?.map(
                   ({ id, certificateId, approved, rejected }) => {
                     return (
                       <div
                         key={id}
-                        className="p-1 my-3 bg-white border shadow rounded-xl"
+                        className="my-3 rounded-xl border bg-white p-1 shadow"
                       >
                         <div className="my-3 w-96">{getDegree(id)}</div>
-                        <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
-                          <div className="absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105">
+                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+                          <div className="absolute right-3 top-3 z-30 hover:scale-105 hover:cursor-pointer">
                             <ImageFull cId={certificateId} />
                           </div>
                           <Image
@@ -537,47 +537,47 @@ export default function TeachersPage() {
                             }
                             alt="Hujjat"
                             layout="fill"
-                            className="top-0 object-contain duration-500 rounded-lg"
+                            className="top-0 rounded-lg object-contain duration-500"
                           />
                           {approved || rejected ? (
                             ""
                           ) : (
-                            <div className="absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5">
+                            <div className="absolute bottom-5 z-20 flex w-full items-center justify-center space-x-5">
                               {isApproving ? (
                                 <Button
-                                  className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-green-400 hover:bg-green-700"
                                   disabled={true}
                                 >
-                                  <Loader2 className="w-6 h-6 mr-2" />
+                                  <Loader2 className="mr-2 h-6 w-6" />
                                   Tasdiqlanmoqda...
                                 </Button>
                               ) : (
                                 <Button
-                                  className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-green-500 hover:bg-green-700"
                                   onClick={() =>
                                     approveTeacherDocument(true, id)
                                   }
                                 >
-                                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                                  <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                                   Tasdiqlash
                                 </Button>
                               )}
                               {isRejecting ? (
                                 <Button
-                                  className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-red-400 hover:bg-red-700"
                                   disabled={true}
                                 >
-                                  <Loader2 className="w-6 h-6 mr-2" />
+                                  <Loader2 className="mr-2 h-6 w-6" />
                                   Rad qilinmoqda...
                                 </Button>
                               ) : (
                                 <Button
-                                  className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-red-500 hover:bg-red-700"
                                   onClick={() =>
                                     approveTeacherDocument(false, id)
                                   }
                                 >
-                                  <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
+                                  <SolarCloseCircleBroken className="mr-2 h-6 w-6" />
                                   Rad qilish
                                 </Button>
                               )}
@@ -602,14 +602,14 @@ export default function TeachersPage() {
           </div>
         ) : mode?.includes("subject") ? (
           <div className="space-y-3">
-            <div className="flex items-center w-full space-x-2">
+            <div className="flex w-full items-center space-x-2">
               <div className="text-base text-gray-500">F.I.SH:</div>
               <div className="w-full text-lg font-medium capitalize">
                 {teacher?.fullName}
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="text-base text-gray-500 whitespace-nowrap">
+              <div className="whitespace-nowrap text-base text-gray-500">
                 Birinchi fan:
               </div>
               <div className="w-full text-lg font-medium">
@@ -618,7 +618,7 @@ export default function TeachersPage() {
                     <SelectValue placeholder="Fanlar..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup className="overflow-auto h-52">
+                    <SelectGroup className="h-52 overflow-auto">
                       {subjects?.map(({ name, id }) => {
                         return (
                           <SelectItem key={id} value={id}>
@@ -632,7 +632,7 @@ export default function TeachersPage() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="text-base text-gray-500 whitespace-nowrap">
+              <div className="whitespace-nowrap text-base text-gray-500">
                 Ikkinchi fan:
               </div>
               <div className="w-full text-lg font-medium">
@@ -641,7 +641,7 @@ export default function TeachersPage() {
                     <SelectValue placeholder="Fanlar..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup className="overflow-auto h-52">
+                    <SelectGroup className="h-52 overflow-auto">
                       {subjects?.map(({ name, id }) => {
                         return (
                           <SelectItem key={id} value={id}>
@@ -657,12 +657,12 @@ export default function TeachersPage() {
             <div className="flex items-center justify-end">
               {isSaving ? (
                 <Button disabled={true}>
-                  <Loader2 className="w-6 h-6 mr-2" />
+                  <Loader2 className="mr-2 h-6 w-6" />
                   Saqlanmoqda...
                 </Button>
               ) : (
                 <Button onClick={() => addSubjectToTeacher()}>
-                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                  <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                   Saqlash
                 </Button>
               )}
@@ -671,7 +671,7 @@ export default function TeachersPage() {
         ) : mode?.includes("qrcode") ? (
           <form onSubmit={qrCodeHandleSubmit(onSubmitAddQrcode)}>
             <div className="space-y-3">
-              <div className="flex flex-col items-center w-full space-y-2">
+              <div className="flex w-full flex-col items-center space-y-2">
                 {image ? (
                   <div>
                     <Image
@@ -679,22 +679,22 @@ export default function TeachersPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
-                <div className="w-full text-lg font-medium text-center capitalize">
+                <div className="w-full text-center text-lg font-medium capitalize">
                   {teacher?.fullName}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <QrCodeIcon className="w-8 h-8 text-gray-500" />
+                <QrCodeIcon className="h-8 w-8 text-gray-500" />
                 <Input
-                  className="w-full text-base text-green-900 font-bold uppercase  placeholder:font-medium placeholder:normal-case"
+                  className="w-full text-base font-bold uppercase text-green-900  placeholder:font-medium placeholder:normal-case"
                   placeholder="QR kodni skanerlang..."
                   {...qrCodeRegister("qrcodeId", { required: true })}
                   disabled
@@ -702,7 +702,7 @@ export default function TeachersPage() {
               </div>
               <div className="flex items-center justify-end">
                 <Button autoFocus={true}>
-                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                  <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                   QR kod biriktirish
                 </Button>
               </div>
@@ -710,7 +710,7 @@ export default function TeachersPage() {
           </form>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 bg-white rounded">
+            <div className="w-full space-y-4 rounded bg-white">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -719,16 +719,16 @@ export default function TeachersPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
                 <div className="w-full space-y-3">
-                  <div className="flex items-center w-full space-x-2">
+                  <div className="flex w-full items-center space-x-2">
                     <div className="text-base text-gray-500">F.I.SH:</div>
                     <div className="w-full text-lg font-medium capitalize">
                       <Input
@@ -738,7 +738,7 @@ export default function TeachersPage() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center w-full space-x-2">
+                  <div className="flex w-full items-center space-x-2">
                     <div className="text-base text-gray-500">Fan:</div>
                     <div className="w-full text-lg font-medium capitalize">
                       {teacher?.degree}
@@ -787,7 +787,7 @@ export default function TeachersPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Ustunlar <ChevronDown className="w-4 h-4 ml-2" />
+                Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -811,7 +811,7 @@ export default function TeachersPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="border rounded-md">
+        <div className="rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -858,8 +858,8 @@ export default function TeachersPage() {
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="text-muted-foreground flex-1 text-sm">
             Jami: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">

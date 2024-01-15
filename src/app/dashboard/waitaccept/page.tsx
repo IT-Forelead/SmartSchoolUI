@@ -102,7 +102,7 @@ export const columns = (
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           F.I.SH
-          <ArrowUpDown className="w-4 h-4 ml-2" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -170,9 +170,9 @@ export const columns = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Amallar</span>
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -183,7 +183,7 @@ export const columns = (
                 className="flex items-center space-x-2"
                 onClick={() => showCertificates("show", teacher)}
               >
-                <EyeIcon className="w-4 h-4 mr-1" />
+                <EyeIcon className="mr-1 h-4 w-4" />
                 Sertifikatlar
               </DialogTrigger>
             </DropdownMenuItem>
@@ -306,7 +306,7 @@ export default function TeachersPage() {
         </DialogHeader>
         {mode?.includes("show") ? (
           <div className="px-4 py-2">
-            <div className="flex p-5 space-y-4 bg-white rounded">
+            <div className="flex space-y-4 rounded bg-white p-5">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -315,12 +315,12 @@ export default function TeachersPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
                   </div>
                 )}
                 <div>
@@ -384,18 +384,18 @@ export default function TeachersPage() {
                 </div>
               </div>
             </div>
-            <div className="items-center justify-start md:space-x-3 md:flex md:flex-wrap overflow-auto max-h-[420px]">
+            <div className="max-h-[420px] items-center justify-start overflow-auto md:flex md:flex-wrap md:space-x-3">
               {!isLoading ? (
                 teacher?.documents?.map(
                   ({ id, certificateId, approved, rejected }) => {
                     return (
                       <div
                         key={id}
-                        className="p-1 my-3 bg-white border shadow rounded-xl"
+                        className="my-3 rounded-xl border bg-white p-1 shadow"
                       >
                         <div className="my-3 w-96">{getDegree(id)}</div>
-                        <div className="relative bg-white border border-gray-200 rounded-lg shadow h-96 w-96 dark:bg-gray-800 dark:border-gray-700">
-                          <div className="absolute z-30 top-3 right-3 hover:cursor-pointer hover:scale-105">
+                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+                          <div className="absolute right-3 top-3 z-30 hover:scale-105 hover:cursor-pointer">
                             <ImageFull cId={certificateId} />
                           </div>
                           <Image
@@ -405,47 +405,47 @@ export default function TeachersPage() {
                             }
                             alt="Hujjat"
                             layout="fill"
-                            className="top-0 object-contain duration-500 rounded-lg"
+                            className="top-0 rounded-lg object-contain duration-500"
                           />
                           {approved || rejected ? (
                             ""
                           ) : (
-                            <div className="absolute z-20 flex items-center justify-center w-full space-x-5 bottom-5">
+                            <div className="absolute bottom-5 z-20 flex w-full items-center justify-center space-x-5">
                               {isApproving ? (
                                 <Button
-                                  className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-green-400 hover:bg-green-700"
                                   disabled={true}
                                 >
-                                  <Loader2 className="w-6 h-6 mr-2" />
+                                  <Loader2 className="mr-2 h-6 w-6" />
                                   Tasdiqlanmoqda...
                                 </Button>
                               ) : (
                                 <Button
-                                  className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-green-500 hover:bg-green-700"
                                   onClick={() =>
                                     approveTeacherDocument(true, id)
                                   }
                                 >
-                                  <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                                  <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                                   Tasdiqlash
                                 </Button>
                               )}
                               {isRejecting ? (
                                 <Button
-                                  className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-red-400 hover:bg-red-700"
                                   disabled={true}
                                 >
-                                  <Loader2 className="w-6 h-6 mr-2" />
+                                  <Loader2 className="mr-2 h-6 w-6" />
                                   Rad qilinmoqda...
                                 </Button>
                               ) : (
                                 <Button
-                                  className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+                                  className="whitespace-nowrap bg-red-500 hover:bg-red-700"
                                   onClick={() =>
                                     approveTeacherDocument(false, id)
                                   }
                                 >
-                                  <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
+                                  <SolarCloseCircleBroken className="mr-2 h-6 w-6" />
                                   Rad qilish
                                 </Button>
                               )}
@@ -489,7 +489,7 @@ export default function TeachersPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Ustunlar <ChevronDown className="w-4 h-4 ml-2" />
+                Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -513,7 +513,7 @@ export default function TeachersPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="border rounded-md">
+        <div className="rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -560,8 +560,8 @@ export default function TeachersPage() {
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="text-muted-foreground flex-1 text-sm">
             Jami: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">

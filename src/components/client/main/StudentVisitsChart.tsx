@@ -140,14 +140,14 @@ export default async function StudentVisitsChart() {
   };
 
   return (
-    <div className="col-span-3 bg-white rounded-lg border">
+    <div className="col-span-3 rounded-lg border bg-white">
       <div className="flex items-center justify-between p-5">
         <div>
           <div className="text-lg font-bold">Tashriflar statistikasi</div>
           <div className="text-sm">Bir haftalik tashriflar statistikasi</div>
         </div>
-        <div className="rounded-xl p-3 bg-blue-500 flex items-center justify-center">
-          <SolarUsersGroupTwoRoundedBroken className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-center rounded-xl bg-blue-500 p-3">
+          <SolarUsersGroupTwoRoundedBroken className="h-8 w-8 text-white" />
         </div>
       </div>
       <ReactApexChart

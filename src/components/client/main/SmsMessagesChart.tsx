@@ -86,14 +86,14 @@ export default async function SmsMessagesChart() {
   };
 
   return (
-    <div className="col-span-2 bg-white rounded-lg border">
+    <div className="col-span-2 rounded-lg border bg-white">
       <div className="flex items-center justify-between p-5">
         <div>
           <div className="text-lg font-bold">SMS xabarlar statistikasi</div>
           <div className="text-sm">Bir haftalik SMS xabarlar statistikasi</div>
         </div>
-        <div className="rounded-xl p-3 bg-yellow-500 flex items-center justify-center">
-          <SolarChatRoundLineBroken className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-center rounded-xl bg-yellow-500 p-3">
+          <SolarChatRoundLineBroken className="h-8 w-8 text-white" />
         </div>
       </div>
       <ReactApexChart

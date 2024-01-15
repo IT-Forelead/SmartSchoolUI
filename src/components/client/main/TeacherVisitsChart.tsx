@@ -140,7 +140,7 @@ export default async function TeacherVisitsChart() {
   };
 
   return (
-    <div className="col-span-3 bg-white rounded-lg border">
+    <div className="col-span-3 rounded-lg border bg-white">
       <div className="flex items-center justify-between p-5">
         <div>
           <div className="text-lg font-bold">
@@ -150,8 +150,8 @@ export default async function TeacherVisitsChart() {
             Bir haftalik o`qituvchilar tashriflari statistikasi
           </div>
         </div>
-        <div className="rounded-xl p-3 bg-green-500 flex items-center justify-center">
-          <SolarUsersGroupRoundedBroken className="w-8 h-8 text-white" />
+        <div className="flex items-center justify-center rounded-xl bg-green-500 p-3">
+          <SolarUsersGroupRoundedBroken className="h-8 w-8 text-white" />
         </div>
       </div>
       <ReactApexChart

@@ -57,8 +57,8 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-screen space-y-5">
-        <h1 className="text-3xl font-bold text-center text-red-500">{error}</h1>
+      <div className="flex h-screen w-full flex-col items-center justify-center space-y-5">
+        <h1 className="text-center text-3xl font-bold text-red-500">{error}</h1>
         <Link href="/">
           <Button>Bosh sahifa</Button>
         </Link>
@@ -68,8 +68,8 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   return (
     <div className="h-screen max-w-full p-5">
-      <div className="grid w-full grid-cols-1 gap-10 p-3 bg-gray-100 shadow md:grid-cols-2 rounded-xl h-fit">
-        <div className="p-5 bg-white shadow rounded-xl">
+      <div className="grid h-fit w-full grid-cols-1 gap-10 rounded-xl bg-gray-100 p-3 shadow md:grid-cols-2">
+        <div className="rounded-xl bg-white p-5 shadow">
           <h1 className="mb-5 text-xl font-bold">O`qituvchi ma`lumotlari</h1>
           <div className="flex flex-col items-start space-x-4 md:flex-row">
             {false ? (
@@ -79,12 +79,12 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                   alt="teacher image"
                   width={100}
                   height={100}
-                  className="object-cover w-32 h-32 duration-500 border rounded-lg cursor-zoom-out hover:object-scale-down"
+                  className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
                 />
               </div>
             ) : (
               <div>
-                <SolarUserBroken className="w-32 h-32 rounded-lg text-gray-500 border p-1.5" />
+                <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
               </div>
             )}
             <div>
@@ -143,9 +143,9 @@ export default function LinkPage({ params }: { params: { link: string } }) {
             </div>
           </div>
         </div>
-        <div className="p-5 bg-white shadow rounded-xl">
+        <div className="rounded-xl bg-white p-5 shadow">
           <h1 className="mb-5 text-xl font-bold">O`qituvchi sertifikati</h1>
-          <div className="relative w-full h-[80vh]">
+          <div className="relative h-[80vh] w-full">
             {teacherLinkResponse.isLoading ? (
               <Loader />
             ) : (
@@ -154,40 +154,40 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                   src={image ?? ""}
                   alt="sertifikat"
                   layout="fill"
-                  className="top-0 object-contain duration-500 rounded-lg"
+                  className="top-0 rounded-lg object-contain duration-500"
                 />
-                <div className="absolute z-30 flex items-center justify-center w-full space-x-5 bottom-5">
+                <div className="absolute bottom-5 z-30 flex w-full items-center justify-center space-x-5">
                   {isApproving ? (
                     <Button
-                      className="bg-green-400 hover:bg-green-700 whitespace-nowrap"
+                      className="whitespace-nowrap bg-green-400 hover:bg-green-700"
                       disabled={true}
                     >
-                      <Loader2 className="w-6 h-6 mr-2" />
+                      <Loader2 className="mr-2 h-6 w-6" />
                       Tasdiqlanmoqda...
                     </Button>
                   ) : (
                     <Button
-                      className="bg-green-500 hover:bg-green-700 whitespace-nowrap"
+                      className="whitespace-nowrap bg-green-500 hover:bg-green-700"
                       onClick={() => approveTeacherDocument(true)}
                     >
-                      <SolarCheckCircleBroken className="w-6 h-6 mr-2" />
+                      <SolarCheckCircleBroken className="mr-2 h-6 w-6" />
                       Tasdiqlash
                     </Button>
                   )}
                   {isRejecting ? (
                     <Button
-                      className="bg-red-400 hover:bg-red-700 whitespace-nowrap"
+                      className="whitespace-nowrap bg-red-400 hover:bg-red-700"
                       disabled={true}
                     >
-                      <Loader2 className="w-6 h-6 mr-2" />
+                      <Loader2 className="mr-2 h-6 w-6" />
                       Rad qilinmoqda...
                     </Button>
                   ) : (
                     <Button
-                      className="bg-red-500 hover:bg-red-700 whitespace-nowrap"
+                      className="whitespace-nowrap bg-red-500 hover:bg-red-700"
                       onClick={() => approveTeacherDocument(false)}
                     >
-                      <SolarCloseCircleBroken className="w-6 h-6 mr-2" />
+                      <SolarCloseCircleBroken className="mr-2 h-6 w-6" />
                       Rad qilish
                     </Button>
                   )}

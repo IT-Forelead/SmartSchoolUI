@@ -82,7 +82,7 @@ export default function TakeLesson() {
       <Dialog>
         <DialogTrigger>
           <Button className="bg-blue-700 hover:bg-blue-900">
-            <SolarBoxMinimalisticBroken className="w-6 h-6 mr-2" />
+            <SolarBoxMinimalisticBroken className="mr-2 h-6 w-6" />
             Dars olish
           </Button>
         </DialogTrigger>
@@ -91,24 +91,24 @@ export default function TakeLesson() {
             <DialogTitle>Dars olish</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} method="POST" content="">
-            <div className="w-full mb-3 space-y-4 bg-white rounded">
+            <div className="mb-3 w-full space-y-4 rounded bg-white">
               <div className="flex items-start space-x-4">
                 <div className="w-full space-y-3">
                   <div className="flex items-center space-x-2">
                     <div className="text-base text-gray-500">Toifalar:</div>
                     <div className="w-full text-lg font-medium">
                       <Select onValueChange={(val) => getSelectDegreeData(val)}>
-                        <SelectTrigger className="w-full text-left h-fit">
+                        <SelectTrigger className="h-fit w-full text-left">
                           <SelectValue placeholder="Toifalar..." />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectGroup className="overflow-auto h-52">
+                          <SelectGroup className="h-52 overflow-auto">
                             {degrees?.map(({ description, id }) => {
                               return (
                                 <SelectItem
                                   key={id}
                                   value={id}
-                                  className="overflow-auto w-[300px] md:w-[450px]"
+                                  className="w-[300px] overflow-auto md:w-[450px]"
                                 >
                                   {description}
                                 </SelectItem>
@@ -120,7 +120,7 @@ export default function TakeLesson() {
                     </div>
                   </div>
                   {selectId ? (
-                    <div className="flex items-center w-full text-gray-500">
+                    <div className="flex w-full items-center text-gray-500">
                       Sertifikat:{" "}
                       <Input
                         id="file"
@@ -140,7 +140,7 @@ export default function TakeLesson() {
                 <Button autoFocus={true}>Saqlash</Button>
               ) : (
                 <Button disabled className="select-none">
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saqlanmoqda...
                 </Button>
               )}

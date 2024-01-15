@@ -55,7 +55,6 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { dateFormatter, translateVisitType } from "@/lib/composables";
 import { downloadCsv } from "@/lib/csv";
-import "react-datepicker/dist/react-datepicker.css";
 import { useGroupsList } from "@/hooks/useGroups";
 import {
   Popover,

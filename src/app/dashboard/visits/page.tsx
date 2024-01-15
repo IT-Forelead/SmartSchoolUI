@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
+  CalendarIcon,
   Check,
   ChevronDown,
   ChevronsUpDown,
@@ -54,7 +55,6 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { dateFormatter, translateVisitType } from "@/lib/composables";
 import { downloadCsv } from "@/lib/csv";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useGroupsList } from "@/hooks/useGroups";
 import {
@@ -74,6 +74,8 @@ import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
 import { SolarUserHandsOutline } from "@/icons/StudentsIcon";
 import { paginate } from "@/lib/pagination";
 import moment from "moment";
+import { humanize } from "@/lib/date";
+import { Calendar } from "@/components/ui/calendar";
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
@@ -152,8 +154,8 @@ export default function VisitsPage() {
     setVisit(visit);
   }
 
-  const [from, setStartDate] = useState<Date | any>();
-  const [to, setEndDate] = useState<Date | any>();
+  const [from, setStartDate] = useState<Date | undefined>();
+  const [to, setEndDate] = useState<Date | undefined>();
 
   useEffect(() => {
     if (!currentUser?.User?.role?.includes("admin")) {
@@ -259,27 +261,41 @@ export default function VisitsPage() {
               }}
             />
 
-            <DatePicker
-              className="flex h-9 w-36 rounded-md border"
-              selected={from}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={from}
-              endDate={to}
-              showIcon={true}
-              placeholderText={"dd/MM/yyyy"}
-            />
-            <DatePicker
-              className="flex h-9 w-36 rounded-md border"
-              selected={to}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={from}
-              endDate={to}
-              minDate={from}
-              showIcon={true}
-              placeholderText={"dd/MM/yyyy"}
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !from && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {from ? humanize(from) : <span>Sana tanlash</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" onSelect={setStartDate} />
+              </PopoverContent>
+            </Popover>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !to && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {to ? humanize(to) : <span>Sana tanlash</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" onSelect={setEndDate} />
+              </PopoverContent>
+            </Popover>
 
             <div className="flex space-x-1">
               <Popover open={openGroup} onOpenChange={setOpenGroup}>

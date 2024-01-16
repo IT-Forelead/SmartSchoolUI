@@ -123,7 +123,7 @@ export default function TargetLesson() {
           Dars kunini belgilash
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl dark:bg-slate-900">
         <DialogHeader>
           <DialogTitle>
             Dars jadvalidan o&apos;qituvchiga mos kunni belgilash
@@ -333,12 +333,15 @@ export default function TargetLesson() {
               render={() => (
                 <FormItem>
                   <FormLabel className="text-base">Dars soatlari</FormLabel>
-                  <table className="w-fit table-auto border">
+                  <table className="w-fit table-auto border dark:border-slate-600 dark:text-slate-400">
                     <thead>
                       <tr>
                         <td></td>
                         {weekdays.map((w) => (
-                          <th className="border p-2" key={w}>
+                          <th
+                            className="border p-2 dark:border-slate-600"
+                            key={w}
+                          >
                             {w}
                           </th>
                         ))}
@@ -347,11 +350,16 @@ export default function TargetLesson() {
                     <tbody>
                       {moments.map((m) => (
                         <tr key={m}>
-                          <th className="border px-2">{m}-para</th>
+                          <th className="border px-2 dark:border-slate-600">
+                            {m}-para
+                          </th>
                           {weekdaysThreeLetter.map((w) => {
                             const item = w + "-" + m;
                             return (
-                              <td className="border" key={w}>
+                              <td
+                                className="border dark:border-slate-600"
+                                key={w}
+                              >
                                 <FormField
                                   key={item}
                                   control={form.control}

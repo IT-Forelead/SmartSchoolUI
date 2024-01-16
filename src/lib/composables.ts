@@ -70,9 +70,9 @@ export function translateEnToUzbWeekday(wd: string) {
 
 export function fillColor(studentsCount: number, divide: boolean) {
   if (divide && studentsCount >= 25) {
-    return "bg-green-500 hover:bg-green-600";
+    return "bg-green-500 dark:bg-green-700 dark:hover:bg-green-600 hover:bg-green-600";
   }
-  return "bg-white hover:bg-gray-100";
+  return "bg-white dark:bg-slate-900 dark:hover:bg-slate-700 hover:bg-gray-100";
 }
 
 export function translateGroup(group?: Group) {

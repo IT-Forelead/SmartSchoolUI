@@ -30,7 +30,7 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-8 w-8 rounded-full border shadow"
+          className="relative h-8 w-8 rounded-full border shadow focus-visible:ring-0 dark:border-slate-600 dark:shadow-none"
         >
           <Avatar className="h-8 w-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}
@@ -40,7 +40,11 @@ export function UserNav() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent
+        className="w-56 dark:bg-slate-900"
+        align="end"
+        forceMount
+      >
         <DropdownMenuLabel className="flex items-center font-normal">
           <Avatar className="h-8 w-8">
             {/* <AvatarImage src="/avatars/01.png" alt="User image" /> */}

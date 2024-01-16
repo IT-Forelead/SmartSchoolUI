@@ -84,15 +84,15 @@ export default function TimeTablePage() {
       )}
 
       {!timeTableResponse.isLoading ? (
-        <table className="w-full border text-sm">
+        <table className="w-full border text-sm dark:border-slate-600">
           <thead>
-            <tr className="border bg-gray-100 text-gray-500">
-              <th className="border bg-gray-500 p-2 text-white">
+            <tr className="border bg-gray-100 text-gray-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-400">
+              <th className="border bg-gray-500 p-2 text-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200">
                 Dars jadvali
               </th>
               {weekdays.map((day) => {
                 return (
-                  <th key={day} className="border p-2">
+                  <th key={day} className="border p-2 dark:border-slate-600">
                     {day}
                   </th>
                 );
@@ -117,20 +117,22 @@ export default function TimeTablePage() {
                 return (
                   <tr
                     key={item}
-                    className={`border ${
-                      idx % 2 !== 1 ? "bg-white" : "bg-gray-100"
+                    className={`border dark:border-slate-600 ${
+                      idx % 2 !== 1
+                        ? "bg-white dark:bg-slate-800"
+                        : "bg-gray-100 dark:bg-slate-700"
                     }`}
                   >
-                    <td className="border p-1 text-center font-medium text-gray-500">
+                    <td className="border p-1 text-center font-medium text-gray-500 dark:border-slate-600 dark:text-slate-400">
                       {item}
                     </td>
                     {weekdays.map((day) => {
                       return (
                         <td
                           key={day}
-                          className="border p-1 align-top font-medium text-gray-500"
+                          className="border p-1 align-top font-medium text-gray-500 dark:border-slate-600"
                         >
-                          <ol className="space-y-1">
+                          <ol className="space-y-1 dark:text-slate-300/80">
                             {timetable[item][translateWeekday(day)]?.map(
                               (subject: any, idx: any) => {
                                 return (

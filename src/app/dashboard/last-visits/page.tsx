@@ -88,9 +88,7 @@ export default function VisitsPage() {
   }
 
   const webcamRef = React.useRef(null);
-  const [socketUrl, setSocketUrl] = useState<string>(
-    "wss://25-school.uz/school/api/v1/ws",
-  );
+  const [socketUrl, setSocketUrl] = useState<string>(process.env.WS_API_URI);
   const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([]);
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
@@ -181,9 +179,9 @@ export default function VisitsPage() {
             message?.kind === "visit" ? (
               <div
                 key={idx}
-                className="flex w-full items-center space-x-4 rounded-md border px-4 py-2"
+                className="flex w-full items-center space-x-4 rounded-md border px-4 py-2 dark:border-slate-600"
               >
-                <div className="rounded-lg border p-1.5">
+                <div className="rounded-lg border p-1.5 dark:border-slate-600">
                   <SolarUserBroken className="h-20 w-20 text-gray-500" />
                 </div>
                 <div className="space-x-1 space-y-1">
@@ -222,7 +220,7 @@ export default function VisitsPage() {
             ) : (
               <div
                 key={idx}
-                className="flex w-full items-center space-x-2 rounded-md border px-4 py-2"
+                className="flex w-full items-center space-x-2 rounded-md border px-4 py-2 dark:border-slate-600"
               >
                 <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
                   <SolarQrCodeBroken className="h-8 w-8" />
@@ -235,14 +233,17 @@ export default function VisitsPage() {
           )}
         </div>
         <div className="col-span-2 w-full p-5">
-          <div className="rounded-md border">
+          <div className="rounded-md border dark:border-slate-600">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <TableHead key={header.id}>
+                        <TableHead
+                          key={header.id}
+                          className="dark:text-slate-400"
+                        >
                           {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -274,7 +275,10 @@ export default function VisitsPage() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
+                    <TableCell
+                      colSpan={8}
+                      className="h-24 text-center dark:text-slate-300"
+                    >
                       Hech nima topilmadi.
                     </TableCell>
                   </TableRow>

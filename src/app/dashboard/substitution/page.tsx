@@ -196,14 +196,14 @@ export default function SubstitutionPage() {
 
   return (
     <div className="w-full p-5">
-      <div className="rounded-md border">
+      <div className="rounded-md border dark:border-slate-600">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="dark:text-slate-400">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -224,7 +224,7 @@ export default function SubstitutionPage() {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="dark:text-slate-300">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

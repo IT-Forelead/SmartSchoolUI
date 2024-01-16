@@ -391,10 +391,10 @@ export default function TeachersPage() {
                     return (
                       <div
                         key={id}
-                        className="my-3 rounded-xl border bg-white p-1 shadow"
+                        className="my-3 rounded-xl border bg-white p-1 shadow dark:bg-slate-900"
                       >
                         <div className="my-3 w-96">{getDegree(id)}</div>
-                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 bg-white shadow dark:border-slate-600 dark:bg-slate-900">
                           <div className="absolute right-3 top-3 z-30 hover:scale-105 hover:cursor-pointer">
                             <ImageFull cId={certificateId} />
                           </div>
@@ -513,14 +513,17 @@ export default function TeachersPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-slate-600">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="dark:text-slate-400"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(

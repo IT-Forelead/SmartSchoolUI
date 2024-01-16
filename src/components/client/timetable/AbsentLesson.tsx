@@ -151,7 +151,7 @@ export default function AbsentLesson(props: {
       {user?.User?.id === subject?.teacherId ? (
         <DialogTrigger className="w-full text-left">
           <li
-            className="border bg-green-500 p-1 text-white hover:cursor-pointer hover:bg-green-600"
+            className="border bg-green-500 p-1 text-white hover:cursor-pointer hover:bg-green-600 dark:border-slate-600"
             key={subject}
           >
             {subject?.moment}. {subject?.subjectName}
@@ -163,11 +163,14 @@ export default function AbsentLesson(props: {
       ) : (
         <div
           onClick={() => doSomethingFunc(compareLessonBody(lessonBody))}
-          className={`w-full text-left hover:cursor-pointer hover:bg-gray-200 ${fillColorSelectedSubject(
+          className={`w-full text-left hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-950 dark:hover:text-slate-100 ${fillColorSelectedSubject(
             lessonBody,
           )} ${compareLessonBody(lessonBody)}`}
         >
-          <li className="border p-1" key={subject}>
+          <li
+            className="border p-1 dark:border-slate-500 dark:hover:border-slate-700"
+            key={subject}
+          >
             {subject?.moment}. {subject?.subjectName}
             <p className="text-right text-[11px] font-bold capitalize">
               {subject?.teacherName}

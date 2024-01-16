@@ -40,7 +40,7 @@ export default function Login() {
     "FaceID orqali davomat qilishni ta'minlash",
   ];
   return (
-    <main className="">
+    <main className="dark:bg-slate-900 dark:text-white">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div className="flex h-screen items-center justify-center p-5 md:h-auto md:p-20">
           <div className="flex h-96 w-full flex-col items-center justify-center space-y-5 md:w-3/4">

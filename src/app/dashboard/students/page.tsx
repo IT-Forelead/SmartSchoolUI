@@ -122,29 +122,29 @@ export const columns = (
           {student.barcode ? (
             <Button variant="ghost">
               <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="h-5 w-5 text-blue-600" />
+                <QrCodeIcon className="h-5 w-5 text-blue-600 dark:text-blue-500" />
               </DialogTrigger>
             </Button>
           ) : (
             <Button variant="ghost">
               <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="h-5 w-5 text-red-600" />
+                <QrCodeIcon className="h-5 w-5 text-red-600 dark:text-red-500" />
               </DialogTrigger>
             </Button>
           )}
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("show", student)}>
-              <EyeIcon className="h-5 w-5 text-green-600" />
+              <EyeIcon className="h-5 w-5 text-green-600 dark:text-green-500" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("update", student)}>
-              <PencilIcon className="h-5 w-5 text-blue-600" />
+              <PencilIcon className="h-5 w-5 text-blue-600 dark:text-blue-500" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("qr-delete", student)}>
-              <QrCodeIcon className="h-5 w-5 text-red-900" />
+              <QrCodeIcon className="h-5 w-5 text-red-900 dark:text-red-700" />
             </DialogTrigger>
           </Button>
         </div>
@@ -164,9 +164,7 @@ export default function StudentsPage() {
 
   // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
   // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(
-    "wss://25-school.uz/school/api/v1/ws",
-  );
+  const [socketUrl, setSocketUrl] = useState<string>(process.env.WS_API_URI);
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   useEffect(() => {
@@ -539,14 +537,17 @@ export default function StudentsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-slate-600">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="dark:text-slate-400"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -567,7 +568,10 @@ export default function StudentsPage() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-2">
+                      <TableCell
+                        key={cell.id}
+                        className="py-2 dark:text-slate-300"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),

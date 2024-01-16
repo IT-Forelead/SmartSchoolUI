@@ -11,7 +11,7 @@ export default function DashboardLayout({
   return (
     <div className="relative flex h-screen">
       <div className="flex-auto overflow-auto">
-        <div className="sticky left-0 right-0 top-0 z-50 flex h-16 w-auto items-center justify-between border-b bg-white p-5 md:left-64">
+        <div className="sticky left-0 right-0 top-0 z-50 flex h-16 w-auto items-center justify-between border-b bg-white p-5 dark:border-slate-600 dark:bg-slate-900 md:left-64">
           <div>
             <h1 className="text-5xl">
               <span className="font-bold text-blue-600">25</span>

@@ -117,8 +117,8 @@ export const columns = (
       <div
         className={`inline-block rounded-full px-3 py-1 text-base text-white ${
           row.getValue("visitType") === "come_in"
-            ? "bg-green-600"
-            : "bg-red-600"
+            ? "bg-green-600 dark:bg-green-900"
+            : "bg-red-600 dark:bg-red-900"
         }`}
       >
         {translateVisitType(row.getValue("visitType"))}
@@ -162,16 +162,6 @@ export default function VisitsPage() {
     }
   }, [currentUser?.User?.role, router]);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     refetch();
-  //   }, 100000);
-
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
   const handleSubmit = () => {
     setVisitFilter({
       groupName: selectedGroup?.name,
@@ -180,7 +170,6 @@ export default function VisitsPage() {
       to: to ? moment(to).format("yyyy-MM-DD") : undefined,
     });
     setCurrentPage(1);
-    // refetch()
   };
 
   const groupResponse = useGroupsList();
@@ -192,13 +181,12 @@ export default function VisitsPage() {
   const [visitFilter, setVisitFilter] = useState<VisitFilter>({});
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { data, isError, isLoading, refetch } = useVisitsList(visitFilter);
+  const { data, isLoading } = useVisitsList(visitFilter);
   const visits = data?.data?.visits ?? [];
   const [pagesCount, setPagesCount] = useState<number>(
     data?.data.totalPages ?? 1,
@@ -389,14 +377,14 @@ export default function VisitsPage() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border dark:border-slate-600">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="dark:text-slate-400">
                       {header.isPlaceholder
                         ? null
                         : flexRender(

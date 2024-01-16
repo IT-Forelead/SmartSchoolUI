@@ -185,14 +185,14 @@ export default function TeacherWorkloadPage() {
       <div className="flex w-full items-center justify-end">
         <ChangeWorkload />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border dark:border-slate-600">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="dark:text-slate-400">
                       {header.isPlaceholder
                         ? null
                         : flexRender(

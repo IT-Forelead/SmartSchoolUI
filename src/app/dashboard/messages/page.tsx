@@ -258,7 +258,7 @@ export default function MessagesPage() {
           <Button onClick={handleSubmit}>Qidirish</Button>
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border dark:border-slate-600">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -310,7 +310,7 @@ export default function MessagesPage() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1">
-          <div className="text-muted-foreground flex items-start space-x-4 text-sm">
+          <div className="text-muted-foreground flex items-start space-x-4 text-sm dark:text-slate-400">
             <div>Jami: {stats?.total}</div>
             <Separator orientation="vertical" />
             <div>

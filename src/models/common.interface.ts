@@ -127,6 +127,7 @@ export type Teacher = {
       rejected: string;
     },
   ];
+  barcode?: string;
 };
 
 export type Student = {

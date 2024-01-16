@@ -77,34 +77,38 @@ export default function StudyHoursPage() {
         </Button>
       </div>
       {!subjectResponse.isLoading ? (
-        <table className="w-full border text-sm">
+        <table className="w-full border text-sm dark:border-slate-600">
           <thead>
-            <tr className="border text-gray-500">
-              <th className="border p-2">Fanlar</th>
+            <tr className="border text-gray-500 dark:border-slate-600">
+              <th className="border p-2  dark:border-slate-600 dark:text-slate-300">
+                Fanlar
+              </th>
               {groups
                 ?.sort((a, b) => a.level - b.level)
                 ?.map((group, idx) => {
                   return (
                     <th
                       key={idx}
-                      className="whitespace-nowrap border p-2 font-medium"
+                      className="whitespace-nowrap border p-2 font-medium dark:border-slate-600 dark:text-slate-300"
                     >{`${group.level}${group.name}`}</th>
                   );
                 })}
-              <th className="border p-2 text-center">
+              <th className="border p-2 text-center dark:border-slate-600 dark:text-slate-300">
                 Jami <br /> (boshlang`ich)
               </th>
-              <th className="border p-2 text-center">
+              <th className="border p-2 text-center dark:border-slate-600 dark:text-slate-300">
                 Jami <br /> (yuqori)
               </th>
-              <th className="border p-2 text-center">Jami</th>
+              <th className="border p-2 text-center dark:border-slate-600 dark:text-slate-300">
+                Jami
+              </th>
             </tr>
           </thead>
           <tbody>
             {subjects?.map((item, idx) => {
               return (
-                <tr key={idx} className="border">
-                  <td className="whitespace-nowrap border p-1 font-medium text-gray-500">
+                <tr key={idx} className="border dark:border-slate-600">
+                  <td className="whitespace-nowrap border p-1 pl-2 font-medium text-gray-500 dark:border-slate-600 dark:text-slate-300">
                     {item.name}
                   </td>
                   {groups?.map(({ level, id, studentCount }) => {
@@ -121,13 +125,13 @@ export default function StudyHoursPage() {
                       />
                     );
                   })}
-                  <td className="border p-1 text-center font-medium">
+                  <td className="border p-1 text-center font-medium dark:border-slate-600 dark:text-slate-300">
                     {item.hourForBeginner}
                   </td>
-                  <td className="border p-1 text-center font-medium">
+                  <td className="border p-1 text-center font-medium dark:border-slate-600 dark:text-slate-300">
                     {item.hourForHigher}
                   </td>
-                  <td className="border p-1 text-center font-medium">
+                  <td className="border p-1 text-center font-medium dark:border-slate-600 dark:text-slate-300">
                     {item.hourForHigher + item.hourForBeginner}
                   </td>
                 </tr>

@@ -101,7 +101,7 @@ export function ChangeWorkload() {
           O`qituvchi dars soatini o`zgartirish
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="dark:bg-slate-900 dark:text-slate-300">
         <DialogHeader>
           <DialogTitle>Dars soatini boshqarish</DialogTitle>
         </DialogHeader>

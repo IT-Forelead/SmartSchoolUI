@@ -91,7 +91,7 @@ export default function TakeLesson() {
             <DialogTitle>Dars olish</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} method="POST" content="">
-            <div className="mb-3 w-full space-y-4 rounded bg-white">
+            <div className="mb-3 w-full space-y-4 rounded bg-white dark:bg-slate-900">
               <div className="flex items-start space-x-4">
                 <div className="w-full space-y-3">
                   <div className="flex items-center space-x-2">

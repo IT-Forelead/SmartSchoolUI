@@ -67,7 +67,7 @@ export default function ChangeLessonHour(props: {
 
   return (
     <td
-      className={`cursor-pointer border p-2 ${fillColor(
+      className={`cursor-pointer border p-2 dark:border-slate-600 dark:text-slate-300 ${fillColor(
         props?.studentCount,
         subject?.needDivideStudents,
       )}`}

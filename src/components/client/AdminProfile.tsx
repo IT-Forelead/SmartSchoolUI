@@ -7,7 +7,7 @@ export default function AdminProfile() {
   const currentUser = useUserInfo();
   return (
     <div className="px-4 py-2">
-      <div className="space-y-4 rounded bg-white p-5">
+      <div className="space-y-4 rounded bg-white p-5 dark:bg-slate-900">
         <div className="flex items-start space-x-4">
           {image ? (
             <div>
@@ -21,19 +21,19 @@ export default function AdminProfile() {
             </div>
           ) : (
             <div>
-              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
             </div>
           )}
           <div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Roli:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {currentUser?.User?.role}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Telefon:</div>
-              <div className="text-lg font-medium">
+              <div className="text-lg font-medium dark:text-slate-300">
                 {currentUser?.User?.phone}
               </div>
             </div>

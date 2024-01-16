@@ -79,7 +79,7 @@ export default function TeacherProfile() {
 
   return (
     <div className="px-4 py-2">
-      <div className="grid grid-cols-1 space-y-4 rounded bg-white md:grid-cols-2 md:p-5">
+      <div className="grid grid-cols-1 space-y-4 rounded bg-white dark:bg-slate-900 md:grid-cols-2 md:p-5">
         <div className="flex scale-90 items-start space-x-4 md:scale-100">
           {image ? (
             <div>
@@ -88,64 +88,66 @@ export default function TeacherProfile() {
                 alt="teacher image"
                 width={100}
                 height={100}
-                className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
               />
             </div>
           ) : (
             <div>
-              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+              <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
             </div>
           )}
           <div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">F.I.SH:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {teacher?.fullName}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Telefon:</div>
-              <div className="text-lg font-medium">{teacher?.phone}</div>
+              <div className="text-lg font-medium dark:text-slate-300">
+                {teacher?.phone}
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Jinsi:</div>
-              <div className="text-lg font-medium">
+              <div className="text-lg font-medium dark:text-slate-300">
                 {teacher?.gender.includes("female") ? "Ayol" : "Erkak"}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Fani:</div>
-              <div className="text-lg font-medium">
+              <div className="text-lg font-medium dark:text-slate-300">
                 {teacher?.subjects?.map((s) => s?.name)?.join(", ") || "-"}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Daraja:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {teacher?.degree ?? "-"}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Millati:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {teacher?.nationality ?? "-"}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Hujjat turi:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {teacher?.documentType}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Hujjat raqami:</div>
-              <div className="text-lg font-medium capitalize">
+              <div className="text-lg font-medium capitalize dark:text-slate-300">
                 {teacher?.documentSeries} {teacher?.documentNumber}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="text-base text-gray-500">Yaratilgan sana:</div>
-              <div className="text-lg font-medium">
+              <div className="text-lg font-medium dark:text-slate-300">
                 {dateFormatter(teacher?.createdAt)}
               </div>
             </div>
@@ -153,17 +155,17 @@ export default function TeacherProfile() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div>
-            <div className="h-fit w-full rounded-lg border p-3 md:w-96">
+            <div className="h-fit w-full rounded-lg border p-3 dark:border-slate-600 md:w-96">
               <h1 className="font-bold">Dars bo`lish formulasi</h1>
               <div className="flex items-center space-x-2">
                 <div className="text-base text-gray-500">X:</div>
-                <div className="text-lg font-medium">
+                <div className="text-lg font-medium dark:text-slate-300">
                   {workloadInfo?.x ?? 0}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="text-base text-gray-500">Jami:</div>
-                <div className="text-lg font-medium">
+                <div className="text-lg font-medium dark:text-slate-300">
                   {workloadInfo?.total ?? 0}
                 </div>
               </div>
@@ -173,13 +175,17 @@ export default function TeacherProfile() {
                     <div className="text-base text-gray-500">
                       {info?.teacher?.fullName}:
                     </div>
-                    <div className="text-lg font-medium">{info?.hour}</div>
+                    <div className="text-lg font-medium dark:text-slate-300">
+                      {info?.hour}
+                    </div>
                   </div>
                 );
               })}
               <div className="flex items-center space-x-2">
                 <div className="text-base text-gray-500">Qoldiq:</div>
-                <div className="text-lg font-medium">{workloadInfo?.mode}</div>
+                <div className="text-lg font-medium dark:text-slate-300">
+                  {workloadInfo?.mode}
+                </div>
               </div>
             </div>
           </div>
@@ -196,7 +202,7 @@ export default function TeacherProfile() {
                   <DialogTitle>Profilni tahrirlash</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="w-full space-y-4 rounded bg-white">
+                  <div className="w-full space-y-4 rounded bg-white dark:bg-slate-900">
                     <div className="flex items-start space-x-4">
                       <div className="hidden md:block">
                         {image ? (
@@ -206,12 +212,12 @@ export default function TeacherProfile() {
                               alt="teacher image"
                               width={100}
                               height={100}
-                              className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                              className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                             />
                           </div>
                         ) : (
                           <div>
-                            <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                            <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
                           </div>
                         )}
                       </div>
@@ -286,10 +292,10 @@ export default function TeacherProfile() {
               return (
                 <div
                   key={id}
-                  className="my-3 rounded-xl border bg-white p-1 shadow"
+                  className="my-3 rounded-xl border bg-white p-1 shadow dark:border-slate-600 dark:bg-slate-900"
                 >
                   <div className="my-3 w-96">{getDegree(id)}</div>
-                  <div className="relative h-96 w-[350px] rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800 md:w-96">
+                  <div className="relative h-96 w-[350px] rounded-lg border border-gray-200 bg-white shadow dark:border-slate-600 dark:bg-slate-900 md:w-96">
                     <div className="absolute right-5 top-5 z-30 hover:scale-105 hover:cursor-pointer">
                       <ImageFull cId={certificateId} />
                     </div>

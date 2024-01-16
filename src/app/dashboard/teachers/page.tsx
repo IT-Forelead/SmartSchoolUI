@@ -77,6 +77,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ImageFull from "@/components/client/timetable/ImageFull";
 import useWebSocket from "react-use-websocket";
+import { cn } from "@/lib/utils";
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length;
@@ -149,15 +150,15 @@ export const columns = (
     header: "Sertifikatlar soni",
     cell: ({ row }) => (
       <div>
-        <p className="text-green-500">
+        <p className="text-green-500 dark:text-green-600">
           Tasdiqlangan:{" "}
           <b>{returnApprovedDocLength(row.getValue("documents")) ?? 0}</b>
         </p>
-        <p className="text-orange-500">
+        <p className="text-orange-500 dark:text-orange-600">
           Tasdiqlanmagan:{" "}
           <b>{returnNotApprovedDocLength(row.getValue("documents")) ?? 0}</b>
         </p>
-        <p className="text-red-500">
+        <p className="text-red-500 dark:text-red-600">
           Rad etilgan:{" "}
           <b>{returnRejectedDocLength(row.getValue("documents")) ?? 0}</b>
         </p>
@@ -173,56 +174,37 @@ export const columns = (
       return (
         <div className="flex items-center">
           <Button variant="ghost">
-            <DialogTrigger
-              className="flex items-center"
-              onClick={() => showCertificates("subject", teacher)}
-            >
-              <PlusCircleIcon className="h-5 w-5 text-indigo-600" />
+            <DialogTrigger onClick={() => showCertificates("subject", teacher)}>
+              <PlusCircleIcon className="h-5 w-5 text-indigo-600 dark:text-indigo-500" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger
-              className="flex items-center"
-              onClick={() => showCertificates("show", teacher)}
-            >
-              <EyeIcon className="h-5 w-5 text-green-600" />
+            <DialogTrigger onClick={() => showCertificates("show", teacher)}>
+              <EyeIcon className="h-5 w-5 text-green-600 dark:text-green-500" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger
-              className="flex items-center"
-              onClick={() => showCertificates("update", teacher)}
-            >
-              <PencilIcon className="h-5 w-5 text-blue-600" />
+            <DialogTrigger onClick={() => showCertificates("update", teacher)}>
+              <PencilIcon className="h-5 w-5 text-blue-600 dark:text-blue-500" />
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
-            <DialogTrigger
-              className="text-red-600"
-              onClick={() => showCertificates("delete", teacher)}
-            >
-              <TrashIcon className="h-5 w-5" />
+            <DialogTrigger onClick={() => showCertificates("delete", teacher)}>
+              <TrashIcon className="dark:text-500 h-5 w-5 text-red-600" />
             </DialogTrigger>
           </Button>
-          {teacher.barcode ? (
-            <Button variant="ghost">
-              <DialogTrigger
-                className="flex items-center"
-                onClick={() => showCertificates("qrcode", teacher)}
-              >
-                <QrCodeIcon className="h-5 w-5 text-blue-600" />
-              </DialogTrigger>
-            </Button>
-          ) : (
-            <Button variant="ghost">
-              <DialogTrigger
-                className="flex items-center"
-                onClick={() => showCertificates("qrcode", teacher)}
-              >
-                <QrCodeIcon className="m-auto flex h-5 w-5 justify-between text-red-600" />
-              </DialogTrigger>
-            </Button>
-          )}
+          <Button variant="ghost">
+            <DialogTrigger onClick={() => showCertificates("qrcode", teacher)}>
+              <QrCodeIcon
+                className={cn(
+                  "h-5 w-5",
+                  teacher?.barcode
+                    ? "text-blue-600 dark:text-blue-500"
+                    : "text-red-600 dark:text-red-500",
+                )}
+              />
+            </DialogTrigger>
+          </Button>
         </div>
       );
     },
@@ -241,9 +223,7 @@ export default function TeachersPage() {
 
   // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
   // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(
-    "wss://25-school.uz/school/api/v1/ws",
-  );
+  const [socketUrl, setSocketUrl] = useState<string>(process.env.WS_API_URI);
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false);
@@ -811,14 +791,17 @@ export default function TeachersPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-slate-600">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="dark:text-slate-400"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -839,7 +822,10 @@ export default function TeachersPage() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-2">
+                      <TableCell
+                        key={cell.id}
+                        className="py-2 dark:text-slate-300"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),

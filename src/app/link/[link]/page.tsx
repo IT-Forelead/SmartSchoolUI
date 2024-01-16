@@ -68,8 +68,8 @@ export default function LinkPage({ params }: { params: { link: string } }) {
 
   return (
     <div className="h-screen max-w-full p-5">
-      <div className="grid h-fit w-full grid-cols-1 gap-10 rounded-xl bg-gray-100 p-3 shadow md:grid-cols-2">
-        <div className="rounded-xl bg-white p-5 shadow">
+      <div className="grid h-fit w-full grid-cols-1 gap-10 rounded-xl bg-gray-100 p-3 shadow dark:bg-slate-900 md:grid-cols-2">
+        <div className="rounded-xl bg-white p-5 shadow dark:border dark:border-slate-600 dark:bg-slate-900">
           <h1 className="mb-5 text-xl font-bold">O`qituvchi ma`lumotlari</h1>
           <div className="flex flex-col items-start space-x-4 md:flex-row">
             {false ? (
@@ -79,12 +79,12 @@ export default function LinkPage({ params }: { params: { link: string } }) {
                   alt="teacher image"
                   width={100}
                   height={100}
-                  className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                  className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                 />
               </div>
             ) : (
               <div>
-                <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
               </div>
             )}
             <div>
@@ -143,7 +143,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
             </div>
           </div>
         </div>
-        <div className="rounded-xl bg-white p-5 shadow">
+        <div className="rounded-xl bg-white p-5 shadow dark:border dark:border-slate-600 dark:bg-slate-900">
           <h1 className="mb-5 text-xl font-bold">O`qituvchi sertifikati</h1>
           <div className="relative h-[80vh] w-full">
             {teacherLinkResponse.isLoading ? (

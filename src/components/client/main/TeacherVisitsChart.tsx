@@ -140,7 +140,7 @@ export default async function TeacherVisitsChart() {
   };
 
   return (
-    <div className="col-span-3 rounded-lg border bg-white">
+    <div className="col-span-3 rounded-lg border bg-white dark:border-slate-600 dark:bg-slate-900">
       <div className="flex items-center justify-between p-5">
         <div>
           <div className="text-lg font-bold">
@@ -155,6 +155,7 @@ export default async function TeacherVisitsChart() {
         </div>
       </div>
       <ReactApexChart
+        className="dark:[&_div]:border-slate-600 dark:[&_div]:bg-slate-900 dark:[&_div]:text-slate-200 dark:[&_div]:shadow-none dark:[&_div_.apexcharts-tooltip-title]:border-slate-600 dark:[&_div_.apexcharts-tooltip-title]:bg-slate-900 dark:[&_div_.apexcharts-tooltip-title]:text-slate-300 dark:[&_svg_text]:fill-slate-200"
         options={options}
         series={series}
         type="bar"

@@ -120,7 +120,7 @@ export default function TimeTablePage() {
                     className={`border dark:border-slate-600 ${
                       idx % 2 !== 1
                         ? "bg-white dark:bg-slate-800"
-                        : "bg-gray-100 dark:bg-slate-700"
+                        : "bg-gray-100 dark:bg-slate-700/70"
                     }`}
                   >
                     <td className="border p-1 text-center font-medium text-gray-500 dark:border-slate-600 dark:text-slate-400">

@@ -234,14 +234,17 @@ export default function TimetableChangesHistory() {
           <Loader />
         ) : (
           <div className="w-full p-5">
-            <div className="rounded-md border">
+            <div className="rounded-md border dark:border-slate-600">
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                       {headerGroup.headers.map((header) => {
                         return (
-                          <TableHead key={header.id}>
+                          <TableHead
+                            className="dark:text-slate-400"
+                            key={header.id}
+                          >
                             {header.isPlaceholder
                               ? null
                               : flexRender(
@@ -262,7 +265,10 @@ export default function TimetableChangesHistory() {
                         data-state={row.getIsSelected() && "selected"}
                       >
                         {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
+                          <TableCell
+                            className="dark:text-slate-300"
+                            key={cell.id}
+                          >
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext(),

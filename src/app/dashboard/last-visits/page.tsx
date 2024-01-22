@@ -12,10 +12,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import useWebSocket from "react-use-websocket";
+import Webcam from "react-webcam";
+
 import Loader from "@/components/client/Loader";
-import { Dialog } from "@/components/ui/dialog";
-import { SolarUserBroken } from "@/icons/UserIcon";
 import {
   Table,
   TableBody,
@@ -24,15 +26,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { updateVisit, useVisitsList } from "@/hooks/useVisits";
 import useUserInfo from "@/hooks/useUserInfo";
-import { Visit } from "@/models/common.interface";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { dateFormatter, translateVisitType } from "@/lib/composables";
-import Webcam from "react-webcam";
-import useWebSocket from "react-use-websocket";
+import { updateVisit, useVisitsList } from "@/hooks/useVisits";
 import { SolarQrCodeBroken } from "@/icons/QrCodeIcon";
+import { SolarUserBroken } from "@/icons/UserIcon";
+import { dateFormatter, translateVisitType } from "@/lib/composables";
+import { LastVisit, Visit } from "@/models/common.interface";
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
@@ -71,26 +70,33 @@ export const columns = (
   },
 ];
 
-export default function VisitsPage() {
+export default function LastVisitsPage() {
   const currentUser = useUserInfo();
   const router = useRouter();
+
   const hasAdminOrVisitMonitoringRole =
     currentUser?.User?.role?.includes("admin") ||
     currentUser?.User?.role?.includes("visit_monitoring");
+
   useEffect(() => {
     // If the user doesn't have admin or visit-monitoring role, redirect to denied page
     if (!hasAdminOrVisitMonitoringRole) {
       router.push("/dashboard/denied");
     }
   }, [hasAdminOrVisitMonitoringRole, router]);
+
   function showCertificates(mode: string, visit: Visit) {
     setVisit(visit);
   }
 
-  const webcamRef = React.useRef(null);
-  const [socketUrl, setSocketUrl] = useState<string>(process.env.WS_API_URI);
-  const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState([]);
-  const { lastJsonMessage } = useWebSocket(socketUrl);
+  const webcamRef = useRef(null);
+
+  const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState<
+    LastVisit[]
+  >([]);
+  const { lastJsonMessage } = useWebSocket<LastVisit>(
+    process.env.NEXT_PUBLIC_WS_URI ?? "",
+  );
 
   function makeBlob(base64String: string) {
     const [contentType, dataPart] = base64String.split(";base64,");
@@ -127,15 +133,14 @@ export default function VisitsPage() {
 
   const [visit, setVisit] = useState<Visit | null>(null);
 
-  const [open, setOpen] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { data, isError, isLoading, refetch } = useVisitsList({});
+  const { data, isLoading } = useVisitsList({ perPage: 10 });
 
-  let visits = data?.data ?? [];
+  let visits = data?.data.visits ?? [];
   const table = useReactTable({
     data: visits,
     columns: columns(setVisit, showCertificates),
@@ -154,12 +159,13 @@ export default function VisitsPage() {
       rowSelection,
     },
   });
-  table.getState().pagination.pageSize = 15;
+
   if (isLoading) {
     return <Loader />;
   }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <div className="w-full p-5">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col items-center space-y-2 p-5">
           <div className="mb-2 h-auto w-full overflow-hidden rounded-lg">
@@ -288,6 +294,6 @@ export default function VisitsPage() {
           </div>
         </div>
       </div>
-    </Dialog>
+    </div>
   );
 }

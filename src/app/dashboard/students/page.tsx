@@ -164,7 +164,9 @@ export default function StudentsPage() {
 
   // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
   // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(process.env.WS_API_URI);
+  const [socketUrl, setSocketUrl] = useState<string>(
+    process.env.NEXT_PUBLIC_WS_URI,
+  );
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   useEffect(() => {

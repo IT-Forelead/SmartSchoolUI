@@ -142,6 +142,20 @@ export type Teacher = {
   barcode?: string;
 };
 
+export type TeacherCreate = {
+  fullName: string;
+  subjects: string[];
+  gender: "male" | "female";
+  dateOfBirth?: string;
+  nationality: "uzbek" | "russian" | "turkmen";
+  citizenship: "uzbekistan" | "russia";
+  documentType?: "passport" | "birth_certificate";
+  documentSeries?: string;
+  documentNumber?: string;
+  pinfl?: string;
+  phone?: string;
+};
+
 export type Student = {
   id: string;
   dateOfBirth: string;

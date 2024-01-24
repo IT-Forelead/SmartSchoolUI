@@ -55,6 +55,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import CreateTeacher from "@/components/client/teachers/CreateTeacher";
 import { useSubjectsList } from "@/hooks/useSubjects";
 import {
   addSubjectToTeacherFunc,
@@ -221,11 +222,7 @@ export default function TeachersPage() {
     setTeacher(teacher);
   }
 
-  // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
-  // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(
-    process.env.NEXT_PUBLIC_WS_URI,
-  );
+  const socketUrl = process.env.NEXT_PUBLIC_WS_URI ?? "";
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false);
@@ -766,32 +763,37 @@ export default function TeachersPage() {
                 ?.setFilterValue(event.target.value);
             }}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex w-full items-center justify-end">
+            <div className="my-3 flex items-center justify-center space-x-5">
+              <CreateTeacher />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </div>
         <div className="rounded-md border dark:border-slate-600">
           <Table>

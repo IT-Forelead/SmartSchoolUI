@@ -78,3 +78,44 @@ export function fillColor(studentsCount: number, divide: boolean) {
 export function translateGroup(group?: Group) {
   return group?.level + "-" + group?.name;
 }
+
+export const documentTypes = ["passport", "birth_certificate"] as const;
+export const documentTypesUz = [
+  "Passport",
+  "Tug'ilganlik haqidagi guvohnoma",
+] as const;
+export const translateDocumentType = (n: string) => {
+  const map = new Map();
+
+  for (let i = 0; i < documentTypes.length; i++) {
+    map.set(documentTypes[i], documentTypesUz[i]);
+  }
+
+  return map.get(n);
+};
+
+export const nationalities = ["uzbek", "russian", "turkmen"] as const;
+export const nationalitiesUz = ["o'zbek", "rus", "turkman"] as const;
+
+export const translateNationality = (n: string) => {
+  const map = new Map();
+
+  for (let i = 0; i < nationalities.length; i++) {
+    map.set(nationalities[i], nationalitiesUz[i]);
+  }
+
+  return map.get(n);
+};
+
+export const citizenships = ["uzbekistan", "russia"] as const;
+export const citizenshipsUz = ["O'zbekiston", "Rossiya"] as const;
+
+export const translateCitizenship = (n: string) => {
+  const map = new Map();
+
+  for (let i = 0; i < citizenships.length; i++) {
+    map.set(citizenships[i], citizenshipsUz[i]);
+  }
+
+  return map.get(n);
+};

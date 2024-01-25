@@ -64,6 +64,7 @@ import {
   useDegreesList,
   useEditTeacher,
   useTeachersList,
+  useDeleteTeacher,
 } from "@/hooks/useTeachers";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
@@ -289,6 +290,7 @@ export default function TeachersPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const { mutate: editTeacher, isSuccess, error } = useEditTeacher();
+  const { mutate: deleteTeacher } = useDeleteTeacher();
   const {
     mutate: addQrCodeToTeacher,
     isSuccess: isSuccessAddQrcode,
@@ -357,7 +359,7 @@ export default function TeachersPage() {
   const subjectsResponse = useSubjectsList();
   const subjects = subjectsResponse?.data?.data;
 
-  const { data, isError, isLoading, refetch } = useTeachersList();
+  const { data, isLoading, refetch } = useTeachersList();
 
   useEffect(() => {
     if (isSuccess) {
@@ -393,6 +395,7 @@ export default function TeachersPage() {
     return <Loader />;
   }
   const image = null;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -400,18 +403,22 @@ export default function TeachersPage() {
       >
         <DialogHeader>
           {mode?.includes("show") ? (
-            <DialogTitle>O`qituvchi ma`lumotlari</DialogTitle>
+            <DialogTitle>O&apos;qituvchi ma&apos;lumotlari</DialogTitle>
           ) : mode?.includes("qrcode") ? (
-            <DialogTitle>O`qituvchiga Qr kod biriktirish</DialogTitle>
+            <DialogTitle>O&apos;qituvchiga Qr kod biriktirish</DialogTitle>
           ) : mode?.includes("subject") ? (
-            <DialogTitle>O`qituvchiga fan biriktirish</DialogTitle>
+            <DialogTitle>O&apos;qituvchiga fan biriktirish</DialogTitle>
+          ) : mode?.includes("update") ? (
+            <DialogTitle>O&apos;qituvchi profili</DialogTitle>
+          ) : mode?.includes("delete") ? (
+            <DialogTitle>O&apos;qituvchini o&apos;chirish </DialogTitle>
           ) : (
-            <DialogTitle>O`qituvchi profili</DialogTitle>
+            <DialogTitle>Unknown</DialogTitle>
           )}
         </DialogHeader>
         {mode?.includes("show") ? (
           <div className="px-4 py-2">
-            <div className="flex space-y-4 rounded bg-white p-5">
+            <div className="flex space-y-4 rounded p-5">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -420,12 +427,12 @@ export default function TeachersPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
                   </div>
                 )}
                 <div>
@@ -502,10 +509,10 @@ export default function TeachersPage() {
                     return (
                       <div
                         key={id}
-                        className="my-3 rounded-xl border bg-white p-1 shadow"
+                        className="my-3 rounded-xl border p-1 shadow dark:border-slate-600"
                       >
                         <div className="my-3 w-96">{getDegree(id)}</div>
-                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+                        <div className="relative h-96 w-96 rounded-lg border border-gray-200 shadow dark:border-slate-600 dark:bg-slate-800">
                           <div className="absolute right-3 top-3 z-30 hover:scale-105 hover:cursor-pointer">
                             <ImageFull cId={certificateId} />
                           </div>
@@ -687,9 +694,9 @@ export default function TeachersPage() {
               </div>
             </div>
           </form>
-        ) : (
+        ) : mode?.includes("update") ? (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 rounded bg-white">
+            <div className="w-full space-y-4 rounded">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -747,6 +754,17 @@ export default function TeachersPage() {
               <Button autoFocus={true}>Saqlash</Button>
             </div>
           </form>
+        ) : mode?.includes("delete") ? (
+          <div>
+            <p className="mb-2 text-lg">{teacher?.fullName}</p>
+            <Button onClick={() => deleteTeacher(teacher?.id ?? "")}>
+              O&apos;chirish
+            </Button>
+          </div>
+        ) : (
+          <div>
+            <h1>Unknown dialog</h1>
+          </div>
         )}
       </DialogContent>
       <div className="w-full p-5">

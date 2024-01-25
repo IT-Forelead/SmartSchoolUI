@@ -34,6 +34,10 @@ const createStudent = async (data: StudentCreate) => {
   return await axios.post<Student>("/student", data);
 };
 
+const deleteStudent = async (studentId: string) => {
+  return await axios.delete<any>(`/student/delete/${studentId}`);
+};
+
 /* Hooks */
 export const useStudentsList = () => {
   return useQuery({
@@ -76,6 +80,13 @@ export const useDeleteBarCodeStudent = () => {
 export const useCreateStudent = () => {
   return useMutation({
     mutationFn: (data: StudentCreate) => createStudent(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useDeleteStudent = () => {
+  return useMutation({
+    mutationFn: (studentId: string) => deleteStudent(studentId),
     onError: (err: AxiosError) => err,
   });
 };

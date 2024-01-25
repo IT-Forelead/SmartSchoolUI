@@ -18,6 +18,7 @@ import {
   EyeIcon,
   PencilIcon,
   QrCodeIcon,
+  TrashIcon,
 } from "lucide-react";
 import * as React from "react";
 import Loader from "@/components/client/Loader";
@@ -50,6 +51,7 @@ import {
   useDeleteBarCodeStudent,
   useEditStudent,
   useStudentsList,
+  useDeleteStudent,
 } from "@/hooks/useStudents";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
@@ -144,6 +146,11 @@ export const columns = (
             </DialogTrigger>
           </Button>
           <Button variant="ghost">
+            <DialogTrigger onClick={() => showStudents("delete", student)}>
+              <TrashIcon className="dark:text-500 h-5 w-5 text-red-600" />
+            </DialogTrigger>
+          </Button>
+          <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("qr-delete", student)}>
               <QrCodeIcon className="h-5 w-5 text-red-900 dark:text-red-700" />
             </DialogTrigger>
@@ -179,6 +186,7 @@ export default function StudentsPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const { mutate: editStudent, isSuccess, error } = useEditStudent();
+  const { mutate: deleteStudent } = useDeleteStudent();
   const {
     mutate: addQrCodeToStudent,
     isSuccess: isSuccessAddQrcode,
@@ -288,15 +296,17 @@ export default function StudentsPage() {
       >
         <DialogHeader>
           {mode?.includes("show") ? (
-            <DialogTitle>O`quvchi ma`lumotlari</DialogTitle>
+            <DialogTitle>O&apos;quvchi ma&apos;lumotlari</DialogTitle>
           ) : mode?.includes("qrcode") ? (
-            <DialogTitle>O`quvchiga QR kod biriktirish</DialogTitle>
+            <DialogTitle>O&apos;quvchiga QR kod biriktirish</DialogTitle>
           ) : mode?.includes("qr-delete") ? (
-            <DialogTitle>O`quvchi QR kodini o`chirish</DialogTitle>
+            <DialogTitle>O&apos;quvchi QR kodini o&apos;chirish</DialogTitle>
           ) : mode?.includes("update") ? (
-            <DialogTitle>O`quvchini tahrirlash</DialogTitle>
+            <DialogTitle>O&apos;quvchini tahrirlash</DialogTitle>
+          ) : mode?.includes("delete") ? (
+            <DialogTitle>O&apos;quvchini o&apos;chirish</DialogTitle>
           ) : (
-            ""
+            <DialogTitle>Unknown</DialogTitle>
           )}
         </DialogHeader>
         {mode?.includes("show") ? (
@@ -494,6 +504,13 @@ export default function StudentsPage() {
               <Button autoFocus={true}>Saqlash</Button>
             </div>
           </form>
+        ) : mode?.includes("delete") ? (
+          <div>
+            <p className="mb-2 text-lg">{student?.fullName}</p>
+            <Button onClick={() => deleteStudent(student?.id ?? "")}>
+              O&apos;chirish
+            </Button>
+          </div>
         ) : (
           <></>
         )}

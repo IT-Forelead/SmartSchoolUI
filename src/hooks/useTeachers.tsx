@@ -30,7 +30,11 @@ const getTeachersList = async () => {
 };
 
 const createTeacher = async (data: TeacherCreate) => {
-  return await axios.post<Teacher[]>(`/teacher`, data);
+  return await axios.post<Teacher[]>("/teacher", data);
+};
+
+const deleteTeacher = async (teacherId: string) => {
+  return await axios.delete<any>(`/teacher/delete/${teacherId}`);
 };
 
 const getTeacherStats = async () => {
@@ -245,6 +249,13 @@ export const useUpdateTeacherPosition = () => {
 export const useCreateTeacher = () => {
   return useMutation({
     mutationFn: (data: TeacherCreate) => createTeacher(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useDeleteTeacher = () => {
+  return useMutation({
+    mutationFn: (teacherId: string) => deleteTeacher(teacherId),
     onError: (err: AxiosError) => err,
   });
 };

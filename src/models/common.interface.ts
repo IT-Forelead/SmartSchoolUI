@@ -169,14 +169,27 @@ export type Student = {
   pinfl: string;
   parentPhone: string;
   photo?: string;
-  group: [
-    {
-      id: string;
-      level: string;
-      name: string;
-    },
-  ];
+  group: {
+    id: string;
+    level: string;
+    name: string;
+  };
   barcode: string;
+  createdAt: string;
+};
+
+export type StudentCreate = {
+  fullName: string;
+  groupId: string;
+  gender: "male" | "female";
+  parentPhone?: string;
+  dateOfBirth?: string;
+  nationality: "uzbek" | "russian" | "turkmen";
+  citizenship: "uzbekistan" | "russia";
+  documentType?: "passport" | "birth_certificate";
+  documentSeries?: string;
+  documentNumber?: string;
+  pinfl?: string;
 };
 
 export type StudentUpdate = {

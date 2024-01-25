@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import Loader from "@/components/client/Loader";
+import CreateStudent from "@/components/client/students/CreateStudent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -61,6 +62,7 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
+import { cn } from "@/lib/utils";
 
 const getGroupNameAndLevel = (group: { name: any; level: any }) => {
   if (group && group.name && group.level) {
@@ -119,19 +121,18 @@ export const columns = (
       const student = row.original;
       return (
         <div className="flex items-center">
-          {student.barcode ? (
-            <Button variant="ghost">
-              <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="h-5 w-5 text-blue-600 dark:text-blue-500" />
-              </DialogTrigger>
-            </Button>
-          ) : (
-            <Button variant="ghost">
-              <DialogTrigger onClick={() => showStudents("qrcode", student)}>
-                <QrCodeIcon className="h-5 w-5 text-red-600 dark:text-red-500" />
-              </DialogTrigger>
-            </Button>
-          )}
+          <Button variant="ghost">
+            <DialogTrigger onClick={() => showStudents("qrcode", student)}>
+              <QrCodeIcon
+                className={cn(
+                  "h-5 w-5",
+                  student.barcode
+                    ? "text-blue-600 dark:text-blue-500"
+                    : "text-red-600 dark:text-red-500",
+                )}
+              />
+            </DialogTrigger>
+          </Button>
           <Button variant="ghost">
             <DialogTrigger onClick={() => showStudents("show", student)}>
               <EyeIcon className="h-5 w-5 text-green-600 dark:text-green-500" />
@@ -162,11 +163,7 @@ export default function StudentsPage() {
     setStudent(student);
   }
 
-  // const hostname = window.location.hostname.includes("localhost") ? "localhost:8000" : "25-school.uz/school/api/v1";
-  // const protocol = window.location.protocol.includes("https:") ? "wss:" : "ws:";
-  const [socketUrl, setSocketUrl] = useState<string>(
-    process.env.NEXT_PUBLIC_WS_URI,
-  );
+  const socketUrl = process.env.NEXT_PUBLIC_WS_URI ?? "";
   const { lastJsonMessage } = useWebSocket(socketUrl);
 
   useEffect(() => {
@@ -283,6 +280,7 @@ export default function StudentsPage() {
     console.log(data);
     setOpen(false);
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -303,7 +301,7 @@ export default function StudentsPage() {
         </DialogHeader>
         {mode?.includes("show") ? (
           <div className="px-4 py-2">
-            <div className="flex space-y-4 rounded bg-white p-5">
+            <div className="flex space-y-4 rounded p-5">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -312,12 +310,12 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
                   </div>
                 )}
                 <div>
@@ -394,12 +392,12 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
                   </div>
                 )}
                 <div className="w-full text-center text-lg font-medium uppercase">
@@ -410,7 +408,7 @@ export default function StudentsPage() {
                 {student?.barcode ? (
                   <>
                     <QrCodeIcon className="h-8 w-8 text-gray-500" />
-                    <h1 className="flex w-full border-2 p-2">
+                    <h1 className="-2 flex w-full border p-2 dark:border-slate-600">
                       {student.barcode}
                     </h1>
                   </>
@@ -449,9 +447,9 @@ export default function StudentsPage() {
               </Button>
             </div>
           </div>
-        ) : (
+        ) : mode?.includes("update") ? (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full space-y-4 rounded bg-white">
+            <div className="w-full space-y-4 rounded">
               <div className="flex items-start space-x-4">
                 {image ? (
                   <div>
@@ -460,12 +458,12 @@ export default function StudentsPage() {
                       alt="teacher image"
                       width={100}
                       height={100}
-                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down"
+                      className="h-32 w-32 cursor-zoom-out rounded-lg border object-cover duration-500 hover:object-scale-down dark:border-slate-600"
                     />
                   </div>
                 ) : (
                   <div>
-                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500" />
+                    <SolarUserBroken className="h-32 w-32 rounded-lg border p-1.5 text-gray-500 dark:border-slate-600" />
                   </div>
                 )}
 
@@ -496,6 +494,8 @@ export default function StudentsPage() {
               <Button autoFocus={true}>Saqlash</Button>
             </div>
           </form>
+        ) : (
+          <></>
         )}
       </DialogContent>
       <div className="w-full p-5">
@@ -512,32 +512,37 @@ export default function StudentsPage() {
                 ?.setFilterValue(event.target.value);
             }}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex w-full items-center justify-end">
+            <div className="my-3 flex items-center justify-center space-x-5">
+              <CreateStudent />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Ustunlar <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </div>
         <div className="rounded-md border dark:border-slate-600">
           <Table>

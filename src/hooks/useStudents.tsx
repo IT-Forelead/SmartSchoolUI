@@ -2,6 +2,7 @@ import {
   AddQrCode,
   Stats,
   Student,
+  StudentCreate,
   StudentUpdate,
 } from "@/models/common.interface";
 import axios from "@/services/axios";
@@ -27,6 +28,10 @@ const editStudent = async (data: StudentUpdate) => {
 
 const deleteStudentBarcode = async (data: Student) => {
   return await axios.delete<any>(`/qrcode/delete/${data}`);
+};
+
+const createStudent = async (data: StudentCreate) => {
+  return await axios.post<Student>("/student", data);
 };
 
 /* Hooks */
@@ -64,6 +69,13 @@ export const useAddQrcodeToStudent = () => {
 export const useDeleteBarCodeStudent = () => {
   return useMutation({
     mutationFn: (data: Student) => deleteStudentBarcode(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useCreateStudent = () => {
+  return useMutation({
+    mutationFn: (data: StudentCreate) => createStudent(data),
     onError: (err: AxiosError) => err,
   });
 };

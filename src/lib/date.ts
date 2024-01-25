@@ -6,5 +6,5 @@ export const humanize = (date: Date): string => {
 };
 
 export const iso8601 = (date: Date): string => {
-  return format(date, "YYYY-MMMM-DD");
+  return format(date, "YYYY-MM-DD");
 };

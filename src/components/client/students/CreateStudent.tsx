@@ -37,6 +37,8 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGroupsList } from "@/hooks/useGroups";
+import { useCreateStudent } from "@/hooks/useStudents";
 import { useSubjectsList } from "@/hooks/useSubjects";
 import { useCreateTeacher } from "@/hooks/useTeachers";
 import { SolarBoxMinimalisticBroken } from "@/icons/BoxIcon";
@@ -50,7 +52,7 @@ import {
 } from "@/lib/composables";
 import { notifyError, notifySuccess } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { TeacherCreate } from "@/models/common.interface";
+import { StudentCreate, TeacherCreate } from "@/models/common.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -59,8 +61,9 @@ import * as z from "zod";
 
 const FormSchema = z.object({
   fullName: z.string().trim().min(5),
-  subjects: z.array(z.string().uuid()).min(1),
+  groupId: z.string().uuid(),
   gender: z.enum(["male", "female"]),
+  parentPhone: z.string().regex(/\+998\d{9}/),
   dateOfBirth: z
     .string()
     .regex(/\d{4}-\d{2}-\d{2}/)
@@ -71,14 +74,13 @@ const FormSchema = z.object({
   documentSeries: z.string().length(2).optional(),
   documentNumber: z.string().regex(/\d+/).max(9999999).optional(),
   pinfl: z.string().regex(/\d+/).optional(),
-  phone: z.string().regex(/\+998\d{9}/),
 });
 
-export default function CreateTeacher() {
-  const subjectResponse = useSubjectsList();
-  const subjects = subjectResponse?.data?.data || [];
+export default function CreateStudent() {
+  const groupsResponse = useGroupsList();
+  const groups = groupsResponse?.data?.data || [];
 
-  const { mutate: createTeacher, isSuccess, error } = useCreateTeacher();
+  const { mutate: createStudent, isSuccess, error } = useCreateStudent();
 
   const [additionalFields, setAdditionalFields] = useState<boolean>(false);
 
@@ -100,7 +102,6 @@ export default function CreateTeacher() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      subjects: [],
       nationality: nationalities[0],
       citizenship: citizenships[0],
       documentType: documentTypes[0],
@@ -108,10 +109,11 @@ export default function CreateTeacher() {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    const newData: TeacherCreate = {
+    const newData: StudentCreate = {
       fullName: data.fullName,
-      subjects: data.subjects,
+      groupId: data.groupId,
       gender: data.gender,
+      parentPhone: data.parentPhone,
       dateOfBirth: data.dateOfBirth,
       nationality: data.nationality,
       citizenship: data.citizenship,
@@ -119,9 +121,8 @@ export default function CreateTeacher() {
       documentSeries: data.documentSeries,
       documentNumber: data.documentNumber,
       pinfl: data.pinfl,
-      phone: data.phone,
     };
-    createTeacher(newData);
+    createStudent(newData);
   };
 
   return (
@@ -133,12 +134,12 @@ export default function CreateTeacher() {
       <DialogTrigger>
         <Button className="bg-blue-700 hover:bg-blue-900">
           <SolarBoxMinimalisticBroken className="mr-2 h-6 w-6" />
-          O&apos;qituvchi qo&apos;shish
+          O&apos;quvchi qo&apos;shish
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl dark:bg-slate-900">
         <DialogHeader>
-          <DialogTitle>O&apos;qituvchi qo&apos;shish</DialogTitle>
+          <DialogTitle>O&apos;quvchi qo&apos;shish</DialogTitle>
         </DialogHeader>
         <ScrollArea className="max-h-[70vh]">
           <Form {...form}>
@@ -159,24 +160,10 @@ export default function CreateTeacher() {
 
               <FormField
                 control={form.control}
-                name="phone"
+                name="groupId"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Telefon raqami</FormLabel>
-                    <FormControl>
-                      <Input placeholder="+998001234567" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="subjects"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base">Fanlar</FormLabel>
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Sinf</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -184,65 +171,51 @@ export default function CreateTeacher() {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "text-muted-foreground w-full justify-between",
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground",
                             )}
                           >
-                            <div>
-                              {field.value.length > 0 ? (
-                                field.value.map((subject) => (
-                                  <span
-                                    className="m-1 rounded-full bg-slate-200 px-2 py-1 dark:bg-slate-700"
-                                    key={subject}
-                                  >
-                                    {
-                                      subjects.find((s) => s.id == subject)
-                                        ?.name
-                                    }
-                                  </span>
-                                ))
-                              ) : (
-                                <span>Fanlarni tanlash</span>
-                              )}
-                            </div>
+                            {field.value
+                              ? ((): string => {
+                                  const g = groups.find(
+                                    (group) => group.id === field.value,
+                                  );
+                                  return `${g?.level}-${g?.name}`;
+                                })()
+                              : "Sinf tanlash"}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-fit p-0">
+                      <PopoverContent className="p-0">
                         <Command>
-                          <CommandInput placeholder="Search subject..." />
-                          <CommandEmpty>Fan topilmadi.</CommandEmpty>
+                          <CommandInput placeholder="Sinf qidirish..." />
+                          <CommandEmpty>Sinf topilmadi.</CommandEmpty>
                           <CommandGroup>
-                            {subjects.map((subject) => (
+                            {groups.map((group) => (
                               <CommandItem
-                                value={subject.name}
-                                key={subject.id}
+                                value={`${group.level}-${group.name}`}
+                                key={group.id}
                                 onSelect={() => {
-                                  form.setValue(
-                                    "subjects",
-                                    field.value.includes(subject.id)
-                                      ? field.value.filter(
-                                          (s) => s != subject.id,
-                                        )
-                                      : [...field.value, subject.id],
-                                  );
+                                  form.setValue("groupId", group.id);
                                 }}
                               >
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    field.value.includes(subject.id)
+                                    group.id === field.value
                                       ? "opacity-100"
                                       : "opacity-0",
                                   )}
                                 />
-                                {subject.name}
+                                {group.level}-{group.name}
                               </CommandItem>
                             ))}
                           </CommandGroup>
                         </Command>
                       </PopoverContent>
                     </Popover>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -272,6 +245,20 @@ export default function CreateTeacher() {
                           <FormLabel className="font-normal">Ayol</FormLabel>
                         </FormItem>
                       </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="parentPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ota-onasini telefon raqami</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+998001234567" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

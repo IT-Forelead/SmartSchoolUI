@@ -12,7 +12,9 @@ import {
   WorkloadFormula,
   WorkloadHistory,
   AddQrCode,
-  Stats, SmsOptOut,
+  Stats,
+  TeacherCreate,
+  SmsOptOut,
 } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -26,6 +28,14 @@ export type AddSubjects = {
 /* APIs */
 const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
+};
+
+const createTeacher = async (data: TeacherCreate) => {
+  return await axios.post<Teacher[]>("/teacher", data);
+};
+
+const deleteTeacher = async (teacherId: string) => {
+  return await axios.delete<any>(`/teacher/delete/${teacherId}`);
 };
 
 const getTeacherStats = async () => {
@@ -237,6 +247,20 @@ export const useChangeTeacherLesson = () => {
 export const useUpdateTeacherPosition = () => {
   return useMutation({
     mutationFn: (data: TeacherPositionUpdate) => updateTeacherPosition(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useCreateTeacher = () => {
+  return useMutation({
+    mutationFn: (data: TeacherCreate) => createTeacher(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useDeleteTeacher = () => {
+  return useMutation({
+    mutationFn: (teacherId: string) => deleteTeacher(teacherId),
     onError: (err: AxiosError) => err,
   });
 };

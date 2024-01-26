@@ -12,7 +12,7 @@ import {
   WorkloadFormula,
   WorkloadHistory,
   AddQrCode,
-  Stats,
+  Stats, SmsOptOut,
 } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -118,6 +118,10 @@ const getTeacherDocumentInfo = async (link: string) => {
 
 const getTeacherWorkloadInfo = async () => {
   return await axios.get<WorkloadFormula[]>("/teacher/workload-info");
+};
+
+const editTeacherSmsOptOut = async (data: SmsOptOut) => {
+  return await axios.post<any>("/teacher/optout", data);
 };
 
 /* Hooks */
@@ -233,6 +237,13 @@ export const useChangeTeacherLesson = () => {
 export const useUpdateTeacherPosition = () => {
   return useMutation({
     mutationFn: (data: TeacherPositionUpdate) => updateTeacherPosition(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useEditTeacherSmsOptOut = () => {
+  return useMutation({
+    mutationFn: (smsOptOut: SmsOptOut) => editTeacherSmsOptOut(smsOptOut),
     onError: (err: AxiosError) => err,
   });
 };

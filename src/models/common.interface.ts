@@ -140,6 +140,7 @@ export type Teacher = {
     },
   ];
   barcode?: string;
+  smsOptOut: boolean;
 };
 
 export type Student = {
@@ -163,6 +164,7 @@ export type Student = {
     },
   ];
   barcode: string;
+  smsOptOut: boolean;
 };
 
 export type StudentUpdate = {
@@ -328,3 +330,8 @@ export type StatsDaily = {
   date: string;
   count: number;
 };
+
+export type SmsOptOut = {
+  personId: string,
+  optOut: boolean
+}

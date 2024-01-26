@@ -3,6 +3,7 @@ import {
   Stats,
   Student,
   StudentUpdate,
+  SmsOptOut,
 } from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -27,6 +28,10 @@ const editStudent = async (data: StudentUpdate) => {
 
 const deleteStudentBarcode = async (data: Student) => {
   return await axios.delete<any>(`/qrcode/delete/${data}`);
+};
+
+const editStudentSmsOptOut = async (data: SmsOptOut) => {
+  return await axios.post<any>("/student/optout", data);
 };
 
 /* Hooks */
@@ -64,6 +69,13 @@ export const useAddQrcodeToStudent = () => {
 export const useDeleteBarCodeStudent = () => {
   return useMutation({
     mutationFn: (data: Student) => deleteStudentBarcode(data),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useEditStudentSmsOptOut = () => {
+  return useMutation({
+    mutationFn: (smsOptOut: SmsOptOut) => editStudentSmsOptOut(smsOptOut),
     onError: (err: AxiosError) => err,
   });
 };

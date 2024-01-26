@@ -49,6 +49,7 @@ import {
   useDeleteBarCodeStudent,
   useEditStudent,
   useStudentsList,
+  useEditStudentSmsOptOut,
 } from "@/hooks/useStudents";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
@@ -61,6 +62,13 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const getGroupNameAndLevel = (group: { name: any; level: any }) => {
   if (group && group.name && group.level) {
@@ -73,6 +81,7 @@ const getGroupNameAndLevel = (group: { name: any; level: any }) => {
 export const columns = (
   setStudent: Dispatch<SetStateAction<Student | null>>,
   showStudents: any,
+  editSmsOptOutFunc: any,
 ): ColumnDef<Student, any>[] => [
   {
     header: "No",
@@ -147,6 +156,16 @@ export const columns = (
               <QrCodeIcon className="h-5 w-5 text-red-900 dark:text-red-700" />
             </DialogTrigger>
           </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Switch checked={!student.smsOptOut} onCheckedChange={value=> editSmsOptOutFunc(student.id, !value)}/>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>SMS xabarnoma holati</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       );
     },
@@ -182,6 +201,7 @@ export default function StudentsPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const { mutate: editStudent, isSuccess, error } = useEditStudent();
+  const { mutate: editSmsOptOut, isSuccess: isSuccessSmsOptOut, error: changeSmsOptOutError } = useEditStudentSmsOptOut();
   const {
     mutate: addQrCodeToStudent,
     isSuccess: isSuccessAddQrcode,
@@ -200,6 +220,10 @@ export default function StudentsPage() {
     error: deleteBarcodeError,
   } = useDeleteBarCodeStudent();
 
+  function editSmsOptOutFunc(personId: string, optOut: boolean) {
+    editSmsOptOut({personId: personId, optOut: optOut});
+  }
+
   useEffect(() => {
     if (isSuccessDeleteBarcode) {
       notifySuccess("O`quvchining QR-kodi o'chirildi");
@@ -209,6 +233,14 @@ export default function StudentsPage() {
       notifyError("QR-kodni o`chirishda muammo yuzaga keldi");
     } else return;
   }, [isSuccessDeleteBarcode, deleteBarcodeError]);
+
+  useEffect(() => {
+    if (isSuccessSmsOptOut) {
+      refetch();
+    } else if (changeSmsOptOutError) {
+      notifyError("SMS xabarnoma holatini o'zgartirishda muammo yuzaga keldi");
+    } else return;
+  }, [isSuccessSmsOptOut, changeSmsOptOutError]);
 
   useEffect(() => {
     reset({ ...student });
@@ -256,7 +288,7 @@ export default function StudentsPage() {
   let students = data?.data ?? [];
   const table = useReactTable({
     data: students,
-    columns: columns(setStudent, showStudents),
+    columns: columns(setStudent, showStudents, editSmsOptOutFunc),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

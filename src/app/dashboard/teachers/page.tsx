@@ -63,6 +63,7 @@ import {
   useDegreesList,
   useEditTeacher,
   useTeachersList,
+  useEditTeacherSmsOptOut,
 } from "@/hooks/useTeachers";
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
@@ -78,6 +79,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ImageFull from "@/components/client/timetable/ImageFull";
 import useWebSocket from "react-use-websocket";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
+import {Switch} from "@/components/ui/switch";
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length;
@@ -100,6 +108,7 @@ function listToString(list: any) {
 export const columns = (
   setTeacher: Dispatch<SetStateAction<Teacher | null>>,
   showCertificates: any,
+  editSmsOptOutFunc: any,
 ): ColumnDef<Teacher, any>[] => [
   {
     header: "No",
@@ -205,6 +214,16 @@ export const columns = (
               />
             </DialogTrigger>
           </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Switch checked={!teacher.smsOptOut} onCheckedChange={value=> editSmsOptOutFunc(teacher.id, !value)}/>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>SMS xabarnoma holati</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       );
     },
@@ -307,10 +326,22 @@ export default function TeachersPage() {
 
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data;
+  const { mutate: editTeacherSmsOptOut, isSuccess: isSuccessTeacherSmsOptOut, error: editTeacherSmsOptOutError } = useEditTeacherSmsOptOut();
 
   function getDegree(id: string) {
     return degrees?.find((deg) => deg?.id === id)?.description;
   }
+  function editTeacherSmsOptOutFunc(personId: string, optOut: boolean) {
+    editTeacherSmsOptOut({personId: personId, optOut: optOut});
+  }
+
+  useEffect(() => {
+    if (isSuccessTeacherSmsOptOut) {
+      refetch();
+    } else if (editTeacherSmsOptOutError) {
+      notifyError("SMS xabarnoma holatini o'zgartirishda muammo yuzaga keldi");
+    } else return;
+  }, [isSuccessTeacherSmsOptOut, editTeacherSmsOptOutError]);
 
   useEffect(() => {
     reset({ ...teacher });
@@ -375,7 +406,7 @@ export default function TeachersPage() {
   let teachers = data?.data ?? [];
   const table = useReactTable({
     data: teachers,
-    columns: columns(setTeacher, showCertificates),
+    columns: columns(setTeacher, showCertificates, editTeacherSmsOptOutFunc),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

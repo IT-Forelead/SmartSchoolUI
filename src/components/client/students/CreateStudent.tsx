@@ -104,7 +104,7 @@ export default function CreateStudent() {
     defaultValues: {
       nationality: nationalities[0],
       citizenship: citizenships[0],
-      documentType: documentTypes[0],
+      documentType: documentTypes[1],
     },
   });
 
@@ -149,7 +149,10 @@ export default function CreateStudent() {
                 name="fullName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>F.I.Sh.</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      F.I.Sh.
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="F.I.Sh." {...field} />
                     </FormControl>
@@ -163,7 +166,10 @@ export default function CreateStudent() {
                 name="groupId"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Sinf</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Sinf
+                    </FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -225,7 +231,10 @@ export default function CreateStudent() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel>Jinsi</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Jinsi
+                    </FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -256,7 +265,10 @@ export default function CreateStudent() {
                 name="parentPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ota-onasini telefon raqami</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Ota-onasini telefon raqami
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="+998001234567" {...field} />
                     </FormControl>
@@ -464,11 +476,10 @@ export default function CreateStudent() {
                     />
                   </AccordionContent>
                   <AccordionTrigger className="h-9 w-20 rounded px-4 py-2 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50">
-                    {/* TODO: translate to uzbek */}
                     {additionalFields ? (
-                      <>Hide additional fields</>
+                      <>Qo&apos;shimcha maydonlarni yashirish</>
                     ) : (
-                      <>Show additional fields</>
+                      <>Qo&apos;shimcha maydonlarni ko&apos;rsatish</>
                     )}
                   </AccordionTrigger>
                 </AccordionItem>

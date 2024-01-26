@@ -40,12 +40,19 @@ import {
 } from "@/lib/composables";
 import { notifyError, notifySuccess } from "@/lib/notify";
 import { cn } from "@/lib/utils";
-import { LessonCreate, LessonFilter } from "@/models/common.interface";
+import {
+  Group,
+  LessonCreate,
+  LessonFilter,
+  Subject,
+  Teacher,
+} from "@/models/common.interface";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useStudyHoursList } from "@/hooks/useStudyHours";
 
 const FormSchema = z.object({
   teacherId: z.string().uuid(),
@@ -59,8 +66,13 @@ export default function TargetLesson() {
   const teachers = teacherResponse?.data?.data || [];
   const groupResponse = useGroupsList();
   const groups = groupResponse?.data?.data || [];
-  const subjectResponse = useSubjectsList();
-  const subjects = subjectResponse?.data?.data || [];
+  const studyHoursResponse = useStudyHoursList();
+  const studyHours = studyHoursResponse.data?.data || [];
+
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher>();
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
+  const [selectedSubject, setSelectedSubject] = useState<Subject>();
+  const [selectedSubjectHours, setSelectedSubjectHours] = useState<number>(0);
 
   const [lessonFilter, setLessonFilter] = useState<LessonFilter>({});
   const { data } = useLessonTimes(lessonFilter);
@@ -110,6 +122,30 @@ export default function TargetLesson() {
     targetLesson(newData);
   };
 
+  useEffect(() => {
+    form.setValue("teacherId", selectedTeacher?.id ?? "");
+    form.setValue("times", []);
+    setSelectedSubject(undefined);
+    setLessonFilter({ ...lessonFilter, teacherId: selectedTeacher?.id });
+  }, [selectedTeacher]);
+
+  useEffect(() => {
+    form.setValue("groupId", selectedGroup?.id ?? "");
+    form.setValue("times", []);
+    setLessonFilter({ ...lessonFilter, groupId: selectedGroup?.id });
+  }, [selectedGroup]);
+
+  useEffect(() => {
+    form.setValue("subjectId", selectedSubject?.id ?? "");
+    form.setValue("times", []);
+    setSelectedSubjectHours(
+      studyHours.find(
+        (s) =>
+          s.level == selectedGroup?.level && s.subjectId == selectedSubject?.id,
+      )?.hour ?? 0,
+    );
+  }, [selectedSubject]);
+
   return (
     <Dialog
       onOpenChange={(open) => {
@@ -149,9 +185,7 @@ export default function TargetLesson() {
                           )}
                         >
                           {field.value
-                            ? teachers.find(
-                                (teacher) => teacher.id === field.value,
-                              )?.fullName
+                            ? selectedTeacher?.fullName
                             : "O'qituvchi tanlash"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -169,14 +203,7 @@ export default function TargetLesson() {
                             <CommandItem
                               value={teacher.fullName}
                               key={teacher.id}
-                              onSelect={() => {
-                                form.setValue("teacherId", teacher.id);
-                                form.setValue("times", []);
-                                setLessonFilter({
-                                  ...lessonFilter,
-                                  teacherId: teacher.id,
-                                });
-                              }}
+                              onSelect={() => setSelectedTeacher(teacher)}
                             >
                               <Check
                                 className={cn(
@@ -215,11 +242,7 @@ export default function TargetLesson() {
                           )}
                         >
                           {field.value
-                            ? translateGroup(
-                                groups.find(
-                                  (group) => group.id === field.value,
-                                ),
-                              )
+                            ? translateGroup(selectedGroup)
                             : "Guruh tanlash"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -237,14 +260,7 @@ export default function TargetLesson() {
                             <CommandItem
                               value={translateGroup(group)}
                               key={group.id}
-                              onSelect={() => {
-                                form.setValue("groupId", group.id);
-                                form.setValue("times", []);
-                                setLessonFilter({
-                                  ...lessonFilter,
-                                  groupId: group.id,
-                                });
-                              }}
+                              onSelect={() => setSelectedGroup(group)}
                             >
                               <Check
                                 className={cn(
@@ -281,32 +297,23 @@ export default function TargetLesson() {
                             "justify-between",
                             !field.value && "text-muted-foreground",
                           )}
+                          disabled={!selectedTeacher}
                         >
-                          {field.value
-                            ? subjects.find(
-                                (subject) => subject.id === field.value,
-                              )?.name
-                            : "Fan tanlash"}
+                          {field.value ? selectedSubject?.name : "Fan tanlash"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-[400px] p-0">
                       <Command>
-                        <CommandInput
-                          placeholder="Fan tanlash..."
-                          className=""
-                        />
+                        <CommandInput placeholder="Fan tanlash..." />
                         <CommandEmpty>Fan topilmadi.</CommandEmpty>
                         <CommandGroup>
-                          {subjects.map((subject) => (
+                          {selectedTeacher?.subjects.map((subject) => (
                             <CommandItem
                               value={subject.name}
                               key={subject.id}
-                              onSelect={() => {
-                                form.setValue("subjectId", subject.id);
-                                form.setValue("times", []);
-                              }}
+                              onSelect={() => setSelectedSubject(subject)}
                             >
                               <Check
                                 className={cn(
@@ -332,7 +339,9 @@ export default function TargetLesson() {
               name="times"
               render={() => (
                 <FormItem>
-                  <FormLabel className="text-base">Dars soatlari</FormLabel>
+                  <FormLabel className="text-base">
+                    Dars soatlari - {selectedSubjectHours}
+                  </FormLabel>
                   <table className="w-fit table-auto border dark:border-slate-600 dark:text-slate-400">
                     <thead>
                       <tr>
@@ -368,7 +377,7 @@ export default function TargetLesson() {
                                     return (
                                       <FormItem
                                         key={item}
-                                        className="space-x-3 space-y-0"
+                                        className="h-10 space-x-3 space-y-0"
                                       >
                                         <FormControl>
                                           <input
@@ -382,6 +391,12 @@ export default function TargetLesson() {
                                             checked={field.value?.includes(
                                               item,
                                             )}
+                                            aria-readonly={
+                                              !field.value?.includes(item) &&
+                                              !lessonTimes.includes(item) &&
+                                              form.getValues().times.length >=
+                                                selectedSubjectHours
+                                            }
                                             onChange={(event) => {
                                               return event.target.checked
                                                 ? field.onChange([
@@ -398,10 +413,8 @@ export default function TargetLesson() {
                                         </FormControl>
                                         <label
                                           htmlFor={item}
-                                          className="block cursor-pointer py-2 hover:bg-gray-50 hover:text-gray-600 peer-checked:bg-[#7cc4f7] peer-checked:text-gray-600 peer-disabled:bg-[#fc888a] dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-gray-300"
-                                        >
-                                          &nbsp;
-                                        </label>
+                                          className="block h-10 cursor-pointer border-0 py-4 hover:bg-gray-50 hover:text-gray-600 peer-checked:bg-[#7cc4f7] peer-checked:text-gray-600 peer-checked:hover:bg-sky-500 peer-disabled:bg-[#fc888a] peer-disabled:hover:bg-red-400 peer-aria-readonly:hidden dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-gray-300"
+                                        ></label>
                                       </FormItem>
                                     );
                                   }}

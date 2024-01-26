@@ -148,7 +148,10 @@ export default function CreateTeacher() {
                 name="fullName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>F.I.Sh.</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      F.I.Sh.
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="F.I.Sh." {...field} />
                     </FormControl>
@@ -162,7 +165,10 @@ export default function CreateTeacher() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Telefon raqami</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Telefon raqami
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="+998001234567" {...field} />
                     </FormControl>
@@ -176,7 +182,10 @@ export default function CreateTeacher() {
                 name="subjects"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base">Fanlar</FormLabel>
+                    <FormLabel className="text-base">
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Fanlar
+                    </FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -252,7 +261,10 @@ export default function CreateTeacher() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel>Jinsi</FormLabel>
+                    <FormLabel>
+                      <span className="text-lg text-red-500">*&nbsp;</span>
+                      Jinsi
+                    </FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -477,11 +489,10 @@ export default function CreateTeacher() {
                     />
                   </AccordionContent>
                   <AccordionTrigger className="h-9 w-20 rounded px-4 py-2 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50">
-                    {/* TODO: translate to uzbek */}
                     {additionalFields ? (
-                      <>Hide additional fields</>
+                      <>Qo&apos;shimcha maydonlarni yashirish</>
                     ) : (
-                      <>Show additional fields</>
+                      <>Qo&apos;shimcha maydonlarni ko&apos;rsatish</>
                     )}
                   </AccordionTrigger>
                 </AccordionItem>

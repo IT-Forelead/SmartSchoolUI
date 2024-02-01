@@ -92,16 +92,14 @@ export type VisitResponse = {
   totalPages: number;
 };
 
-export type LastVisit = {
-  kind: "visit";
-  data: {
-    id: string;
-    createdAt: string;
-    personId: string;
-    visitType: "go_out" | "come_in";
-    fullName: string;
-    label: "student" | "teacher";
-  };
+export type VisitInfo = {
+  id: string;
+  createdAt: string;
+  personId: string;
+  visitType: "come_in" | "go_out";
+  assetId: string;
+  fullName: string;
+  label: "student" | "teacher";
 };
 
 export type Teacher = {

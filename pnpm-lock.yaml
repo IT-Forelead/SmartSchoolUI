@@ -149,9 +149,6 @@ dependencies:
   react-toastify:
     specifier: ^9.1.3
     version: 9.1.3(react-dom@18.2.0)(react@18.2.0)
-  react-use-websocket:
-    specifier: ^4.5.0
-    version: 4.5.0(react-dom@18.2.0)(react@18.2.0)
   react-webcam:
     specifier: ^7.2.0
     version: 7.2.0(react-dom@18.2.0)(react@18.2.0)
@@ -4026,16 +4023,6 @@ packages:
       react-dom: '>=16'
     dependencies:
       clsx: 1.2.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /react-use-websocket@4.5.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-oxYVLWM3Lv0InCfjW7hG/Hk0hkE0P1SiLd5/I3d5x0W4riAnDUkD4VEu7qNVAqxNjBF3nU7k0jLMOetLXpwfsA==}
-    peerDependencies:
-      react: '>= 18.0.0'
-      react-dom: '>= 18.0.0'
-    dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false

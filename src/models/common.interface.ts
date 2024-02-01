@@ -205,13 +205,11 @@ export type StudentUpdate = {
   pinfl: string;
   parentPhone: string;
   photo?: string;
-  group: [
-    {
+  group: {
       id: string;
       level: string;
       name: string;
-    },
-  ];
+  };
   barcode: string;
 };
 

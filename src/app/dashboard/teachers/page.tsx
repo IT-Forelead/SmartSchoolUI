@@ -79,7 +79,6 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ImageFull from "@/components/client/timetable/ImageFull";
-import useWebSocket from "react-use-websocket";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -88,6 +87,7 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip";
 import {Switch} from "@/components/ui/switch";
+import { getKeyPresses } from "@/lib/keypresses";
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length;
@@ -242,9 +242,6 @@ export default function TeachersPage() {
     setTeacher(teacher);
   }
 
-  const socketUrl = process.env.NEXT_PUBLIC_WS_URI ?? "";
-  const { lastJsonMessage } = useWebSocket(socketUrl);
-
   const [isApproving, setIsApproving] = useState<boolean>(false);
   const [isRejecting, setIsRejecting] = useState<boolean>(false);
 
@@ -334,6 +331,21 @@ export default function TeachersPage() {
     editTeacherSmsOptOut({personId: personId, optOut: optOut});
   }
 
+  const [UUID, setUUID] = useState<string>("");
+
+  const handleKeyPress = getKeyPresses(setUUID);
+
+  useEffect(() => {
+    window.addEventListener("keyup", handleKeyPress);
+    return () => window.removeEventListener("keyup", handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    if (UUID.length != 36) return;
+    setValue("qrcodeId", UUID)
+    setUUID("");
+  }, [UUID]);
+
   useEffect(() => {
     if (isSuccessTeacherSmsOptOut) {
       refetch();
@@ -345,12 +357,6 @@ export default function TeachersPage() {
   useEffect(() => {
     reset({ ...teacher });
   }, [reset, teacher]);
-
-  useEffect(() => {
-    if (mode === "qrcode" && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("qrcodeId", lastJsonMessage?.data ?? "");
-    }
-  }, [lastJsonMessage]);
 
   function getSelectData(order: number, sv: string) {
     if (

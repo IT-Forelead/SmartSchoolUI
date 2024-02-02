@@ -206,9 +206,9 @@ export type StudentUpdate = {
   parentPhone: string;
   photo?: string;
   group: {
-      id: string;
-      level: string;
-      name: string;
+    id: string;
+    level: string;
+    name: string;
   };
   barcode: string;
 };
@@ -355,6 +355,6 @@ export type StatsDaily = {
 };
 
 export type SmsOptOut = {
-  personId: string,
-  optOut: boolean
-}
+  personId: string;
+  optOut: boolean;
+};

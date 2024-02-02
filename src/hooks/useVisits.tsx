@@ -1,4 +1,8 @@
-import { VisitFilter, VisitInfo, VisitResponse } from "@/models/common.interface";
+import {
+  VisitFilter,
+  VisitInfo,
+  VisitResponse,
+} from "@/models/common.interface";
 import axios from "@/services/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
@@ -26,7 +30,9 @@ export const useVisitsList = (filters: VisitFilter) => {
 };
 
 /* Mutations */
-export const useVisitCreate = (onSuccess: (data: AxiosResponse<VisitInfo, any>) => void) => {
+export const useVisitCreate = (
+  onSuccess: (data: AxiosResponse<VisitInfo, any>) => void,
+) => {
   return useMutation({
     mutationFn: (data: FormData) => visitCreate(data),
     onSuccess: onSuccess,

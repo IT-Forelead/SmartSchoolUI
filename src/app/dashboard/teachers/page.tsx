@@ -84,9 +84,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {Switch} from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch";
 import { getKeyPresses } from "@/lib/keypresses";
 
 function returnApprovedDocLength(list: any) {
@@ -219,7 +219,12 @@ export const columns = (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Switch checked={!teacher.smsOptOut} onCheckedChange={value=> editSmsOptOutFunc(teacher.id, !value)}/>
+                <Switch
+                  checked={!teacher.smsOptOut}
+                  onCheckedChange={(value) =>
+                    editSmsOptOutFunc(teacher.id, !value)
+                  }
+                />
               </TooltipTrigger>
               <TooltipContent>
                 <p>SMS xabarnoma holati</p>
@@ -322,13 +327,17 @@ export default function TeachersPage() {
 
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data;
-  const { mutate: editTeacherSmsOptOut, isSuccess: isSuccessTeacherSmsOptOut, error: editTeacherSmsOptOutError } = useEditTeacherSmsOptOut();
+  const {
+    mutate: editTeacherSmsOptOut,
+    isSuccess: isSuccessTeacherSmsOptOut,
+    error: editTeacherSmsOptOutError,
+  } = useEditTeacherSmsOptOut();
 
   function getDegree(id: string) {
     return degrees?.find((deg) => deg?.id === id)?.description;
   }
   function editTeacherSmsOptOutFunc(personId: string, optOut: boolean) {
-    editTeacherSmsOptOut({personId: personId, optOut: optOut});
+    editTeacherSmsOptOut({ personId: personId, optOut: optOut });
   }
 
   const [UUID, setUUID] = useState<string>("");
@@ -342,7 +351,7 @@ export default function TeachersPage() {
 
   useEffect(() => {
     if (UUID.length != 36) return;
-    setValue("qrcodeId", UUID)
+    setValue("qrcodeId", UUID);
     setUUID("");
   }, [UUID]);
 

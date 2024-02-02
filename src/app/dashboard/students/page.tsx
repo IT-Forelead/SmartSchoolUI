@@ -246,7 +246,7 @@ export default function StudentsPage() {
 
   useEffect(() => {
     if (UUID.length != 36) return;
-    setValue("qrcodeId", UUID)
+    setValue("qrcodeId", UUID);
     setUUID("");
   }, [UUID]);
 

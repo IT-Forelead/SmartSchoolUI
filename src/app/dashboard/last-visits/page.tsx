@@ -93,6 +93,8 @@ export default function LastVisitsPage() {
 
   const webcamRef = useRef(null);
 
+  const [isCameraAllowed, setCameraAllowed] = useState<boolean>(false);
+
   const [visitHistory, setVisitHistory] = useState<VisitInfo[]>([]);
 
   const { mutate: visitCreate } = useVisitCreate((data) => {
@@ -115,6 +117,11 @@ export default function LastVisitsPage() {
     // Create a Blob with the data and specify the MIME type (e.g., image/png)
     return new Blob([dataArray], { type: contentType.replace(/^data:/, "") });
   }
+
+  if (navigator.mediaDevices)
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((value) => setCameraAllowed(value.active));
 
   const handleKeyPress = getKeyPresses(setUUID);
 
@@ -173,7 +180,7 @@ export default function LastVisitsPage() {
         <div className="flex flex-col items-center space-y-2 p-5">
           <div className="mb-2 h-auto w-full overflow-hidden rounded-lg">
             <AspectRatio ratio={4 / 3} className="w-full">
-              <Skeleton>
+              {isCameraAllowed ? (
                 <Webcam
                   audio={false}
                   mirrored={true}
@@ -186,7 +193,9 @@ export default function LastVisitsPage() {
                   width={640}
                   videoConstraints={{ height: 480, width: 640 }}
                 />
-              </Skeleton>
+              ) : (
+                <Skeleton className="h-full"></Skeleton>
+              )}
             </AspectRatio>
           </div>
           <div className="flex w-full flex-col gap-y-2">

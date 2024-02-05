@@ -118,10 +118,11 @@ export default function LastVisitsPage() {
     return new Blob([dataArray], { type: contentType.replace(/^data:/, "") });
   }
 
-  if (navigator.mediaDevices)
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((value) => setCameraAllowed(value.active));
+  if (typeof navigator != "undefined")
+    if (navigator.mediaDevices)
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((value) => setCameraAllowed(value.active));
 
   const handleKeyPress = getKeyPresses(setUUID);
 

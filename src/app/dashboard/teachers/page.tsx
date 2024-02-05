@@ -79,15 +79,15 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ImageFull from "@/components/client/timetable/ImageFull";
-import useWebSocket from "react-use-websocket";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {Switch} from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch";
+import { getKeyPresses } from "@/lib/keypresses";
 
 function returnApprovedDocLength(list: any) {
   return list?.filter((doc: any) => doc.approved)?.length;
@@ -219,7 +219,12 @@ export const columns = (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Switch checked={!teacher.smsOptOut} onCheckedChange={value=> editSmsOptOutFunc(teacher.id, !value)}/>
+                <Switch
+                  checked={!teacher.smsOptOut}
+                  onCheckedChange={(value) =>
+                    editSmsOptOutFunc(teacher.id, !value)
+                  }
+                />
               </TooltipTrigger>
               <TooltipContent>
                 <p>SMS xabarnoma holati</p>
@@ -241,9 +246,6 @@ export default function TeachersPage() {
     setMode(mode);
     setTeacher(teacher);
   }
-
-  const socketUrl = process.env.NEXT_PUBLIC_WS_URI ?? "";
-  const { lastJsonMessage } = useWebSocket(socketUrl);
 
   const [isApproving, setIsApproving] = useState<boolean>(false);
   const [isRejecting, setIsRejecting] = useState<boolean>(false);
@@ -325,14 +327,33 @@ export default function TeachersPage() {
 
   const degreesResponse = useDegreesList();
   const degrees = degreesResponse?.data?.data;
-  const { mutate: editTeacherSmsOptOut, isSuccess: isSuccessTeacherSmsOptOut, error: editTeacherSmsOptOutError } = useEditTeacherSmsOptOut();
+  const {
+    mutate: editTeacherSmsOptOut,
+    isSuccess: isSuccessTeacherSmsOptOut,
+    error: editTeacherSmsOptOutError,
+  } = useEditTeacherSmsOptOut();
 
   function getDegree(id: string) {
     return degrees?.find((deg) => deg?.id === id)?.description;
   }
   function editTeacherSmsOptOutFunc(personId: string, optOut: boolean) {
-    editTeacherSmsOptOut({personId: personId, optOut: optOut});
+    editTeacherSmsOptOut({ personId: personId, optOut: optOut });
   }
+
+  const [UUID, setUUID] = useState<string>("");
+
+  const handleKeyPress = getKeyPresses(setUUID);
+
+  useEffect(() => {
+    window.addEventListener("keyup", handleKeyPress);
+    return () => window.removeEventListener("keyup", handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    if (UUID.length != 36) return;
+    setValue("qrcodeId", UUID);
+    setUUID("");
+  }, [UUID]);
 
   useEffect(() => {
     if (isSuccessTeacherSmsOptOut) {
@@ -345,12 +366,6 @@ export default function TeachersPage() {
   useEffect(() => {
     reset({ ...teacher });
   }, [reset, teacher]);
-
-  useEffect(() => {
-    if (mode === "qrcode" && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("qrcodeId", lastJsonMessage?.data ?? "");
-    }
-  }, [lastJsonMessage]);
 
   function getSelectData(order: number, sv: string) {
     if (

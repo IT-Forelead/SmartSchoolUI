@@ -92,16 +92,14 @@ export type VisitResponse = {
   totalPages: number;
 };
 
-export type LastVisit = {
-  kind: "visit";
-  data: {
-    id: string;
-    createdAt: string;
-    personId: string;
-    visitType: "go_out" | "come_in";
-    fullName: string;
-    label: "student" | "teacher";
-  };
+export type VisitInfo = {
+  id: string;
+  createdAt: string;
+  personId: string;
+  visitType: "come_in" | "go_out";
+  assetId: string;
+  fullName: string;
+  label: "student" | "teacher";
 };
 
 export type Teacher = {
@@ -207,13 +205,11 @@ export type StudentUpdate = {
   pinfl: string;
   parentPhone: string;
   photo?: string;
-  group: [
-    {
-      id: string;
-      level: string;
-      name: string;
-    },
-  ];
+  group: {
+    id: string;
+    level: string;
+    name: string;
+  };
   barcode: string;
 };
 
@@ -359,6 +355,6 @@ export type StatsDaily = {
 };
 
 export type SmsOptOut = {
-  personId: string,
-  optOut: boolean
-}
+  personId: string;
+  optOut: boolean;
+};

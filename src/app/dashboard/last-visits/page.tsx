@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import useWebSocket from "react-use-websocket";
 import Webcam from "react-webcam";
 
 import Loader from "@/components/client/Loader";
@@ -27,11 +26,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useUserInfo from "@/hooks/useUserInfo";
-import { updateVisit, useVisitsList } from "@/hooks/useVisits";
+import { useVisitCreate, useVisitsList } from "@/hooks/useVisits";
 import { SolarQrCodeBroken } from "@/icons/QrCodeIcon";
 import { SolarUserBroken } from "@/icons/UserIcon";
 import { dateFormatter, translateVisitType } from "@/lib/composables";
-import { LastVisit, Visit } from "@/models/common.interface";
+import { Visit, VisitInfo } from "@/models/common.interface";
+import { getKeyPresses } from "@/lib/keypresses";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const columns = (
   setVisit: Dispatch<SetStateAction<Visit | null>>,
@@ -91,14 +93,17 @@ export default function LastVisitsPage() {
 
   const webcamRef = useRef(null);
 
-  const [visitHistoryInWebSocket, setVisitHistoryInWebSocket] = useState<
-    LastVisit[]
-  >([]);
-  const { lastJsonMessage } = useWebSocket<LastVisit>(
-    process.env.NEXT_PUBLIC_WS_URI ?? "",
-  );
+  const [isCameraAllowed, setCameraAllowed] = useState<boolean>(false);
 
-  function makeBlob(base64String: string) {
+  const [visitHistory, setVisitHistory] = useState<VisitInfo[]>([]);
+
+  const { mutate: visitCreate } = useVisitCreate((data) => {
+    setVisitHistory([data.data, ...visitHistory.slice(0, 2)]);
+  });
+
+  const [UUID, setUUID] = useState<string>("");
+
+  function makeBlob(base64String: string): Blob {
     const [contentType, dataPart] = base64String.split(";base64,");
     // Convert base64 to binary
     const binaryString = atob(dataPart);
@@ -113,23 +118,28 @@ export default function LastVisitsPage() {
     return new Blob([dataArray], { type: contentType.replace(/^data:/, "") });
   }
 
+  if (navigator.mediaDevices)
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((value) => setCameraAllowed(value.active));
+
+  const handleKeyPress = getKeyPresses(setUUID);
+
   useEffect(() => {
-    if (lastJsonMessage !== null) {
-      setVisitHistoryInWebSocket((prev) => prev.concat(lastJsonMessage));
-      if (
-        lastJsonMessage?.kind === "visit" &&
-        webcamRef.current &&
-        webcamRef.current.stream
-      ) {
-        const imageSrc = webcamRef.current.getScreenshot();
-        const form = new FormData();
-        form.append("file", makeBlob(imageSrc));
-        updateVisit(lastJsonMessage?.data?.id, form);
-      } else {
-        console.log("webcam is not working...");
-      }
-    }
-  }, [lastJsonMessage, setVisitHistoryInWebSocket]);
+    window.addEventListener("keyup", handleKeyPress);
+    return () => window.removeEventListener("keyup", handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    if (UUID.length != 36) return;
+    if (webcamRef.current == null) return;
+    const imageSrc = webcamRef.current.getScreenshot();
+    const form = new FormData();
+    form.append("file", makeBlob(imageSrc));
+    form.append("qrcode", UUID);
+    visitCreate(form);
+    setUUID("");
+  }, [UUID]);
 
   const [visit, setVisit] = useState<Visit | null>(null);
 
@@ -169,74 +179,81 @@ export default function LastVisitsPage() {
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col items-center space-y-2 p-5">
           <div className="mb-2 h-auto w-full overflow-hidden rounded-lg">
-            <Webcam
-              audio={false}
-              mirrored={true}
-              disablePictureInPicture={true}
-              height={720}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              screenshotQuality={1}
-              forceScreenshotSourceSize={true}
-              width={1280}
-            />
+            <AspectRatio ratio={4 / 3} className="w-full">
+              {isCameraAllowed ? (
+                <Webcam
+                  audio={false}
+                  mirrored={true}
+                  disablePictureInPicture={true}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  screenshotQuality={1}
+                  forceScreenshotSourceSize={true}
+                  height={480}
+                  width={640}
+                  videoConstraints={{ height: 480, width: 640 }}
+                />
+              ) : (
+                <Skeleton className="h-full"></Skeleton>
+              )}
+            </AspectRatio>
           </div>
-          {visitHistoryInWebSocket.slice(-3).map((message, idx) =>
-            message?.kind === "visit" ? (
-              <div
-                key={idx}
-                className="flex w-full items-center space-x-4 rounded-md border px-4 py-2 dark:border-slate-600"
-              >
-                <div className="rounded-lg border p-1.5 dark:border-slate-600">
-                  <SolarUserBroken className="h-20 w-20 text-gray-500" />
+          <div className="flex w-full flex-col gap-y-2">
+            {visitHistory.map((visit, idx) =>
+              visit !== null ? (
+                <div
+                  key={idx}
+                  className="flex w-full items-center space-x-4 rounded-md border px-4 py-2 dark:border-slate-600"
+                >
+                  <div className="rounded-lg border p-1.5 dark:border-slate-600">
+                    <SolarUserBroken className="h-20 w-20 text-gray-500" />
+                  </div>
+                  <div className="space-x-1 space-y-1">
+                    <div className="text-lg font-medium">{visit.fullName}</div>
+                    <div className="text-base">
+                      {dateFormatter(visit.createdAt)}
+                    </div>
+                    <div
+                      className={`inline-block rounded-full px-4 py-0.5 text-sm capitalize ${
+                        visit.label === "teacher"
+                          ? "bg-blue-600 text-white"
+                          : visit.label === "student"
+                            ? "bg-yellow-600 text-white"
+                            : "bg-gray-600 text-white"
+                      } text-center`}
+                    >
+                      {visit.label === "teacher"
+                        ? "O'qituvchi"
+                        : visit.label === "student"
+                          ? "O'quvchi"
+                          : "Hodim"}
+                    </div>
+                    <div
+                      className={`inline-block rounded-full px-8 py-0.5 text-sm capitalize ${
+                        visit.visitType === "come_in"
+                          ? "bg-green-600 text-white"
+                          : "bg-red-600 text-white"
+                      } text-center`}
+                    >
+                      {translateVisitType(visit.visitType)}
+                    </div>
+                  </div>
                 </div>
-                <div className="space-x-1 space-y-1">
+              ) : (
+                <div
+                  key={idx}
+                  className="flex w-full items-center space-x-2 rounded-md border px-4 py-2 dark:border-slate-600"
+                >
+                  <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
+                    <SolarQrCodeBroken className="h-8 w-8" />
+                  </div>
                   <div className="text-lg font-medium">
-                    {message?.data?.fullName}
-                  </div>
-                  <div className="text-base">
-                    {dateFormatter(message?.data?.createdAt)}
-                  </div>
-                  <div
-                    className={`inline-block rounded-full px-4 py-0.5 text-sm capitalize ${
-                      message?.data?.label === "teacher"
-                        ? "bg-blue-600 text-white"
-                        : message?.data?.label === "student"
-                          ? "bg-yellow-600 text-white"
-                          : "bg-gray-600 text-white"
-                    } text-center`}
-                  >
-                    {message?.data?.label === "teacher"
-                      ? "O'qituvchi"
-                      : message?.data?.label === "student"
-                        ? "O'quvchi"
-                        : "Hodim"}
-                  </div>
-                  <div
-                    className={`inline-block rounded-full px-8 py-0.5 text-sm capitalize ${
-                      message?.data?.visitType === "come_in"
-                        ? "bg-green-600 text-white"
-                        : "bg-red-600 text-white"
-                    } text-center`}
-                  >
-                    {translateVisitType(message?.data?.visitType)}
+                    Ushbu Qr kodga foydalanuvchi biriktirlmagan!
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div
-                key={idx}
-                className="flex w-full items-center space-x-2 rounded-md border px-4 py-2 dark:border-slate-600"
-              >
-                <div className="flex items-center justify-center rounded-md bg-gray-200 p-2">
-                  <SolarQrCodeBroken className="h-8 w-8" />
-                </div>
-                <div className="text-lg font-medium">
-                  Ushbu Qr kodga foydalanuvchi biriktirlmagan!
-                </div>
-              </div>
-            ),
-          )}
+              ),
+            )}
+          </div>
         </div>
         <div className="col-span-2 w-full p-5">
           <div className="rounded-md border dark:border-slate-600">

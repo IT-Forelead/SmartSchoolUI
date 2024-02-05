@@ -64,7 +64,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import useWebSocket from "react-use-websocket";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -72,7 +71,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
+import { getKeyPresses } from "@/lib/keypresses";
 
 const getGroupNameAndLevel = (group: { name: any; level: any }) => {
   if (group && group.name && group.level) {
@@ -167,7 +167,12 @@ export const columns = (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Switch checked={!student.smsOptOut} onCheckedChange={value=> editSmsOptOutFunc(student.id, !value)}/>
+                <Switch
+                  checked={!student.smsOptOut}
+                  onCheckedChange={(value) =>
+                    editSmsOptOutFunc(student.id, !value)
+                  }
+                />
               </TooltipTrigger>
               <TooltipContent>
                 <p>SMS xabarnoma holati</p>
@@ -189,9 +194,6 @@ export default function StudentsPage() {
     setStudent(student);
   }
 
-  const socketUrl = process.env.NEXT_PUBLIC_WS_URI ?? "";
-  const { lastJsonMessage } = useWebSocket(socketUrl);
-
   useEffect(() => {
     if (!currentUser?.User?.role?.includes("admin")) {
       router.push("/dashboard/denied");
@@ -206,7 +208,11 @@ export default function StudentsPage() {
   const [rowSelection, setRowSelection] = useState({});
   const { mutate: editStudent, isSuccess, error } = useEditStudent();
   const { mutate: deleteStudent } = useDeleteStudent();
-  const { mutate: editSmsOptOut, isSuccess: isSuccessSmsOptOut, error: changeSmsOptOutError } = useEditStudentSmsOptOut();
+  const {
+    mutate: editSmsOptOut,
+    isSuccess: isSuccessSmsOptOut,
+    error: changeSmsOptOutError,
+  } = useEditStudentSmsOptOut();
   const {
     mutate: addQrCodeToStudent,
     isSuccess: isSuccessAddQrcode,
@@ -226,8 +232,23 @@ export default function StudentsPage() {
   } = useDeleteBarCodeStudent();
 
   function editSmsOptOutFunc(personId: string, optOut: boolean) {
-    editSmsOptOut({personId: personId, optOut: optOut});
+    editSmsOptOut({ personId: personId, optOut: optOut });
   }
+
+  const [UUID, setUUID] = useState<string>("");
+
+  const handleKeyPress = getKeyPresses(setUUID);
+
+  useEffect(() => {
+    window.addEventListener("keyup", handleKeyPress);
+    return () => window.removeEventListener("keyup", handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    if (UUID.length != 36) return;
+    setValue("qrcodeId", UUID);
+    setUUID("");
+  }, [UUID]);
 
   useEffect(() => {
     if (isSuccessDeleteBarcode) {
@@ -250,12 +271,6 @@ export default function StudentsPage() {
   useEffect(() => {
     reset({ ...student });
   }, [reset, student]);
-
-  useEffect(() => {
-    if (mode === "qrcode" && lastJsonMessage?.kind === "qr_code_assign") {
-      setValue("qrcodeId", lastJsonMessage?.data ?? "");
-    }
-  }, [lastJsonMessage]);
 
   useEffect(() => {
     if (mode === "qrcode") {

@@ -76,7 +76,7 @@ const FormSchema = z.object({
   pinfl: z.string().regex(/\d+/).optional(),
 });
 
-export default function CreateStudent() {
+export default function CreateStudent({ refetch }) {
   const groupsResponse = useGroupsList();
   const groups = groupsResponse?.data?.data || [];
 
@@ -123,6 +123,7 @@ export default function CreateStudent() {
       pinfl: data.pinfl,
     };
     createStudent(newData);
+    refetch();
   };
 
   return (

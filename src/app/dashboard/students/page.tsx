@@ -578,7 +578,7 @@ export default function StudentsPage() {
           />
           <div className="flex w-full items-center justify-end">
             <div className="my-3 flex items-center justify-center space-x-5">
-              <CreateStudent />
+              <CreateStudent refetch={refetch} />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">

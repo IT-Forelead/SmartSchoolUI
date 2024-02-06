@@ -30,6 +30,10 @@ const getTeachersList = async () => {
   return await axios.post<Teacher[]>("/teacher/fetch", {});
 };
 
+const getTeacherByPhone = async (phone: string) => {
+  return await axios.post<Teacher | null>("/teacher/phone", { phone: phone });
+};
+
 const createTeacher = async (data: TeacherCreate) => {
   return await axios.post<Teacher[]>("/teacher", data);
 };
@@ -155,6 +159,14 @@ export const useTeachersList = () => {
   return useQuery({
     queryKey: ["teachers"],
     queryFn: () => getTeachersList(),
+    onError: (err: AxiosError) => err,
+  });
+};
+
+export const useTeacherByPhone = (phone: string) => {
+  return useQuery({
+    queryKey: ["teacherByPhone", phone],
+    queryFn: () => getTeacherByPhone(phone),
     onError: (err: AxiosError) => err,
   });
 };

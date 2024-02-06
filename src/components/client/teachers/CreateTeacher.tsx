@@ -38,7 +38,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSubjectsList } from "@/hooks/useSubjects";
-import { useCreateTeacher } from "@/hooks/useTeachers";
+import { useCreateTeacher, useTeacherByPhone } from "@/hooks/useTeachers";
 import { SolarBoxMinimalisticBroken } from "@/icons/BoxIcon";
 import {
   citizenships,
@@ -75,10 +75,14 @@ const FormSchema = z.object({
 });
 
 export default function CreateTeacher() {
+  const [teacherPhone, setTeacherPhone] = useState<string>("");
+
   const subjectResponse = useSubjectsList();
   const subjects = subjectResponse?.data?.data || [];
 
   const { mutate: createTeacher, isSuccess, error } = useCreateTeacher();
+
+  const { data: teacherByPhone } = useTeacherByPhone(teacherPhone);
 
   const [additionalFields, setAdditionalFields] = useState<boolean>(false);
 
@@ -170,9 +174,24 @@ export default function CreateTeacher() {
                       Telefon raqami
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="+998001234567" {...field} />
+                      <Input
+                        placeholder="+998001234567"
+                        {...field}
+                        onChange={(e) => {
+                          setTeacherPhone(e.target.value);
+                          form.setValue("phone", e.target.value);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
+                    {teacherByPhone?.data ? (
+                      <div className="text-red-500">
+                        {teacherByPhone.data.fullName} ismli o&apos;qituvchi
+                        mavjud.
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </FormItem>
                 )}
               />
@@ -498,7 +517,11 @@ export default function CreateTeacher() {
                 </AccordionItem>
               </Accordion>
 
-              <Button type="submit" className="bg-green-600">
+              <Button
+                type="submit"
+                className="bg-green-600"
+                disabled={!!teacherByPhone?.data}
+              >
                 Qo&apos;shish
               </Button>
             </form>

@@ -283,7 +283,7 @@ export default function MessagesPage() {
               </div>
               <Separator orientation="vertical" />
               <div
-                className="rounded-full text-center font-bold bg-red-600 text-white py-1 bg-gray-600">
+                className="rounded-full text-center font-bold bg-red-600 text-white py-1 ">
                 {translateSMSStatus("Failed")}: {stats?.failed}
               </div>
               <Separator orientation="vertical" />

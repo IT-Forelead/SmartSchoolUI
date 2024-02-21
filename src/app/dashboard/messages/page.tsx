@@ -200,8 +200,10 @@ export default function MessagesPage() {
   return (
     <div className="w-full p-5">
       <div>
-        <div className="flex w-full items-center justify-between space-x-1 py-4">
-          <div className="flex w-full items-center justify-start space-x-5 py-4">
+        <div
+          className="flex w-full items-center justify-between space-x-1 py-4">
+          <div
+            className="flex w-full items-center justify-start space-x-5 py-4">
             <Input
               placeholder="Raqam bo`yicha izlash..."
               className="w-54 max-w-sm"
@@ -215,7 +217,7 @@ export default function MessagesPage() {
                   variant={"outline"}
                   className={cn(
                     "w-[280px] justify-start text-left font-normal",
-                    !dateStart && "text-muted-foreground",
+                    !dateStart && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -238,7 +240,7 @@ export default function MessagesPage() {
                   variant={"outline"}
                   className={cn(
                     "w-[280px] justify-start text-left font-normal",
-                    !dateEnd && "text-muted-foreground",
+                    !dateEnd && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -258,84 +260,43 @@ export default function MessagesPage() {
           <Button onClick={handleSubmit}>Qidirish</Button>
         </div>
       </div>
-      <div className="rounded-md border dark:border-slate-600">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Hech nima topilmadi.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1">
-          <div className="text-muted-foreground flex items-start space-x-4 text-sm dark:text-slate-400">
-            <div>Jami: {stats?.total}</div>
-            <Separator orientation="vertical" />
-            <div>
-              {translateSMSStatus("Delivered")}: {stats?.delivered}
-            </div>
-            <Separator orientation="vertical" />
-            <div>
-              {translateSMSStatus("Sent")}: {stats?.sent}
-            </div>
-            <Separator orientation="vertical" />
-            <div>
-              {translateSMSStatus("NotDelivered")}: {stats?.notDelivered}
-            </div>
-            <Separator orientation="vertical" />
-            <div>
-              {translateSMSStatus("Failed")}: {stats?.failed}
-            </div>
-            <Separator orientation="vertical" />
-            <div>
-              {translateSMSStatus("Undefined")}:{" "}
-              {(stats?.undefined ?? 0) + (stats?.transmitted ?? 0)}
+
+      <div className="flex">
+        <div className="flex items-center justify-start space-x-2 py-4">
+          <div className="flex-1">
+            <div
+              className="text-muted-foreground flex items-start space-x-4 text-sm dark:text-slate-400">
+              <div className="rounded-full py-1 font-bold">Jami: {stats?.total}</div>
+              <Separator orientation="vertical" />
+              <div className="bg-green-600 font-bold rounded-full py-1 text-white">
+                {translateSMSStatus("Delivered")}: {stats?.delivered}
+              </div>
+              <Separator orientation="vertical" />
+              <div
+                className="rounded-full font-bold bg-blue-600 text-center text-white py-1">
+                {translateSMSStatus("Sent")}: {stats?.sent}
+              </div>
+              <Separator orientation="vertical" />
+              <div
+                className="rounded-full font-bold text-white bg-yellow-600 text-center py-1">
+                {translateSMSStatus("NotDelivered")}: {stats?.notDelivered}
+              </div>
+              <Separator orientation="vertical" />
+              <div
+                className="rounded-full text-center font-bold bg-red-600 text-white py-1 bg-gray-600">
+                {translateSMSStatus("Failed")}: {stats?.failed}
+              </div>
+              <Separator orientation="vertical" />
+              <div
+                className="rounded-full text-center text-white py-1 font-bold bg-gray-600">
+                {translateSMSStatus("Undefined")}:{" "}
+                {(stats?.undefined ?? 0) + (stats?.transmitted ?? 0)}
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
+
+        <div className="flex items-center justify-end pb-0">
           <div className="space-x-2">
             <Pagination>
               <PaginationContent>
@@ -375,6 +336,98 @@ export default function MessagesPage() {
           </div>
         </div>
       </div>
+
+      <div className="rounded-md border dark:border-slate-600 mt-6">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Hech nima topilmadi.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-end pt-10">
+        <div className="space-x-2">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                />
+              </PaginationItem>
+              {paginate(currentPage, pagesCount).map((page) => {
+                return (
+                  <PaginationItem key={page}>
+                    {page == 0 ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        href="#"
+                        isActive={page == currentPage}
+                        onClick={() => {
+                          setCurrentPage(page);
+                        }}
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                );
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
+
     </div>
   );
 }

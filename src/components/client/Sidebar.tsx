@@ -189,7 +189,7 @@ export default function Sidebar() {
           ""
         )}
       </div>
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-sm text-gray-500 dark:text-slate-400">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-sm text-gray-500 dark:text-slate-400">
         &copy;{" "}
         <a
           href="http://it-forelead.uz"

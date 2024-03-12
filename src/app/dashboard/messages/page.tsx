@@ -259,7 +259,7 @@ export default function MessagesPage() {
         </div>
       </div>
       <div className="flex justify-between">
-        <div className="flex items-center justify-start space-x-2 py-4">
+        <div className="flex items-center justify-start space-x-2 py-4 pb-20">
           <div className="flex-1">
             <div className="text-muted-foreground flex items-start space-x-2 text-sm dark:text-slate-400 ">
               <div className="rounded-full pt-2 text-gray-800 dark:text-gray-200">Jami</div>
@@ -310,7 +310,7 @@ export default function MessagesPage() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end pb-0">
+        <div className="flex items-center justify-end pt-10">
             <div className="space-x-2">
               <Pagination>
                 <PaginationContent>
@@ -351,7 +351,7 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      <div className="mt-6 rounded-md border dark:border-slate-600">
+      <div className="mt-3 rounded-md border dark:border-slate-600">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -263,7 +263,7 @@ export default function MessagesPage() {
           <div className="flex-1">
             <div className="text-muted-foreground flex items-start space-x-2 text-sm dark:text-slate-400 ">
               <div className="rounded-full pt-2 text-gray-800 dark:text-gray-200">Jami</div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mr-2 mt-2 font-bold text-gray-800 dark:text-gray-200">
                 {stats?.total}
               </div>
@@ -271,7 +271,7 @@ export default function MessagesPage() {
               <div className="upparcase rounded-full bg-green-600 p-2 text-center text-white">
                 {translateSMSStatus("Delivered")}
               </div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">
                 {stats?.delivered}
               </div>
@@ -279,13 +279,13 @@ export default function MessagesPage() {
               <div className="rounded-full  bg-blue-600 p-2 text-center text-white">
                 {translateSMSStatus("Sent")}
               </div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">{stats?.sent}</div>
               <Separator orientation="vertical" />
               <div className="rounded-full bg-yellow-600 p-2 text-center text-white">
                 {translateSMSStatus("NotDelivered")}
               </div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">
                 {stats?.notDelivered}
               </div>
@@ -294,7 +294,7 @@ export default function MessagesPage() {
               <div className="rounded-full bg-red-600 p-2 text-center text-white ">
                 {translateSMSStatus("Failed")}
               </div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">
                 {stats?.failed}
               </div>
@@ -303,7 +303,7 @@ export default function MessagesPage() {
               <div className="rounded-full bg-gray-600 p-2 text-center text-white">
                 {translateSMSStatus("Undefined")}{" "}
               </div>
-              <div className="pt-2 text-white">:</div>
+              <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="pt-2 font-bold text-gray-800 dark:text-gray-200">
                 {(stats?.undefined ?? 0) + (stats?.transmitted ?? 0)}
               </div>

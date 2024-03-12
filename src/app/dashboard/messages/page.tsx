@@ -262,7 +262,9 @@ export default function MessagesPage() {
         <div className="flex items-center justify-start space-x-2 py-4">
           <div className="flex-1">
             <div className="text-muted-foreground flex items-start space-x-2 text-sm dark:text-slate-400 ">
-              <div className="rounded-full pt-2 text-gray-800 dark:text-gray-200">Jami</div>
+              <div className="rounded-full pt-2 text-gray-800 dark:text-gray-200">
+                Jami
+              </div>
               <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
               <div className="mr-2 mt-2 font-bold text-gray-800 dark:text-gray-200">
                 {stats?.total}
@@ -280,7 +282,9 @@ export default function MessagesPage() {
                 {translateSMSStatus("Sent")}
               </div>
               <div className="pt-2 text-gray-800 dark:text-gray-200">:</div>
-              <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">{stats?.sent}</div>
+              <div className="mt-2 font-bold text-gray-800 dark:text-gray-200">
+                {stats?.sent}
+              </div>
               <Separator orientation="vertical" />
               <div className="rounded-full bg-yellow-600 p-2 text-center text-white">
                 {translateSMSStatus("NotDelivered")}
@@ -311,42 +315,42 @@ export default function MessagesPage() {
           </div>
         </div>
         <div className="flex items-center justify-end pb-0">
-            <div className="space-x-2">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={() => setCurrentPage(currentPage - 1)}
-                    />
-                  </PaginationItem>
-                  {paginate(currentPage, pagesCount).map((page) => {
-                    return (
-                      <PaginationItem key={page}>
-                        {page == 0 ? (
-                          <PaginationEllipsis />
-                        ) : (
-                          <PaginationLink
-                            href="#"
-                            isActive={page == currentPage}
-                            onClick={() => {
-                              setCurrentPage(page);
-                            }}
-                          >
-                            {page}
-                          </PaginationLink>
-                        )}
-                      </PaginationItem>
-                    );
-                  })}
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+          <div className="space-x-2">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                  />
+                </PaginationItem>
+                {paginate(currentPage, pagesCount).map((page) => {
+                  return (
+                    <PaginationItem key={page}>
+                      {page == 0 ? (
+                        <PaginationEllipsis />
+                      ) : (
+                        <PaginationLink
+                          href="#"
+                          isActive={page == currentPage}
+                          onClick={() => {
+                            setCurrentPage(page);
+                          }}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  );
+                })}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </div>

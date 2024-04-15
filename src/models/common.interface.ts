@@ -60,7 +60,7 @@ export type Visit = {
   createdAt: string;
   personId: string;
   visitType: string;
-  assetId: string;
+  assetId?: string;
   fullName: string;
   group?: string;
   groupLevel?: number;

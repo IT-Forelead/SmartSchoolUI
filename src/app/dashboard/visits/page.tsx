@@ -128,11 +128,12 @@ export const columns = (
   {
     accessorKey: "assetId",
     header: "Asset Id",
-    cell: ({ row }) => (
-      <div className="flex items-center">
-        <ViewVisitorPicture assetId={row.getValue("assetId")} />
-      </div>
-    ),
+    cell: ({ row }) =>
+      row.original.assetId ? (
+        <div className="flex items-center">
+          <ViewVisitorPicture assetId={row.getValue("assetId")} />
+        </div>
+      ) : null,
   },
   {
     accessorKey: "groupName",

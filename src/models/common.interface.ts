@@ -358,3 +358,24 @@ export type SmsOptOut = {
   personId: string;
   optOut: boolean;
 };
+
+export interface TelegramMessage {
+  id: string;
+  createdAt: string;
+  message: string;
+  personId: string;
+}
+
+export interface TelegramMessagesResponse {
+  messages: TelegramMessage[];
+  page: number;
+  perPage: number;
+  totalPages: number;
+}
+
+export interface TelegramMessagesFilter {
+  from: string;
+  to: string;
+  page: string;
+  perPage: string;
+}

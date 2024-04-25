@@ -140,7 +140,7 @@ export default async function StudentVisitsChart() {
   };
 
   return (
-    <div className="col-span-3 rounded-lg border bg-white dark:border-slate-600 dark:bg-slate-900">
+    <div className="col-span-4 rounded-lg border bg-white dark:border-slate-600 dark:bg-slate-900">
       <div className="flex items-center justify-between p-5">
         <div>
           <div className="text-lg font-bold">Tashriflar statistikasi</div>

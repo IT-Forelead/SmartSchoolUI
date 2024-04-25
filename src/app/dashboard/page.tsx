@@ -7,6 +7,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import { Skeleton } from "@/components/ui/skeleton";
 import TeacherStatistics from "@/components/client/main/TeacherStatistics";
 import StudentStatistics from "@/components/client/main/StudentStatistics";
+import TelegramMessagesChart from "@/components/client/main/TelegramMessagesChart";
 
 export default function Home() {
   const SmsMessagesChart = dynamic(
@@ -41,10 +42,11 @@ export default function Home() {
   return (
     <div className="hidden flex-col md:flex">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-8 gap-4">
           <TeacherStatistics />
           <StudentStatistics />
           <SmsMessagesChart />
+          <TelegramMessagesChart />
           <TeacherVisitsChart />
           <StudentVisitsChart />
         </div>

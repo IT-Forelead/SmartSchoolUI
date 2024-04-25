@@ -27,14 +27,14 @@ export default function Home() {
     () => import("@/components/client/main/TeacherVisitsChart"),
     {
       ssr: false,
-      loading: () => <Skeleton className="col-span-3 h-80 rounded-lg" />,
+      loading: () => <Skeleton className="col-span-4 h-80 rounded-lg" />,
     },
   );
   const StudentVisitsChart = dynamic(
     () => import("@/components/client/main/StudentVisitsChart"),
     {
       ssr: false,
-      loading: () => <Skeleton className="col-span-3 h-80 rounded-lg" />,
+      loading: () => <Skeleton className="col-span-4 h-80 rounded-lg" />,
     },
   );
 

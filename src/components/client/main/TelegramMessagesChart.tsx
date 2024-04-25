@@ -6,10 +6,10 @@ import { SolarChatRoundLineBroken } from "@/icons/ChatIcon";
 import { useTelegramMessagesStatsByRange } from "@/hooks/useTelegramMessages";
 import { StatsDaily } from "@/models/common.interface";
 
-export default function TelegramMessagesChart() {
-  const today = new Date();
-  const startDate = subDays(today, 6);
+const today = new Date();
+const startDate = subDays(today, 6);
 
+export default function TelegramMessagesChart() {
   const { data: stats } = useTelegramMessagesStatsByRange({
     from: format(startDate, "yyyy-MM-dd"),
     to: format(today, "yyyy-MM-dd"),

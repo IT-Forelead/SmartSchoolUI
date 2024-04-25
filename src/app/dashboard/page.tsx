@@ -7,11 +7,17 @@ import useUserInfo from "@/hooks/useUserInfo";
 import { Skeleton } from "@/components/ui/skeleton";
 import TeacherStatistics from "@/components/client/main/TeacherStatistics";
 import StudentStatistics from "@/components/client/main/StudentStatistics";
-import TelegramMessagesChart from "@/components/client/main/TelegramMessagesChart";
 
 export default function Home() {
   const SmsMessagesChart = dynamic(
     () => import("@/components/client/main/SmsMessagesChart"),
+    {
+      ssr: false,
+      loading: () => <Skeleton className="col-span-2 rounded-lg" />,
+    },
+  );
+  const TelegramMessagesChart = dynamic(
+    () => import("@/components/client/main/TelegramMessagesChart"),
     {
       ssr: false,
       loading: () => <Skeleton className="col-span-2 rounded-lg" />,

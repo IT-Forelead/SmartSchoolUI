@@ -70,7 +70,7 @@ export const columns: ColumnDef<Message>[] = [
     header: "Xabar matni",
     cell: ({ row }) => (
       <div>
-        {(row.getValue("text") as string)?.includes("25-school.uz/link/") ? (
+        {(row.getValue("text") as string)?.includes("data.it-forelead.uz/link/") ? (
           <a
             href={row.getValue("text")}
             className="flex items-center text-blue-600"

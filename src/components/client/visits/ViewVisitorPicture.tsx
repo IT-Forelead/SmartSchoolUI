@@ -29,7 +29,7 @@ export default function ViewVisitorPicture({
           <DialogTitle>Tashrif buyuruvchi rasmi</DialogTitle>
         </DialogHeader>
         <img
-          src={`https://25-school.uz/school/api/v1/asset/view/${assetId}`}
+          src={`https://data.it-forelead.uz/api/v1/asset/view/${assetId}`}
           alt="Visitor picture"
           className="h-[500px] w-full rounded"
         />

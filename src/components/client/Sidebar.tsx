@@ -1,4 +1,5 @@
 "use client";
+
 import useUserInfo from "@/hooks/useUserInfo";
 import { SolarCheckCircleBroken } from "@/icons/ApproveIcon";
 import { SolarBookMinimalisticBroken } from "@/icons/BooksIcon";
@@ -13,18 +14,19 @@ import { SolarClockSquareBroken } from "@/icons/TeacherHourIcon";
 import { SolarUsersGroupRoundedBroken } from "@/icons/TeacherIcon";
 import { SolarWindowFrameBroken } from "@/icons/TimeTable";
 import { SolarUserCheckBroken } from "@/icons/UserCheckIcon";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import dddLogo from "../../public/ddd.png";
 
 export default function Sidebar() {
   const currentUser = useUserInfo();
   const path = usePathname();
   return (
     <div className="dark:bg-slate-900">
-      <h1 className="text-5xl">
-        <span className="font-bold text-blue-600">25</span>
-        <b className="text-3xl font-extrabold">SCHOOL</b>
-      </h1>
+      <div className="pt-2">
+        <Image src={dddLogo} alt="DDD logo" />
+      </div>
       <div className="mt-10 max-h-[80vh] overflow-auto">
         <div className="space-y-7 font-medium">
           <Link

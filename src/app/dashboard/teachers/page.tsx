@@ -564,7 +564,7 @@ export default function TeachersPage() {
                           </div>
                           <Image
                             src={
-                              `http://25-school.uz/school/api/v1/asset/${certificateId}` ??
+                              `https://data.it-forelead.uz/api/v1/asset/${certificateId}` ??
                               ""
                             }
                             alt="Hujjat"

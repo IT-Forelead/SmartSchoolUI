@@ -21,7 +21,7 @@ export default function LinkPage({ params }: { params: { link: string } }) {
   const [isRejecting, setIsRejecting] = useState<boolean>(false);
   useEffect(() => {
     setImage(
-      `http://25-school.uz/school/api/v1/asset/${teacher?.documents[0]?.certificateId}`,
+      `https://data.it-forelead.uz/api/v1/asset/${teacher?.documents[0]?.certificateId}`,
     );
   }, [teacher?.documents]);
 

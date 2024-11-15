@@ -46,7 +46,7 @@ function getTeacherData(list: Teacher[], id: string) {
 
 function downloadFile(fileName: string) {
   const downloadLink = document.createElement("a");
-  downloadLink.href = `http://25-school.uz/school/api/v1/asset/${fileName}`;
+  downloadLink.href = `https://data.it-forelead.uz/api/v1/asset/${fileName}`;
   downloadLink.download = fileName;
   downloadLink.target = "_blank";
 

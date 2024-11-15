@@ -11,7 +11,7 @@ export default function ImageFull(props: { cId: string }) {
       <DialogContent className="max-w-3xl">
         <div className="relative h-[85vh]">
           <Image
-            src={`http://25-school.uz/school/api/v1/asset/${props.cId}` ?? ""}
+            src={`https://data.it-forelead.uz/api/v1/asset/${props.cId}` ?? ""}
             alt="Hujjat"
             layout="fill"
             className="top-0 rounded-lg object-contain duration-500"
